@@ -5,6 +5,8 @@
 
     #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
         #include <string>
+    #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+        #include <string.h> 
     #endif
 
     #if defined(CPSTL_VECTOR_EXCEPTIONS_ENABLED) || defined(CPSTL_EXCEPTIONS_ENABLED)
