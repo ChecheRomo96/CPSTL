@@ -6,6 +6,10 @@
 
     namespace cpstd {}
 
+    #ifdef ARDUINO
+        #include <Arduino.h>
+    #endif
+
     #ifdef CPSTL_VECTOR_ENABLED
         #include <CPvector>
     #endif
@@ -15,5 +19,7 @@
         #include <stdarg.h>
         #include <cstdio.h>
     #endif
+
+    #if defined
 
 #endif//CPSTL_H
