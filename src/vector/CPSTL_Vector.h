@@ -913,9 +913,6 @@
 
 
                         void insert(size_t position, const T& val){
-
-                            using std::cout;
-
                         #if defined(CPSTL_VECTOR_USING_C_ALLOCATION) | defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
                             resize(_Size + 1);
 
