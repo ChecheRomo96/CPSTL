@@ -1,7 +1,7 @@
 #include <AUnit.h>
 #include <CPSTL.h>
 
-#include "vector/AssignmentTests.cc"
+#include "AssignmentTests.cc"
 
 test(correct) {
   int x = 1;

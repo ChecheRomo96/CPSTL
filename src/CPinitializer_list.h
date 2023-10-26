@@ -15,104 +15,37 @@
             template<class T>
             using initializer_list = std::initializer_list<T>;
         #else
-            #if defined(__GNUC__)
 
-                template<typename T>
-                class initializer_list
+            template<class T> class initializer_list
+            {
+            private:
+                const T* array_ = nullptr;
+                size_t len_ = 0;
+         
+                // The compiler can (and will) call a private constructor.
+                // This constructor will get called when the compiler encounters a braced
+                // list expression with elements of type T, like in f({t1, t2, t3}) and
+                // an initializer_list<T> is expected by f function.
+                constexpr initializer_list(const T* array, size_t len) : array_{array}, len_{len} {}
+         
+            public:
+                constexpr initializer_list() = default;
+         
+                constexpr size_t size() const
                 {
-                public:
-                    using value_type = T;
-                    using reference = const T&;
-                    using const_reference = const T&;
-                    using size_type = size_t;
-                    using iterator = const T*;
-                    using const_iterator = const T*;
-
-                private:
-                    iterator  m_array;
-                    size_type m_len;
-
-                    // The compiler can call a private constructor.
-                    constexpr initializer_list(const_iterator itr, size_type st)
-                        : m_array(itr), m_len(st) { }
-
-                public:
-                    constexpr initializer_list() noexcept : m_array(0), m_len(0) { }
-
-                    // Number of elements.
-                    constexpr size_type size() const noexcept { return m_len; }
-
-                    // First element.
-                    constexpr const_iterator begin() const noexcept { return m_array; }
-
-                    // One past the last element.
-                    constexpr const_iterator end() const noexcept { return begin() + size(); }
-                };
-            #elif defined(__clang__)
-
-                template<typename T>
-                class initializer_list
+                    return len_;
+                }
+         
+                constexpr const T* begin() const
                 {
-                private:
-                    const T* m_first;
-                    const T* m_last;
-
-                public:
-                    using value_type      = T;
-                    using reference       = const T&;
-                    using const_reference = const T&;
-                    using size_type       = size_t;
-                    using iterator        = const T*;
-                    using const_iterator  = const T*;
-
-                    initializer_list() noexcept : m_first(nullptr), m_last(nullptr) {}
-
-                    // Number of elements.
-                    size_t size() const noexcept { return m_last - m_first; }
-
-                    // First element.
-                    const T* begin() const noexcept { return m_first; }
-
-                    // One past the last element.
-                    const T* end() const noexcept { return m_last; }
-                };
-            #elif defined(_MSC_VER)
-
-                template<typename T>
-                class initializer_list
+                    return array_;
+                }
+         
+                constexpr const T* end() const
                 {
-                public:
-                    using value_type = T;
-                    using reference = const T&;
-                    using const_reference = const T&;
-                    using size_type = size_t;
-                    using iterator = const T*;
-                    using const_iterator = const T*;
-
-                    constexpr initializer_list() noexcept : m_first(nullptr), m_last(nullptr) {}
-
-                    constexpr initializer_list(const T* first, const T* last) noexcept
-                        : m_first(first), m_last(last) {}
-
-                    // First element.
-                    constexpr const T* begin() const noexcept { return m_first; }
-
-                    // One past the last element.
-                    constexpr const T* end() const noexcept { return m_last; }
-
-                    // Number of elements.
-                    constexpr size_t size() const noexcept
-                    {
-                        return static_cast<size_t>(m_last - m_first);
-                    }
-
-                private:
-                    const T* m_first;
-                    const T* m_last;
-                };
-            #else
-                #error "Initializer_list is not supported for this compiler"
-            #endif
+                    return begin() + size();
+                }
+            };
         #endif
     }
 
