@@ -1221,7 +1221,7 @@
             va_list arg;
             va_start( arg, Format );
             
-            auto sz = vsnprintf(NULL, 0, Format, arg);
+            auto sz = vsnprintf_P(NULL, 0, Format, arg);
             resize(sz);
             vsnprintf(&((*this)[0]), size()+1, Format, arg);
 
