@@ -802,7 +802,7 @@
                 resize(size()+il.size());
 
                 for(size_t i = offset; i < size(); i++){
-                    (*this)[i] = *(li.begin()+(i-offset));
+                    (*this)[i] = *(il.begin()+(i-offset));
                 }
             #endif
 
@@ -921,7 +921,7 @@
                 resize(il.size());
 
                 for(size_t i = 0; i < size(); i++){
-                    (*this)[i] = *(li.begin()+(i));
+                    (*this)[i] = *(il.begin()+(i));
                 }
             #endif
 
@@ -1031,7 +1031,7 @@
                 resize(il.size());
 
                 for(size_t i = 0; i < size(); i++){
-                    (*this)[i] = *(li.begin()+(i));
+                    (*this)[i] = *(il.begin()+(i));
                 }
             #endif
 
@@ -1155,7 +1155,7 @@
                 resize(il.size());
 
                 for(size_t i = 0; i < size(); i++){
-                    (*this)[i] = *(li.begin()+(i));
+                    (*this)[i] = *(il.begin()+(i));
                 }
             #endif
 
