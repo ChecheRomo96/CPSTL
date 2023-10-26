@@ -1758,91 +1758,98 @@
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // string
 
-            cpstd::string cpstd::operator+(const cpstd::string& lhs, const cpstd::string& rhs){
-                cpstd::string toReturn = lhs;
-                toReturn += rhs;
-                return toReturn;
-            }
+            namespace cpstd{
+                string operator+(const string& lhs, const string& rhs){
+                    string toReturn = lhs;
+                    toReturn += rhs;
+                    return toReturn;
+                }
 
-            cpstd::string cpstd::operator+(cpstd::string&& lhs, cpstd::string&& rhs){
-                lhs.append(rhs);
-                rhs.clear();
-                return cpstd::move(lhs);
-            }
+                string operator+(string&& lhs, string&& rhs){
+                    lhs.append(rhs);
+                    rhs.clear();
+                    return move(lhs);
+                }
 
-            cpstd::string cpstd::operator+(const cpstd::string& lhs, cpstd::string&& rhs){
-                cpstd::string toReturn = lhs;
-                toReturn.append(rhs);
-                rhs.clear();
-                return toReturn;
-            }
+                string operator+(const string& lhs, string&& rhs){
+                    string toReturn = lhs;
+                    toReturn.append(rhs);
+                    rhs.clear();
+                    return toReturn;
+                }
 
-            cpstd::string cpstd::operator+(cpstd::string&& lhs, const cpstd::string& rhs){
-                lhs.append(rhs);
-                return cpstd::move(lhs);
+                string operator+(string&& lhs, const string& rhs){
+                    lhs.append(rhs);
+                    return move(lhs);
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // C string
 
-            cpstd::string cpstd::operator+(const cpstd::string& lhs, const char* rhs){
-                cpstd::string toReturn = lhs;
-                toReturn.append(rhs);
-                return toReturn;
-            }
+            namespace cpstd{
+                string operator+(const string& lhs, const char* rhs){
+                    string toReturn = lhs;
+                    toReturn.append(rhs);
+                    return toReturn;
+                }
 
-            cpstd::string cpstd::operator+(cpstd::string&& lhs, const char* rhs){
-                lhs.append(rhs);
-                return cpstd::move(lhs);
-            }
+                string operator+(string&& lhs, const char* rhs){
+                    lhs.append(rhs);
+                    return move(lhs);
+                }
 
-            cpstd::string cpstd::operator+(const char* lhs, const cpstd::string& rhs){
-                cpstd::string toReturn = lhs;
-                toReturn.append(rhs);
-                return toReturn;
-            }
+                string operator+(const char* lhs, const string& rhs){
+                    string toReturn = lhs;
+                    toReturn.append(rhs);
+                    return toReturn;
+                }
 
-            cpstd::string cpstd::operator+(const char* lhs, cpstd::string&& rhs){
-                cpstd::string toReturn = lhs;
-                toReturn.append(rhs);
-                rhs.clear();
-                return toReturn;
+                string operator+(const char* lhs, string&& rhs){
+                    string toReturn = lhs;
+                    toReturn.append(rhs);
+                    rhs.clear();
+                    return toReturn;
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // char
 
-            cpstd::string cpstd::operator+ (const cpstd::string& lhs, char rhs){
-                cpstd::string toReturn = lhs;
-                toReturn.append(1,rhs);
-                return toReturn;
-            }
+            namespace cpstd{
+                string operator+ (const string& lhs, char rhs){
+                    string toReturn = lhs;
+                    toReturn.append(1,rhs);
+                    return toReturn;
+                }
 
-            cpstd::string cpstd::operator+ (cpstd::string&& lhs, char rhs){
-                lhs.append(1,rhs);
-                return cpstd::move(lhs);
-            }
+                string operator+ (string&& lhs, char rhs){
+                    lhs.append(1,rhs);
+                    return move(lhs);
+                }
 
-            cpstd::string cpstd::operator+ (char lhs, const cpstd::string& rhs){
-                cpstd::string toReturn(lhs);
-                toReturn.append(rhs);
-                return toReturn;
-            }
+                string operator+ (char lhs, const string& rhs){
+                    string toReturn(lhs);
+                    toReturn.append(rhs);
+                    return toReturn;
+                }
 
-            cpstd::string cpstd::operator+ (char lhs, cpstd::string&& rhs){
-                cpstd::string toReturn(lhs);
-                toReturn.append(rhs);
-                rhs.clear();
-                return toReturn;
+                string operator+ (char lhs, string&& rhs){
+                    string toReturn(lhs);
+                    toReturn.append(rhs);
+                    rhs.clear();
+                    return toReturn;
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Relational operators (cpstd::string::string)
+    // Relational operators (string::string)
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Equality
+
             namespace cpstd{
                 bool operator==(const string& lhs, const string& rhs) noexcept{
                     if(strcmp(lhs.c_str(), rhs.c_str()) == 0) { return 1; }
@@ -1863,104 +1870,116 @@
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Inequality
 
-            bool cpstd::operator!=(const cpstd::string& lhs, const cpstd::string& rhs) noexcept{
-                if(strcmp(lhs.c_str(), rhs.c_str()) == 0) { return 0; }
-                else{return 1;}
-            }
+            namespace cpstd{
+                bool operator!=(const string& lhs, const string& rhs) noexcept{
+                    if(strcmp(lhs.c_str(), rhs.c_str()) == 0) { return 0; }
+                    else{return 1;}
+                }
 
-            bool cpstd::operator!=(const char* lhs, const cpstd::string& rhs){
-                if(strcmp(lhs, rhs.c_str()) == 0) { return 0; }
-                else{return 1;}
-            }
+                bool operator!=(const char* lhs, const string& rhs){
+                    if(strcmp(lhs, rhs.c_str()) == 0) { return 0; }
+                    else{return 1;}
+                }
 
-            bool cpstd::operator!=(const cpstd::string& lhs, const char* rhs){
-                if(strcmp(lhs.c_str(), rhs) == 0) { return 0; }
-                else{return 1;}
+                bool operator!=(const string& lhs, const char* rhs){
+                    if(strcmp(lhs.c_str(), rhs) == 0) { return 0; }
+                    else{return 1;}
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Less than
 
-            bool cpstd::operator<(const cpstd::string& lhs, const cpstd::string& rhs) noexcept{
-                if(strcmp(lhs.c_str(), rhs.c_str()) < 0) { return 1; }
-                else{return 0;}
-            }
+            namespace cpstd{
+                bool operator<(const string& lhs, const string& rhs) noexcept{
+                    if(strcmp(lhs.c_str(), rhs.c_str()) < 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator<(const char* lhs, const cpstd::string& rhs){
-                if(strcmp(lhs, rhs.c_str()) < 0) { return 1; }
-                else{return 0;}
-            }
+                bool operator<(const char* lhs, const string& rhs){
+                    if(strcmp(lhs, rhs.c_str()) < 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator<(const cpstd::string& lhs, const char* rhs){
-                if(strcmp(lhs.c_str(), rhs) < 0) { return 1; }
-                else{return 0;}
+                bool operator<(const string& lhs, const char* rhs){
+                    if(strcmp(lhs.c_str(), rhs) < 0) { return 1; }
+                    else{return 0;}
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Less or equal than
 
-            bool cpstd::operator<=(const cpstd::string& lhs, const cpstd::string& rhs) noexcept{
-                if(strcmp(lhs.c_str(), rhs.c_str()) <= 0) { return 1; }
-                else{return 0;}
-            }
+            namespace cpstd{
+                bool operator<=(const string& lhs, const string& rhs) noexcept{
+                    if(strcmp(lhs.c_str(), rhs.c_str()) <= 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator<=(const char* lhs, const cpstd::string& rhs){
-                if(strcmp(lhs, rhs.c_str()) <= 0) { return 1; }
-                else{return 0;}
-            }
+                bool operator<=(const char* lhs, const string& rhs){
+                    if(strcmp(lhs, rhs.c_str()) <= 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator<=(const cpstd::string& lhs, const char* rhs){
-                if(strcmp(lhs.c_str(), rhs) <= 0) { return 1; }
-                else{return 0;}
+                bool operator<=(const string& lhs, const char* rhs){
+                    if(strcmp(lhs.c_str(), rhs) <= 0) { return 1; }
+                    else{return 0;}
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Greater than
 
-            bool cpstd::operator>(const cpstd::string& lhs, const cpstd::string& rhs) noexcept{
-                if(strcmp(lhs.c_str(), rhs.c_str()) > 0) { return 1; }
-                else{return 0;}
-            }
+            namespace cpstd{
+                bool operator>(const string& lhs, const string& rhs) noexcept{
+                    if(strcmp(lhs.c_str(), rhs.c_str()) > 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator>(const char* lhs, const cpstd::string& rhs){
-                if(strcmp(lhs, rhs.c_str()) > 0) { return 1; }
-                else{return 0;}
-            }
+                bool operator>(const char* lhs, const string& rhs){
+                    if(strcmp(lhs, rhs.c_str()) > 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator>(const cpstd::string& lhs, const char* rhs){
-                if(strcmp(lhs.c_str(), rhs) > 0) { return 1; }
-                else{return 0;}
+                bool operator>(const string& lhs, const char* rhs){
+                    if(strcmp(lhs.c_str(), rhs) > 0) { return 1; }
+                    else{return 0;}
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Greater or equal than
 
-            bool cpstd::operator>=(const cpstd::string& lhs, const cpstd::string& rhs) noexcept{
-                if(strcmp(lhs.c_str(), rhs.c_str()) >= 0) { return 1; }
-                else{return 0;}
-            }
+            namespace cpstd{
+                bool operator>=(const string& lhs, const string& rhs) noexcept{
+                    if(strcmp(lhs.c_str(), rhs.c_str()) >= 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator>=(const char* lhs, const cpstd::string& rhs){
-                if(strcmp(lhs, rhs.c_str()) >= 0) { return 1; }
-                else{return 0;}
-            }
+                bool operator>=(const char* lhs, const string& rhs){
+                    if(strcmp(lhs, rhs.c_str()) >= 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator>=(const cpstd::string& lhs, const char* rhs){
-                if(strcmp(lhs.c_str(), rhs) >= 0) { return 1; }
-                else{return 0;}
+                bool operator>=(const string& lhs, const char* rhs){
+                    if(strcmp(lhs.c_str(), rhs) >= 0) { return 1; }
+                    else{return 0;}
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////
         // swap
         // 
-            void cpstd::swap(cpstd::string& x, cpstd::string& y){
-            #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
-                std::swap(x._string, y._string);
-            #else
-                cpstd::string tmp = cpstd::move(x);
-                x = cpstd::move(y);
-                y = cpstd::move(tmp);
-            #endif
+            namespace cpstd{
+                void swap(string& x, string& y){
+                #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                    std::swap(x._string, y._string);
+                #else
+                    string tmp = cpstd::move(x);
+                    x = cpstd::move(y);
+                    y = cpstd::move(tmp);
+                #endif
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
