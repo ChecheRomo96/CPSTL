@@ -20,6 +20,4 @@
         #include <cstdio.h>
     #endif
 
-    #if defined
-
 #endif//CPSTL_H
