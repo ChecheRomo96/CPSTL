@@ -74,7 +74,7 @@
             std::copy(il.begin(), il.end(), _string.begin());
         #else
             for(size_t i = 0; i < size(); i++){
-                (*this)[i] = *(li.begin()+i);
+                (*this)[i] = *(il.begin()+i);
             }
         #endif
         }
