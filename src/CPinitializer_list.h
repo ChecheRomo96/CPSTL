@@ -16,36 +16,32 @@
             using initializer_list = std::initializer_list<T>;
         #else
 
-            template<class T> class initializer_list
-            {
-            private:
-                const T* array_ = nullptr;
-                size_t len_ = 0;
-         
-                // The compiler can (and will) call a private constructor.
-                // This constructor will get called when the compiler encounters a braced
-                // list expression with elements of type T, like in f({t1, t2, t3}) and
-                // an initializer_list<T> is expected by f function.
-                constexpr initializer_list(const T* array, size_t len) : array_{array}, len_{len} {}
-         
-            public:
-                constexpr initializer_list() = default;
-         
-                constexpr size_t size() const
-                {
-                    return len_;
-                }
-         
-                constexpr const T* begin() const
-                {
-                    return array_;
-                }
-         
-                constexpr const T* end() const
-                {
-                    return begin() + size();
-                }
+            template<class _E>
+            class initializer_list
             };
+
+          /**
+           *  @brief  Return an iterator pointing to the first element of
+           *          the initializer_list.
+           *  @param  __ils  Initializer list.
+           *  @relates initializer_list
+           */
+          template<class _Tp>
+            constexpr const _Tp*
+            begin(initializer_list<_Tp> __ils) noexcept
+            { return __ils.begin(); }
+
+          /**
+           *  @brief  Return an iterator pointing to one past the last element
+           *          of the initializer_list.
+           *  @param  __ils  Initializer list.
+           *  @relates initializer_list
+           */
+          template<class _Tp>
+            constexpr const _Tp*
+            end(initializer_list<_Tp> __ils) noexcept
+            { return __ils.end(); }
+    
         #endif
     }
 
