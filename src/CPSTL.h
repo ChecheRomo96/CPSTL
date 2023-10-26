@@ -2,7 +2,6 @@
 #define CPSTL_H
 
     #include <CPSTL_BuildSettings.h>
-    
     #include <CPinitializer_list>
 
     namespace cpstd {}
