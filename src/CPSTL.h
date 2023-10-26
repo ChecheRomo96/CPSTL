@@ -16,8 +16,6 @@
 
     #ifdef CPSTL_STRING_ENABLED
         #include <CPstring>
-    
-        #include <stdio.h>
     #endif
 
 #endif//CPSTL_H
