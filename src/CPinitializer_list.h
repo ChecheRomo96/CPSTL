@@ -43,18 +43,18 @@
             { return __ils.end(); }
     
         #endif
-    }
 
-    template<typename T>
-    constexpr const T* begin(cpstd::initializer_list<T> il) noexcept 
-    {
-        return il.begin();
-    }
+        template<typename T>
+        constexpr const T* begin(cpstd::initializer_list<T> il) noexcept 
+        {
+            return il.begin();
+        }
 
-    template<typename T>
-    constexpr const T* end(cpstd::initializer_list<T> il) noexcept
-    {
-        return il.end();
+        template<typename T>
+        constexpr const T* end(cpstd::initializer_list<T> il) noexcept
+        {
+            return il.end();
+        }
     }
 
 
