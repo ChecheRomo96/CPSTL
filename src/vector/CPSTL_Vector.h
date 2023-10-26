@@ -4,7 +4,10 @@
     #include <CPSTL_BuildSettings.h>
     #include <utility/CPSTL_Move.h>
     #include <CPinitializer_list>
-    #include <iostream>
+
+    #if defined CPSTL_USING_STL
+        #include <iostream>
+    #endif
 
     #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
         #include "CPVector_Exceptions.h"
