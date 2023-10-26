@@ -5,7 +5,7 @@
 
     #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
         #include <string>
-    #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+    #else
         #include <string.h> 
     #endif
 
