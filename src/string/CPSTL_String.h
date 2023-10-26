@@ -3,6 +3,7 @@
 
     #include <CPstring>
     #include <CPinitializer_list>
+    #include <utility/CPSTL_Move.h>
 
     namespace cpstd{  
         class string{
