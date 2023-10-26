@@ -1767,7 +1767,7 @@
             cpstd::string cpstd::operator+(cpstd::string&& lhs, cpstd::string&& rhs){
                 lhs.append(rhs);
                 rhs.clear();
-                return std::move(lhs);
+                return cpstd::move(lhs);
             }
 
             cpstd::string cpstd::operator+(const cpstd::string& lhs, cpstd::string&& rhs){
@@ -1779,7 +1779,7 @@
 
             cpstd::string cpstd::operator+(cpstd::string&& lhs, const cpstd::string& rhs){
                 lhs.append(rhs);
-                return std::move(lhs);
+                return cpstd::move(lhs);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1793,7 +1793,7 @@
 
             cpstd::string cpstd::operator+(cpstd::string&& lhs, const char* rhs){
                 lhs.append(rhs);
-                return std::move(lhs);
+                return cpstd::move(lhs);
             }
 
             cpstd::string cpstd::operator+(const char* lhs, const cpstd::string& rhs){
@@ -1820,7 +1820,7 @@
 
             cpstd::string cpstd::operator+ (cpstd::string&& lhs, char rhs){
                 lhs.append(1,rhs);
-                return std::move(lhs);
+                return cpstd::move(lhs);
             }
 
             cpstd::string cpstd::operator+ (char lhs, const cpstd::string& rhs){
