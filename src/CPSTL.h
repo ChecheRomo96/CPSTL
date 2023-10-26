@@ -13,7 +13,7 @@
     #ifdef CPSTL_STRING_ENABLED
         #include <CPstring>
         #include <stdarg.h>
-        #include <stdio.h>
+        #include <cstdio.h>
     #endif
 
 #endif//CPSTL_H
