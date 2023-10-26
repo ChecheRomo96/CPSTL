@@ -1843,20 +1843,21 @@
 
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Equality
+            namespace cpstd{
+                bool operator==(const string& lhs, const string& rhs) noexcept{
+                    if(strcmp(lhs.c_str(), rhs.c_str()) == 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator==(const cpstd::string& lhs, const cpstd::string& rhs) noexcept{
-                if(strcmp(lhs.c_str(), rhs.c_str()) == 0) { return 1; }
-                else{return 0;}
-            }
+                bool operator==(const char* lhs, const string& rhs){
+                    if(strcmp(lhs, rhs.c_str()) == 0) { return 1; }
+                    else{return 0;}
+                }
 
-            bool cpstd::operator==(const char* lhs, const cpstd::string& rhs){
-                if(strcmp(lhs, rhs.c_str()) == 0) { return 1; }
-                else{return 0;}
-            }
-
-            bool cpstd::operator==(const cpstd::string& lhs, const char* rhs){
-                if(strcmp(lhs.c_str(), rhs) == 0) { return 1; }
-                else{return 0;}
+                bool operator==(const string& lhs, const char* rhs){
+                    if(strcmp(lhs.c_str(), rhs) == 0) { return 1; }
+                    else{return 0;}
+                }
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
