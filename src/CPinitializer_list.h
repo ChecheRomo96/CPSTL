@@ -16,76 +16,42 @@
             using initializer_list = std::initializer_list<T>;
         #else
 
-            template<class _E>
+            template<class T>
             class initializer_list {
             public:
-              typedef _E        value_type;
-              typedef const _E&     reference;
-              typedef const _E&     const_reference;
-              typedef size_t        size_type;
-              typedef const _E*     iterator;
-              typedef const _E*     const_iterator;
+                using value_type = T;
+                using reference = const T&;
+                using const_reference = const T&;
+                using size_type = size_t;
+                using const_iterator = const T*;
 
             private:
-              iterator          _M_array;
-              size_type         _M_len;
+                const_iterator _M_array;
+                size_type _M_len;
 
-              // The compiler can call a private constructor.
-              constexpr initializer_list(const_iterator __a, size_type __l)
-              : _M_array(__a), _M_len(__l) { }
+                constexpr initializer_list(const_iterator __a, size_type __l)
+                    : _M_array(__a), _M_len(__l) { }
 
             public:
-              constexpr initializer_list() noexcept
-              : _M_array(0), _M_len(0) { }
+                constexpr initializer_list() noexcept
+                    : _M_array(nullptr), _M_len(0) { }
 
-              // Number of elements.
-              constexpr size_type
-              size() const noexcept { return _M_len; }
+                constexpr size_type size() const noexcept { return _M_len; }
+                constexpr const_iterator begin() const noexcept { return _M_array; }
+                constexpr const_iterator end() const noexcept { return _M_array + _M_len; }
 
-              // First element.
-              constexpr const_iterator
-              begin() const noexcept { return _M_array; }
-
-              // One past the last element.
-              constexpr const_iterator
-              end() const noexcept { return begin() + size(); }
+                // Custom constructor to initialize with a brace-enclosed initializer list
+                constexpr initializer_list(std::initializer_list<T> il) noexcept
+                    : _M_array(il.begin()), _M_len(il.size()) { }
             };
 
-          /**
-           *  @brief  Return an iterator pointing to the first element of
-           *          the initializer_list.
-           *  @param  __ils  Initializer list.
-           *  @relates initializer_list
-           */
-          template<class _Tp>
-            constexpr const _Tp*
-            begin(initializer_list<_Tp> __ils) noexcept
-            { return __ils.begin(); }
-
-          /**
-           *  @brief  Return an iterator pointing to one past the last element
-           *          of the initializer_list.
-           *  @param  __ils  Initializer list.
-           *  @relates initializer_list
-           */
-          template<class _Tp>
-            constexpr const _Tp*
-            end(initializer_list<_Tp> __ils) noexcept
-            { return __ils.end(); }
+            // Helper function to create initializer lists
+            template<class T>
+            constexpr initializer_list<T> make_initializer_list(const T* array, size_t size) {
+                return initializer_list<T>(array, size);
+            }
 
         #endif
-
-        template<typename T>
-        constexpr const T* begin(cpstd::initializer_list<T> il) noexcept 
-        {
-            return il.begin();
-        }
-
-        template<typename T>
-        constexpr const T* end(cpstd::initializer_list<T> il) noexcept
-        {
-            return il.end();
-        }
     }
 
 
