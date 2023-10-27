@@ -29,10 +29,11 @@
                 const_iterator _M_array;
                 size_type _M_len;
 
-                constexpr initializer_list(const_iterator __a, size_type __l)
-                    : _M_array(__a), _M_len(__l) { }
 
             public:
+                constexpr initializer_list(const_iterator __a, size_type __l)
+                    : _M_array(__a), _M_len(__l) { }
+                    
                 constexpr initializer_list() noexcept
                     : _M_array(nullptr), _M_len(0) { }
 
