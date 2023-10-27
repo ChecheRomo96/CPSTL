@@ -6,18 +6,9 @@
     #if __has_include(<initializer_list>)
         #include <initializer_list>
     #else
-        #include <stddef.h>  // For size_t
+        #include <stddef.h>
         
-    #endif
-        
-    #include <stddef.h>
-
-    namespace cpstd {
-
-        #if __has_include(<initializer_list>)
-            template<class T>
-            using initializer_list = std::initializer_list<T>;
-        #else
+        namespace std {
 
             template <typename T>
             class initializer_list {
@@ -44,26 +35,14 @@
                 constexpr const_iterator begin() const noexcept { return _M_array; }
                 constexpr const_iterator end() const noexcept { return _M_array + _M_len; }
             };
-
-            // Helper function to create initializer lists from arrays
-            template <typename T>
-            constexpr initializer_list<T> make_initializer_list(const T* array, size_t size) {
-                return initializer_list<T>(array, size);
-            }
-
-
-
-        #endif
-    }
-
-    #if __has_include(<initializer_list>)
-    
-    #else
-
-        namespace std{
-            using initializer_list = cpstd::initializer_list<T>;
         }
-        
+
     #endif
+
+    namespace cpstd {
+      template<class T>
+      using initializer_list = std::initializer_list<T>;
+    }
+        
 
 #endif//CPSTL_INITIALIZER_LIST_H
