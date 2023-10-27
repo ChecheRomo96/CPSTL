@@ -9,7 +9,7 @@
         
     #include <stddef.h>
 
-    namespace cpstd {
+    namespace std {
 
         #if __has_include(<initializer_list>)
             template<class T>
@@ -41,7 +41,7 @@
             constexpr const _Tp*
             end(initializer_list<_Tp> __ils) noexcept
             { return __ils.end(); }
-    
+
         #endif
 
         template<typename T>
