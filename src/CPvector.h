@@ -1,6 +1,8 @@
 #ifndef CPSTL_VECTOR_H
 #define CPSTL_VECTOR_H
 
+    #include "CPinitializer_list.h"
+
     #if defined (CPSTL_VECTOR_SORTING_ENABLED)
         #include "Sorting/CPVector_Sorting.h"
     #endif
