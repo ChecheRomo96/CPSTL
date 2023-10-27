@@ -18,11 +18,11 @@
         #if defined(CPVECTOR_USING_STD_VECTOR_ALLOCATION) || defined(CPVECTOR_USING_CPP_ALLOCATION)
             cpstd::vector<uint8_t>* myVectorptr = nullptr;
 
-            EXPECT_EQ((void*)myVectorptr,nullptr);
+            EXPECT_EQ(myVectorptr, (void*)nullptr);
             
             myVectorptr = new cpstd::vector<uint8_t>(12);
 
-            ASSERT_NE(myVectorptr,nullptr);
+            ASSERT_NE(myVectorptr, (void*)nullptr);
 
             EXPECT_EQ(myVectorptr->size(),12);
 
@@ -78,7 +78,7 @@
         
         for(uint8_t i = 0; i < 8; i++){
             for(uint8_t j = 0; j < 8; j++){
-                EXPECT_EQ(myVectorptr[i][j], (8*i) + j);
+                EXPECT_EQ(myVectorptr[i][j], (uint8_t) ((8*i) + j) );
             }
         }
 
