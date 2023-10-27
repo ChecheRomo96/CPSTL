@@ -128,7 +128,7 @@
             testClass tmp(i);
             ASSERT_EQ(tmp.A(), i);
             myVector.push_back(cpstd::move(tmp));
-            ASSERT_EQ(myVector.back(), i);
+            ASSERT_EQ(myVector.back().A(), i);
             ASSERT_EQ(tmp.A(), 0);
         }
     }
