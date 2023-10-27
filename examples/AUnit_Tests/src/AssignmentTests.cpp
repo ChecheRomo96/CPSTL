@@ -1,5 +1,6 @@
 #include <Aunit.h>
-#include <CPvector>
+#include <CPvector.h>
+#include <aunit/contrib/gtest.h>
 
 //////////////////////////////////////////////////////////////////////////////////
 //! @test
@@ -11,14 +12,14 @@
 
     test(CPSTL_Vector_AssignmentTesting_cpstd_vector) {
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
-        assertEqual(myVector.size(),5);
-        assertEqual(myVector.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
 
         cpstd::vector<uint8_t> myVector2 = myVector;
-        assertEqual(myVector.size(),5);
-        assertEqual(myVector.capacity(),5);
-        assertEqual(myVector2.size(),5);
-        assertEqual(myVector2.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
+        assertEqual(myVector2.size(), (size_t) 5);
+        assertEqual(myVector2.capacity(), (size_t) 5);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -31,14 +32,14 @@
 
     test(CPSTL_Vector_AssignmentTesting_cpstd_vector_move) {
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
-        assertEqual(myVector.size(),5);
-        assertEqual(myVector.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
 
         cpstd::vector<uint8_t> myVector2 = cpstd::move(myVector);
-        assertEqual(myVector.size(),0);
-        assertEqual(myVector.capacity(),0);
-        assertEqual(myVector2.size(),5);
-        assertEqual(myVector2.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 0);
+        assertEqual(myVector.capacity(), (size_t) 0);
+        assertEqual(myVector2.size(), (size_t) 5);
+        assertEqual(myVector2.capacity(), (size_t) 5);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -51,14 +52,14 @@
 
     test(CPSTL_Vector_AssignmentTesting_InitializerList) {
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
-        assertEqual(myVector.size(),5);
-        assertEqual(myVector.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
 
         cpstd::vector<uint8_t> myVector2 = cpstd::move(myVector);
-        assertEqual(myVector.size(),0);
-        assertEqual(myVector.capacity(),0);
-        assertEqual(myVector2.size(),5);
-        assertEqual(myVector2.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 0);
+        assertEqual(myVector.capacity(), (size_t) 0);
+        assertEqual(myVector2.size(), (size_t) 5);
+        assertEqual(myVector2.capacity(), (size_t) 5);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
