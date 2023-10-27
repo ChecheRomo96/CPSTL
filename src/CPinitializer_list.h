@@ -31,9 +31,9 @@
 
 
             public:
-                constexpr initializer_list(const_iterator __a, size_type __l)
+                constexpr initializer_list(const_iterator __a, size_type __l) noexcept
                     : _M_array(__a), _M_len(__l) { }
-                    
+
                 constexpr initializer_list() noexcept
                     : _M_array(nullptr), _M_len(0) { }
 
