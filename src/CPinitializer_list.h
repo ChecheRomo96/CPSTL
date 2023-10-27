@@ -7,8 +7,13 @@
         #include <initializer_list>
     #else
         #include <stddef.h>  // For size_t
+        
+        namespace cpstd{ template<class> initializer_list; }
 
-        using std::initializer_list = cpstd::initializer_list<T>;
+        namespace std{
+            using initializer_list = cpstd::initializer_list<T>;
+        }
+        
     #endif
         
     #include <stddef.h>
