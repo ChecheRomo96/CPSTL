@@ -8,12 +8,6 @@
     #else
         #include <stddef.h>  // For size_t
         
-        namespace cpstd{ template<class> initializer_list; }
-
-        namespace std{
-            using initializer_list = cpstd::initializer_list<T>;
-        }
-        
     #endif
         
     #include <stddef.h>
@@ -61,5 +55,15 @@
 
         #endif
     }
+
+    #if __has_include(<initializer_list>)
+    
+    #else
+
+        namespace std{
+            using initializer_list = cpstd::initializer_list<T>;
+        }
+        
+    #endif
 
 #endif//CPSTL_INITIALIZER_LIST_H
