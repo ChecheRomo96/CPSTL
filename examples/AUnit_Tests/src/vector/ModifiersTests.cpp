@@ -201,7 +201,7 @@
         myVector.insert(cpstd::move(2),2);
 
         for(uint8_t i = 0; i < myVector.size(); i++){
-            ASSERT_EQ(myVector[i],i);
+            ASSERT_EQ(myVector[i].A(),i);
         }
     }
 //
