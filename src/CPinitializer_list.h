@@ -9,7 +9,7 @@
         
     #include <stddef.h>
 
-    namespace std {
+    namespace cpstd {
 
         #if __has_include(<initializer_list>)
             template<class T>
