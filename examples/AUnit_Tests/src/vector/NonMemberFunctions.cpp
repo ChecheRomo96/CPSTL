@@ -19,9 +19,9 @@
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
         cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-        EXPECT_EQ(myVector == myVector2, 1);
+        EXPECT_EQ(myVector == myVector2, (bool) 1);
         myVector2 = {0,1,2,3};
-        EXPECT_EQ(myVector == myVector2, 0);
+        EXPECT_EQ(myVector == myVector2, (bool) 0);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -41,9 +41,9 @@
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
         cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-        EXPECT_EQ(myVector != myVector2, 0);
+        EXPECT_EQ(myVector != myVector2, (bool) 0);
         myVector2 = {0,1,2,3};
-        EXPECT_EQ(myVector != myVector2, 1);
+        EXPECT_EQ(myVector != myVector2, (bool) 1);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -63,9 +63,9 @@
         cpstd::vector<uint8_t> myVector = {0,1,2,3};
         cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-        EXPECT_EQ(myVector < myVector2, 1);
+        EXPECT_EQ(myVector < myVector2, (bool) 1);
         myVector2 = {0,1,2,3};
-        EXPECT_EQ(myVector < myVector2, 0);
+        EXPECT_EQ(myVector < myVector2, (bool) 0);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -85,9 +85,9 @@
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
         cpstd::vector<uint8_t> myVector2 = {0,1,2,3};
 
-        EXPECT_EQ(myVector > myVector2, 1);
+        EXPECT_EQ(myVector > myVector2, (bool) 1);
         myVector2 = {0,1,2,3,4};
-        EXPECT_EQ(myVector > myVector2, 0);
+        EXPECT_EQ(myVector > myVector2, (bool) 0);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -107,11 +107,11 @@
         cpstd::vector<uint8_t> myVector = {0,1,2,3};
         cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-        EXPECT_EQ(myVector <= myVector2, 1);
+        EXPECT_EQ(myVector <= myVector2, (bool) 1);
         myVector2 = {0,1,2,3};
-        EXPECT_EQ(myVector <= myVector2, 1);
+        EXPECT_EQ(myVector <= myVector2, (bool) 1);
         myVector2 = {0,1,2};
-        EXPECT_EQ(myVector <= myVector2, 0);
+        EXPECT_EQ(myVector <= myVector2, (bool) 0);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -132,11 +132,11 @@
         cpstd::vector<int> myVector = {0,1,2,3,4};
         cpstd::vector<int> myVector2 = {0,1,2,3};
 
-        EXPECT_EQ(myVector >= myVector2, 1);
+        EXPECT_EQ(myVector >= myVector2, (bool) 1);
         myVector2 = {0,1,2,3,4};
-        EXPECT_EQ(myVector >= myVector2, 1);
+        EXPECT_EQ(myVector >= myVector2, (bool) 1);
         myVector2 = {0,1,2,3,4,5};
-        EXPECT_EQ(myVector >= myVector2, 0);
+        EXPECT_EQ(myVector >= myVector2, (bool) 0);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -156,13 +156,13 @@
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
         cpstd::vector<uint8_t> myVector2 = {0,1,2,3};
 
-        EXPECT_EQ(myVector.size(), 5);
-        EXPECT_EQ(myVector2.size(), 4);
+        EXPECT_EQ(myVector.size(), (size_t) 5);
+        EXPECT_EQ(myVector2.size(), (size_t) 4);
 
         cpstd::swap(myVector, myVector2);
 
-        EXPECT_EQ(myVector.size(), 4);
-        EXPECT_EQ(myVector2.size(), 5);
+        EXPECT_EQ(myVector.size(), (size_t) 4);
+        EXPECT_EQ(myVector2.size(), (size_t) 5);
 
     }
 //
