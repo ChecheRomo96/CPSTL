@@ -2,7 +2,7 @@
 #define CPSTL_H
 
     #include <CPSTL_BuildSettings.h>
-    #include <CPinitializer_list>
+    #include <CPinitializer_list.h>
 
     namespace cpstd {}
 
@@ -11,11 +11,11 @@
     #endif
 
     #ifdef CPSTL_VECTOR_ENABLED
-        #include <CPvector>
+        #include <CPvector.h>
     #endif
 
     #ifdef CPSTL_STRING_ENABLED
-        #include <CPstring>
+        #include <CPstring.h>
     #endif
 
 #endif//CPSTL_H
