@@ -17,8 +17,7 @@
         #else
 
             template<class _E>
-            class initializer_list
-            {
+            class initializer_list {
             public:
               typedef _E        value_type;
               typedef const _E&     reference;
