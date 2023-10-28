@@ -1,6 +1,6 @@
 #ifndef CPSTL_STRING_HEADER
 #define CPSTL_STRING_HEADER
     
-    #include <SPstring.h>
+    #include <CPstring.h>
 
 #endif//CPSTL_STRING_HEADER
