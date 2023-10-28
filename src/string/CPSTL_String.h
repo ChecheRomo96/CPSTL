@@ -1,9 +1,9 @@
 #ifndef CPSTL_STRING_CLASS_H
 #define CPSTL_STRING_CLASS_H
 
-    #include <CPstring>
-    #include <CPinitializer_list>
+    #include <CPinitializer_list.h>
     #include <utility/CPSTL_Move.h>
+    #include <CPstring.h>
 
     namespace cpstd{  
         class string{
