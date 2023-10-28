@@ -14,29 +14,29 @@
 
     TEST(BasicFunctionalityTesting, reserve) {
 
-        CPString::string<uint8_t> myVector;
-        ASSERT_EQ(myVector.size(), (size_t) 0);
+        CPString::string<uint8_t> myString;
+        ASSERT_EQ(myString.size(), (size_t) 0);
 
         for(uint8_t i = 0; i < UINT8_MAX; i++ )
         {
-            myVector.resize(i);
-            ASSERT_EQ(myVector.size(),i);
-            ASSERT_GE(myVector.capacity(),i);
+            myString.resize(i);
+            ASSERT_EQ(myString.size(),i);
+            ASSERT_GE(myString.capacity(),i);
         }
 
-        myVector.clear();
-        ASSERT_EQ(myVector.size(), (size_t) 0);
-        ASSERT_EQ(myVector.capacity(), (size_t) 0);
+        myString.clear();
+        ASSERT_EQ(myString.size(), (size_t) 0);
+        ASSERT_EQ(myString.capacity(), (size_t) 0);
 
-        myVector.reserve(UINT8_MAX);
-        ASSERT_EQ(myVector.size(), (size_t) 0);
-        ASSERT_GE(myVector.capacity(), (size_t) UINT8_MAX);
+        myString.reserve(UINT8_MAX);
+        ASSERT_EQ(myString.size(), (size_t) 0);
+        ASSERT_GE(myString.capacity(), (size_t) UINT8_MAX);
 
         for(uint8_t i = 0; i < UINT8_MAX; i++ )
         {
-            myVector.resize(i);
-            ASSERT_EQ(myVector.size(), (size_t) i);
-            ASSERT_GE(myVector.capacity(), (size_t) UINT8_MAX);
+            myString.resize(i);
+            ASSERT_EQ(myString.size(), (size_t) i);
+            ASSERT_GE(myString.capacity(), (size_t) UINT8_MAX);
         }
     }
 //
