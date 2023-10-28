@@ -20,8 +20,8 @@
         for(uint8_t i = 0; i < UINT8_MAX; i++ )
         {
             myString.resize(i);
-            ASSERT_EQ(myString.size(),i);
-            ASSERT_GE(myString.capacity(),i);
+            ASSERT_EQ(myString.size(), (size_t) i);
+            ASSERT_GE(myString.capacity(), (size_t) i);
         }
 
         myString.clear();
