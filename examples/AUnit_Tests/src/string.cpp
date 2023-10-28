@@ -4,7 +4,7 @@
 
 //////////////////////////////////////////////////////////////////////////////////
 //! @test
-//! This test case assesses the "reserve" functionality of the CPString::string class.
+//! This test case assesses the "reserve" functionality of the cpstd::string class.
 //! The purpose of this test is to verify that the "reserve" method correctly
 //! allocates memory to accommodate the specified capacity without affecting the
 //! size of the string.\n\n
@@ -14,7 +14,7 @@
 
     TEST(BasicFunctionalityTesting, reserve) {
 
-        CPString::string<uint8_t> myString;
+        cpstd::string<uint8_t> myString;
         ASSERT_EQ(myString.size(), (size_t) 0);
 
         for(uint8_t i = 0; i < UINT8_MAX; i++ )
