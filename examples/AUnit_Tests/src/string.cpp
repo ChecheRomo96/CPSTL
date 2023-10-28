@@ -14,7 +14,7 @@
 
     TEST(BasicFunctionalityTesting, reserve) {
 
-        cpstd::string<uint8_t> myString;
+        cpstd::string myString;
         ASSERT_EQ(myString.size(), (size_t) 0);
 
         for(uint8_t i = 0; i < UINT8_MAX; i++ )
