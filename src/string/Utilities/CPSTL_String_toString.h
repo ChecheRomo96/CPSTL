@@ -2,7 +2,7 @@
 #define CPSTL_STRING_UTILITIES_TO_STRING_H
 
     #include <CPSTL_BuildSettings.h>
-    #include <CPstring>
+    #include <CPstring.h>
     
     namespace cpstd {
 
