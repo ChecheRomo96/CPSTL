@@ -15,7 +15,6 @@
         #if defined(Arduino_h)
             #include <Arduino.h>
             #include "CPSTL_UserSetup.h"
-asfd
         #endif
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
