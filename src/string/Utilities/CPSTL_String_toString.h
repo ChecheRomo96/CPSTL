@@ -6,8 +6,6 @@
     
     namespace cpstd {
 
-        class string;
-
         cpstd::string to_string( int val );
         cpstd::string to_string( long val );
         cpstd::string to_string( long long val );
