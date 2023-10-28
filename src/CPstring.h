@@ -7,13 +7,13 @@
 
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_STRING_USING_CPP_ALLOCATION)
             #include <string>
-        #else
+        #elif defined(CPSTL_STRING_USING_C_ALLOCATION) 
             #include <string.h> 
             #include <stdio.h>
         #endif
 
         #if defined(CPSTL_VECTOR_EXCEPTIONS_ENABLED) || defined(CPSTL_EXCEPTIONS_ENABLED)
-            #include <CPexception>
+            #include <CPexception.h>
         #endif
 
         #include "string/CPSTL_String.h"
