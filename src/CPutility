@@ -1,6 +1,6 @@
-#ifndef CPSTL_UTILITY_H
-#define CPSTL_UTILITY_H
+#ifndef CPSTL_UTILITY_HEADER
+#define CPSTL_UTILITY_HEADER
 
-    
+    #include <CPutility.h>
 
-#endif//CPSTL_UTILITY_H
+#endif//CPSTL_UTILITY_HEADER
