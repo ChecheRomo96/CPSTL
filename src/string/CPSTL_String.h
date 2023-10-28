@@ -493,5 +493,4 @@
         };
     }
 
-
 #endif//CPSTL_STRING_CLASS_H

@@ -1,15 +1,5 @@
 #include "CPSTL_String.h"
 
-#if defined(CPSTL_USING_STL)
-    #include <string.h>
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <math.h>
-    #include <sstream>
-#endif
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors
     
