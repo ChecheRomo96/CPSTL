@@ -8,6 +8,7 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_STRING_USING_CPP_ALLOCATION)
             #include <string>
         #else
+            #include <cstring.h> 
             #include <string.h> 
             #include <stdio.h>
         #endif
