@@ -2081,7 +2081,7 @@ namespace {
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // substrings
 
-            int cpstd::string::compare(size_t pos, size_t len, const cpstd::stringstring& str) const{
+            int cpstd::string::compare(size_t pos, size_t len, const cpstd::string& str) const{
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.compare(pos, len, str);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
@@ -2108,7 +2108,7 @@ namespace {
             #endif
             }
 
-            int cpstd::string::compare(size_t pos, size_t len, const cpstd::stringstring& str, size_t subpos, size_t sublen) const{
+            int cpstd::string::compare(size_t pos, size_t len, const cpstd::string& str, size_t subpos, size_t sublen) const{
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.compare(pos, len, str, subpos, sublen);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
