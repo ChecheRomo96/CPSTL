@@ -1,6 +1,7 @@
 #ifndef CPSTL_STRING_CLASS_H
 #define CPSTL_STRING_CLASS_H
 
+    #include <CPSTL_BuildSettings.h>
     #include <CPinitializer_list.h>
     #include <utility/CPSTL_Move.h>
     
