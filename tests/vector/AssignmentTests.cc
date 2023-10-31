@@ -12,16 +12,16 @@ using cpstd::initializer_list;
 //! The test is expected to pass if the assertion holds true, demonstrating that
 //! the default constructor effectively creates an empty vector with a size of zero.
 
-    TEST(CPSTL_Vector_AssignmentTesting, cpstd_vector) {
+    test(CPSTL_Vector_AssignmentTesting_cpstd_vector) {
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
-        ASSERT_EQ(myVector.size(),5);
-        ASSERT_EQ(myVector.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
 
         cpstd::vector<uint8_t> myVector2 = myVector;
-        ASSERT_EQ(myVector.size(),5);
-        ASSERT_EQ(myVector.capacity(),5);
-        ASSERT_EQ(myVector2.size(),5);
-        ASSERT_EQ(myVector2.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
+        assertEqual(myVector2.size(), (size_t) 5);
+        assertEqual(myVector2.capacity(), (size_t) 5);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -32,16 +32,16 @@ using cpstd::initializer_list;
 //! The test is expected to pass if the assertion holds true, demonstrating that
 //! the default constructor effectively creates an empty vector with a size of zero.
 
-    TEST(CPSTL_Vector_AssignmentTesting, cpstd_vector_move) {
+    test(CPSTL_Vector_AssignmentTesting_cpstd_vector_move) {
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
-        ASSERT_EQ(myVector.size(),5);
-        ASSERT_EQ(myVector.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
 
         cpstd::vector<uint8_t> myVector2 = cpstd::move(myVector);
-        ASSERT_EQ(myVector.size(),0);
-        ASSERT_EQ(myVector.capacity(),0);
-        ASSERT_EQ(myVector2.size(),5);
-        ASSERT_EQ(myVector2.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 0);
+        assertEqual(myVector.capacity(), (size_t) 0);
+        assertEqual(myVector2.size(), (size_t) 5);
+        assertEqual(myVector2.capacity(), (size_t) 5);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -52,16 +52,16 @@ using cpstd::initializer_list;
 //! The test is expected to pass if the assertion holds true, demonstrating that
 //! the default constructor effectively creates an empty vector with a size of zero.
 
-    TEST(CPSTL_Vector_AssignmentTesting, InitializerList) {
+    test(CPSTL_Vector_AssignmentTesting_InitializerList) {
         cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
-        ASSERT_EQ(myVector.size(),5);
-        ASSERT_EQ(myVector.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 5);
+        assertEqual(myVector.capacity(), (size_t) 5);
 
         cpstd::vector<uint8_t> myVector2 = cpstd::move(myVector);
-        ASSERT_EQ(myVector.size(),0);
-        ASSERT_EQ(myVector.capacity(),0);
-        ASSERT_EQ(myVector2.size(),5);
-        ASSERT_EQ(myVector2.capacity(),5);
+        assertEqual(myVector.size(), (size_t) 0);
+        assertEqual(myVector.capacity(), (size_t) 0);
+        assertEqual(myVector2.size(), (size_t) 5);
+        assertEqual(myVector2.capacity(), (size_t) 5);
     }
 //
 //////////////////////////////////////////////////////////////////////////////////

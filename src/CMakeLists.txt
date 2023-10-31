@@ -25,6 +25,11 @@
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPinitializer_list")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPutility")
 
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPalgorithm.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPexception.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPinitializer_list.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPutility.h")
+
 #
 ######################################################################################################
 # Add Subdirectories
@@ -33,11 +38,13 @@
 
 	if( ${CPSTL_VECTOR_STATUS} )
 		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPvector")
+		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPvector.h")
 		add_subdirectory(vector)
 	endif()
 
 	if( ${CPSTL_STRING_STATUS} )
 		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPstring")
+		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPstring.h")
 		add_subdirectory(string)
 	endif()
 #

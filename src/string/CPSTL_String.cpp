@@ -1,5 +1,9 @@
 #include "CPSTL_String.h"
 
+namespace {
+    static const char EmptyCString[] = {'\0'};
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors
     
@@ -14,6 +18,7 @@
             _size = 0;
             _capacity = 0;
 
+            reserve(0);
             resize(0);
         #endif
         }
@@ -26,7 +31,7 @@
 
         #if defined (CPSTL_STRING_USING_C_ALLOCATION)
             if(_buffer != NULL){
-                free(buffer);
+                free(_buffer);
             }
         #endif
         }
@@ -79,7 +84,7 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string = Source;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                resize(Source.length()+1);
+                resize(Source.length());
                 for(uint16_t i = 0; i < _size; i++){
                     _buffer[i] = Source[i];
                 }
@@ -105,7 +110,7 @@
                 else{
                     auto len = static_cast<size_t>(strlen(Source));
                     resize(len);
-                    for(uint16_t i = 0; i < size() ; i++){
+                    for(size_t i = 0; i < size() ; i++){
                         (*this)[i] = Source[i];
                     }
                 }
@@ -119,7 +124,7 @@
                 else{
                     resize(Size);
 
-                    for(uint16_t i = 0; i < Size; i++){
+                    for(size_t i = 0; i < Size; i++){
                         (*this)[i] = Source[i];
                     }
                 }
@@ -168,14 +173,13 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string = std::move(Source._string);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                _buffer = NULL;
-                _size = 0;
+                _buffer = Source._buffer;
+                _size = Source._size;
+                _capacity = Source._capacity;
 
-                resize(Source.length()+1);
-                for(uint16_t i = 0; i < _size; i++)
-                {
-                    _buffer[i] = Source[i];
-                }
+                Source._buffer = NULL;
+                Source._size = 0;
+                Source._capacity = 0;
             #endif
             }
         //
@@ -222,88 +226,19 @@
             _string.resize(new_size, new_chars);
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // Validating that Size is different from the actual size
-                ////////////////////////////////////////////////////////////////////////////////////////
-                //
-                    if((_buffer != NULL)&&(_size > 1)){
+            if(new_size > _capacity){ 
+                reserve(new_size);
+                if (_capacity < new_size) { return; }
+            }
+            else if (new_size < _capacity) { _buffer[new_size] = '\0'; }
+            
 
-                        if(new_size==_size-1){
-                            return;
-                        }
-                    }
-
-                    if(new_size == 0){
-
-                        if(_buffer!=NULL){free(_buffer);}
-                        _buffer = NULL;
-                        _size = 0;
-                        return;
-                    }
-                //
-                ////////////////////////////////////////////////////////////////////////////////////////
-
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // Getting the current string length
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // 
-                    uint8_t OldLength = length();
-                //
-                ////////////////////////////////////////////////////////////////////////////////////////
-
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // setting up a char buffer
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // 
-                    char* tmp = NULL;
-                    tmp = (char*)malloc(sizeof(char)*(new_size+1));
-                    
-                    if(tmp == NULL)
-                    {
-                        if(_buffer!=NULL){free(_buffer);}
-                        _buffer = NULL;
-                        _size = 0;
-                        return;
-                    }
-                //
-                ////////////////////////////////////////////////////////////////////////////////////////
-
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // Getting up the number of chars that are going to be maintained
-                ////////////////////////////////////////////////////////////////////////////////////////
-                //
-                    uint16_t MaintainedData = OldLength;
-                    if(new_size<_size){MaintainedData = new_size;}
-                //
-                ////////////////////////////////////////////////////////////////////////////////////////
-
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // Copying Data, Initializing the new blocks, Setting the last char to '\0'
-                ////////////////////////////////////////////////////////////////////////////////////////
-                //
-                    for(uint16_t i = 0; i < MaintainedData; i++)
-                    {
-                        tmp[i] = _buffer[i];
-                    }
-
-                    for(uint16_t i = MaintainedData; i < new_size; i++)
-                    {
-                        tmp[i] = new_chars;
-                    }
-
-                    tmp[new_size] =  '\0';
-                //
-                ////////////////////////////////////////////////////////////////////////////////////////
-                
-                ////////////////////////////////////////////////////////////////////////////////////////
-                // delete the current buffer and reference the previously allocated buffer
-                ////////////////////////////////////////////////////////////////////////////////////////
-                //
-                    if(_buffer!=NULL){free(_buffer);}
-                    _size = new_size+1;
-                    _buffer = tmp;
-                //
-                ////////////////////////////////////////////////////////////////////////////////////////
+            if(new_size > _size){
+                for(size_t i = _size; i < new_size; i++){
+                    _buffer[i] = new_chars;
+                }
+            }
+            _size = new_size;
         #endif
         }
     //
@@ -327,11 +262,32 @@
             _string.reserve(n);
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
             
-            //Not yet implemented
+            if (n == 0) {
+                if (_buffer == NULL) {
+                    char* tmp = NULL;
+                    tmp = (char*)malloc(sizeof(char));
+                    if (tmp != NULL){
+                        tmp[0] = '\0';
+                        _buffer = tmp;
+                    }
+                }
+                return;
+            }
 
+            if(_capacity >= n){ return; }
+            char* tmp = NULL;
+            tmp = (char*)calloc(n + 1, sizeof(char));
+            if(tmp != NULL){
+                size_t MaintainedData = (n < _size) ? n : _size;
 
+                for (size_t i = 0; i < MaintainedData; i++) {
+                    tmp[i] = _buffer[i];
+                }
 
-
+                if (_buffer != NULL) { free(_buffer); }
+                _capacity = n;
+                _buffer = tmp;
+            }
 
         #endif
 
@@ -344,13 +300,7 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             _string.clear();
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-            
-            //Not yet implemented
             resize(0);
-
-
-
-
         #endif
         }
     //
@@ -362,11 +312,6 @@
             return _string.empty();
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
             if(_size == 0){return 1;}
-            if(_capacity > 0){
-                if(strlen(_buffer) == 0){
-                    return 1;
-                }
-            }
         #endif
             return 0;
         }
@@ -378,20 +323,20 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             _string.shrink_to_fit();
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-            if(_capacity > _size)
+            if(capacity() > _size)
             {
                 char* ptr = NULL;
-                
-                if((ptr = (char*)malloc((_size+1) * sizeof(char)) ) != NULL){
-                    for(uint32_t i = 0; i < _size+1; i++)
-                    {
+                ptr = (char*)calloc(_size + 1, sizeof(char));
+
+                if (ptr != NULL) {
+                    for (size_t i = 0; i < _size; i++) {
                         ptr[i] = _buffer[i];
                     }
 
                     free(_buffer);
                     _buffer = ptr;
                     _capacity = _size;
-                }
+            }
                 else
                 {
                 #ifdef CPSTL_STRING_EXCEPTIONS_ENABLED
@@ -582,7 +527,7 @@
             cpstd::string& cpstd::string::operator=(const cpstd::string& Source){
                 if(this != &Source){
                     resize(Source.length());
-                    for(uint16_t i = 0; i < Source.length(); i++){
+                    for(size_t i = 0; i < Source.length(); i++){
                         (*this)[i] = Source[i];
                     }
                 }
@@ -665,6 +610,10 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string = Source._string;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                if (_buffer != NULL) {
+                    free(_buffer);
+                }
+
                 _buffer = Source._buffer;
                 _size = Source._size;
                 _capacity = Source._capacity;
@@ -699,9 +648,15 @@
                 _string.append(str._string);
                 return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                size_t offset = _size;
 
-                //Not yet implemented
+                resize(_size + str.size());
 
+                for (size_t i = 0; i < str.size(); i++) {
+                    (*this)[offset + i] = str[i];
+                }
+
+                return (*this);
             #endif
             }
         //
@@ -714,9 +669,14 @@
                     _string.append(str);
                     return (*this);
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                    size_t offset = _size;
 
-                    //Not yet implemented
+                    resize(_size + str.size());
 
+                    for (size_t i = 0; i < str.size(); i++) {
+                        (*this)[offset + i] = str[i];
+                    }
+                    return (*this);
                 #endif
                 }
             #endif
@@ -730,8 +690,18 @@
                 return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 
-                //Not yet implemented
+                if (str.size() >= subpos) {
+                    size_t offset = _size;
+                    size_t end = (str.size() < subpos + sublen) ? str.size() : subpos + sublen;
+                    size_t len = (str.size() < subpos + sublen) ? str.size() - subpos : sublen;
 
+                    resize(_size + len);
+
+                    for (size_t i = 0; i < len; i++) {
+                        (*this)[offset + i] = str[subpos + i];
+                    }
+                }
+                return (*this);
             #endif
             }
         //
@@ -741,12 +711,18 @@
             cpstd::string& cpstd::string::append(const char* s) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.append(s);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                size_t offset = _size;
+                size_t len = strlen(s);
+                if (len != 0) {
+                    resize(_size + len);
 
-                //Not yet implemented
-
+                    for (size_t i = 0; i < len; i++) {
+                        _buffer[offset + i] = s[i];
+                    }
+                }
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -756,11 +732,15 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.append(s,n);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                size_t offset = _size;
+                if (n != 0) {
+                    resize(_size + n);
 
-                //Not yet implemented
-
+                    for (size_t i = 0; i < n; i++) {
+                        _buffer[offset + i] = s[i];
+                    }
+            }
             #endif
-
                 return (*this);
             }
         //
@@ -771,11 +751,15 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.append(n,c);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                size_t offset = _size;
+                if (n != 0) {
+                    resize(_size + n);
 
-                //Not yet implemented
-
+                    for (size_t i = 0; i < n; i++) {
+                        _buffer[offset + i] = c;
+                    }
+                }
             #endif
-
                 return (*this);
             }
         //
@@ -787,7 +771,6 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.append(il);
             #else
-
                 size_t offset = size();
                 resize(size()+il.size());
 
@@ -808,7 +791,11 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             _string.push_back(c);
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-            //Not yet implemented
+            size_t oldSz = _size;
+            resize(_size + 1);
+            if (_size > oldSz) {
+                _buffer[_size - 1] = c;
+            }
         #endif
         }
     //
@@ -821,12 +808,10 @@
             cpstd::string& cpstd::string::assign(const cpstd::string& str) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.assign(str._string);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                (*this) = str;
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -835,12 +820,11 @@
             cpstd::string& cpstd::string::assign(const cpstd::string& str, size_t subpos, size_t sublen) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.assign(cpstd::string::string(str, subpos, sublen));
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                cpstd::string tmp = str.substr(subpos, sublen);
+                (*this) = cpstd::move(tmp);
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -849,12 +833,10 @@
             cpstd::string& cpstd::string::assign(const char* s) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.assign(s);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                (*this) = cpstd::move(cpstd::string(s));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -863,12 +845,10 @@
             cpstd::string& cpstd::string::assign(const char* s, size_t n) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.assign(s,n);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                (*this) = cpstd::move(cpstd::string(s,n));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -879,10 +859,9 @@
                 _string.assign(n,c);
                 return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                (*this) = cpstd::move(cpstd::string(n,c));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -893,28 +872,20 @@
                 _string.assign(std::move(str._string));
                 return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                (*this) = cpstd::move(str);
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // initializer list
 
             cpstd::string& cpstd::string::assign(cpstd::initializer_list<char> il){
-
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.assign(il);
             #else
-
-                resize(il.size());
-
-                for(size_t i = 0; i < size(); i++){
-                    (*this)[i] = *(il.begin()+(i));
-                }
+                (*this) = cpstd::move(cpstd::string(il));
             #endif
-
                 return (*this);
             }
         //
@@ -925,12 +896,10 @@
                 cpstd::string& cpstd::string::assign(const std::string& str) {
                 #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                     _string.assign(str);
-                    return (*this);
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                    //Not yet implemented
-
+                    (*this) = cpstd::move(cpstd::string(str));
                 #endif
+                    return (*this);
                 }
             #endif
         //
@@ -945,12 +914,26 @@
             cpstd::string& cpstd::string::insert(size_t pos, const cpstd::string& str) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.insert(pos, str._string);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                if(!str.empty()){
+                    if(pos < _size){
 
-                //Not yet implemented
+                        auto oldSize = _size;
+                        resize(_size + str._size);
+                        auto offset = _size - oldSize;
 
+                        for(size_t i =_size-1; i > pos; i--){
+                            _buffer[i] = _buffer[i - offset];
+                        }
+
+
+                        for(size_t i = 0; i < str._size; i++){
+                            _buffer[pos + i] = str._buffer[i];
+                        }
+                    }
+                }
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -959,12 +942,10 @@
             cpstd::string& cpstd::string::insert(size_t pos, const cpstd::string& str, size_t subpos, size_t sublen) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.insert(pos, cpstd::string::string(str, subpos, sublen));
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                insert(pos, str.substr(subpos, sublen));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -973,12 +954,10 @@
             cpstd::string& cpstd::string::insert(size_t pos, const char* s) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.insert(pos, s);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                insert(pos, cpstd::string(s));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -987,12 +966,10 @@
             cpstd::string& cpstd::string::insert(size_t pos, const char* s, size_t n) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.insert(pos, s,n);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                insert(pos, cpstd::string(s,n));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1001,12 +978,10 @@
             cpstd::string& cpstd::string::insert(size_t pos, size_t n, char c) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.insert(pos, n,c);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                insert(pos, cpstd::string(n,c));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1017,14 +992,8 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.insert(pos, il);
             #else
-
-                resize(il.size());
-
-                for(size_t i = 0; i < size(); i++){
-                    (*this)[i] = *(il.begin()+(i));
-                }
+                insert(pos, cpstd::string(il));
             #endif
-
                 return (*this);
             }
         //
@@ -1035,12 +1004,10 @@
                 cpstd::string& cpstd::string::insert(size_t pos, const std::string& str) {
                 #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                     _string.insert(pos, str);
-                    return (*this);
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                    //Not yet implemented
-
+                    insert(pos, cpstd::string(str));
                 #endif
+                    return (*this);
                 }
             #endif
         //
@@ -1055,7 +1022,16 @@
             return (*this);
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 
-            //Not yet implemented
+            if(pos < _size){
+                auto length = (len != npos) ? ((_size < pos + len) ? _size - pos : len) : _size - pos;
+
+                for(size_t i = pos + length; i < _size; i++){
+                    _buffer[i - length] = _buffer[i];
+                }
+                resize(_size - length);
+            }
+
+            return (*this);
 
         #endif
         }
@@ -1069,12 +1045,28 @@
             cpstd::string& cpstd::string::replace(size_t pos, size_t len, const cpstd::string& str) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.replace(pos, len, str._string);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                if (pos < _size) {
+                    auto removeLength = (_size < pos + len) ? _size - pos : len;
+                    auto newLength = str.size();
 
-                //Not yet implemented
+                    if (newLength < removeLength) {
+                        size_t difference = removeLength - newLength;
+                        memmove(_buffer + pos + newLength, _buffer + pos + removeLength, _size - (pos + removeLength));
+                        resize(_size - difference);
+                    }
+                    else if (newLength > removeLength) {
+                        size_t difference = newLength - removeLength;
+                        resize(_size + difference);
+                        memmove(_buffer + pos + newLength, _buffer + pos + removeLength, _size - (pos + removeLength + difference));
+                    }
 
+                    if (newLength != 0) {
+                        memcpy(_buffer + pos, str.c_str(), newLength);
+                    }
+                }
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1083,12 +1075,10 @@
             cpstd::string& cpstd::string::replace(size_t pos, size_t len, const cpstd::string& str, size_t subpos, size_t sublen) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.replace(pos, len, cpstd::string::string(str, subpos, sublen));
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                replace(pos, len, cpstd::string(str, subpos, sublen));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1097,12 +1087,10 @@
             cpstd::string& cpstd::string::replace(size_t pos, size_t len, const char* s) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.replace(pos, len, s);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                replace(pos, len, cpstd::string(s));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1111,12 +1099,10 @@
             cpstd::string& cpstd::string::replace(size_t pos, size_t len, const char* s, size_t n) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.replace(pos, len, s,n);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                replace(pos, len, cpstd::string(s,n));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1125,12 +1111,10 @@
             cpstd::string& cpstd::string::replace(size_t pos, size_t len, size_t n, char c) {
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.replace(pos,len,n,c);
-                return (*this);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                //Not yet implemented
-
+                replace(pos, len, cpstd::string(n,c));
             #endif
+                return (*this);
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1140,15 +1124,9 @@
 
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 _string.replace(pos, len, il);
-            #else
-
-                resize(il.size());
-
-                for(size_t i = 0; i < size(); i++){
-                    (*this)[i] = *(il.begin()+(i));
-                }
+            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                replace(pos, len, cpstd::string(il));
             #endif
-
                 return (*this);
             }
         //
@@ -1159,12 +1137,10 @@
                 cpstd::string& cpstd::string::replace(size_t pos, size_t len, const std::string& str) {
                 #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                     _string.replace(pos, len, str);
-                    return (*this);
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-                    //Not yet implemented
-
+                    replace(pos,len,cpstd::string(str));
                 #endif
+                    return (*this);
                 }
             #endif
         //
@@ -1177,9 +1153,9 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             _string.swap(str._string);
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-            //Not yet implemented
-
+            cpstd::string tmp = cpstd::move(str);
+            str = cpstd::move(*this);
+            (*this) = cpstd::move(tmp);
         #endif
         }
         
@@ -1196,9 +1172,7 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             _string.pop_back();
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-
-            //Not yet implemented
-
+            resize(_size-1);
         #endif
 
         }
@@ -1207,11 +1181,10 @@
     // formatted 
      
         void cpstd::string::formatted(const char* Format, ... ){
-            
             va_list arg;
             va_start( arg, Format );
             
-            auto sz = vsnprintf_P(NULL, 0, Format, arg);
+            auto sz = vsnprintf(NULL, 0, Format, arg);
             resize(sz);
             vsnprintf(&((*this)[0]), size()+1, Format, arg);
 
@@ -1225,9 +1198,13 @@
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // std::string cast operator
 
-        #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
+        #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
             cpstd::string::operator std::string() const{
+            #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string;
+            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                return std::string(_buffer, _size);
+            #endif
             }
         #endif
     //
@@ -1238,6 +1215,7 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             return _string.c_str();
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+            if(_buffer == NULL){return EmptyCString;}
             return _buffer;
         #endif
         }
@@ -1260,7 +1238,15 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             return _string.copy(s, len, pos);
         #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-            // Not Yet Implemented
+            if(pos<_size){
+                auto length = (_size < pos + len) ? _size - pos : len;
+
+                for(auto i = pos; i < pos + length; i++){
+                    s[i-pos] = _buffer[i];
+                }
+                return length;
+            }
+            return 0;
         #endif
         }
     //
@@ -1274,7 +1260,21 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.find(str._string, pos);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t substringLength = str.size();
+
+                if (substringLength > _size || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i <= _size - substringLength; ++i) {
+                    size_t j;
+                    for (j = 0; j < substringLength; ++j) {
+                        if (_buffer[i + j] != str._buffer[j]) {break;}
+                    }
+                    if (j == substringLength) {return i;}
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1285,7 +1285,21 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.find(s, pos);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t substringLength =  strlen(s);
+
+                if (substringLength > _size || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i <= _size - substringLength; ++i) {
+                    size_t j;
+                    for (j = 0; j < substringLength; ++j) {
+                        if (_buffer[i + j] != s[j]) {break;}
+                    }
+                    if (j == substringLength) {return i;}
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1296,7 +1310,21 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.find(s, pos, n);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t substringLength =  n;
+
+                if (substringLength > _size || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i <= _size - substringLength; ++i) {
+                    size_t j;
+                    for (j = 0; j < substringLength; ++j) {
+                        if (_buffer[i + j] != s[j]) {break;}
+                    }
+                    if (j == substringLength) {return i;}
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1307,18 +1335,25 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.find(c, pos);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                for (size_t i = pos; i < _size; ++i) {
+                    if (_buffer[i] == c) {
+                        return i; 
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // std::string
+        // 
             #if defined(CPSTL_USING_STL) || defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 size_t cpstd::string::find(const std::string& str, size_t pos) const noexcept{
                 #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                     return _string.find(str, pos);
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    // Not Yet Implemented
+                    return find(cpstd::string(str),pos);
                 #endif
                 }
             #endif
@@ -1335,7 +1370,28 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.rfind(str._string, pos);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t substringLength = str.size();
+                
+                if (substringLength > _size || substringLength == 0) {
+                    return cpstd::string::npos;
+                }
+
+                if (pos > _size - substringLength) {
+                    pos = _size - substringLength;
+                }
+
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    size_t j;
+                    for (j = 0; j < substringLength; ++j) {
+                        if (_buffer[i + j] != str[j]) {
+                            break;
+                        }
+                    }
+                    if (j == substringLength) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1346,7 +1402,28 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.rfind(s, pos);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t substringLength = strlen(s);
+                
+                if (substringLength > _size || substringLength == 0) {
+                    return cpstd::string::npos;
+                }
+
+                if (pos > _size - substringLength) {
+                    pos = _size - substringLength;
+                }
+
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    size_t j;
+                    for (j = 0; j < substringLength; ++j) {
+                        if (_buffer[i + j] != s[j]) {
+                            break;
+                        }
+                    }
+                    if (j == substringLength) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1356,8 +1433,29 @@
             size_t cpstd::string::rfind(const char* s, size_t pos, size_t n) const{
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.rfind(s, pos, n);
-            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)                
+                size_t substringLength = n;
+                
+                if (substringLength > _size || substringLength == 0) {
+                    return cpstd::string::npos;
+                }
+
+                if (pos > _size - substringLength) {
+                    pos = _size - substringLength;
+                }
+
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    size_t j;
+                    for (j = 0; j < substringLength; ++j) {
+                        if (_buffer[i + j] != s[j]) {
+                            break;
+                        }
+                    }
+                    if (j == substringLength) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1369,6 +1467,7 @@
                 return _string.rfind(c, pos);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                 // Not Yet Implemented
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1379,7 +1478,29 @@
                 #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                     return _string.rfind(str, pos);
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    // Not Yet Implemented
+                    size_t substringLength = str.size();
+                    size_t _size = size();
+                    
+                    if (substringLength > _size || substringLength == 0) {
+                        return cpstd::string::npos;
+                    }
+
+                        if (pos > _size - substringLength) {
+                        pos = _size - substringLength;
+                    }
+
+                    for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                        size_t j;
+                        for (j = 0; j < substringLength; ++j) {
+                            if (_buffer[i + j] != str[j]) {
+                                break;
+                            }
+                        }
+                        if (j == substringLength) {
+                            return i;
+                        }
+                    }
+                    return cpstd::string::npos;
                 #endif
                 }
             #endif
@@ -1397,7 +1518,21 @@
                 size_t ret = _string.find_first_of(str._string, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = str.size();
+
+                if (strLength == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i < _size; ++i) {
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == str[j]) {
+                            return i;
+                        }
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1409,7 +1544,21 @@
                 auto ret =_string.find_first_of(s, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = strlen(s);
+
+                if (strLength == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i < _size; ++i) {
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == s[j]) {
+                            return i; 
+                        }
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1421,7 +1570,19 @@
                 size_t ret = _string.find_first_of(s, pos, n);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                if (n == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i < _size; ++i) {
+                    for (size_t j = 0; j < n; ++j) {
+                        if (_buffer[i] == s[j]) {
+                            return i; 
+                        }
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1433,7 +1594,16 @@
                 size_t ret = _string.find_first_of(c, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                if (pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i < _size; ++i) {
+                    if (_buffer[i] == c) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1446,6 +1616,7 @@
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                     // Not Yet Implemented
+                    return cpstd::string::npos;
                 #endif
                 }
             #endif
@@ -1463,7 +1634,23 @@
                 size_t ret = _string.find_last_of(str._string, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = str.size();
+
+                if (strLength == 0 || _size == 0) {
+                    return cpstd::string::npos;
+                }
+
+                pos = (pos >= _size) ? _size - 1 : pos;
+                
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == str[j]) {
+                            return i;
+                        }
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1475,7 +1662,23 @@
                 auto ret =_string.find_last_of(s, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = strlen(s);
+
+                if (strLength == 0 || _size == 0) {
+                    return cpstd::string::npos;
+                }
+
+                pos = (pos >= _size) ? _size - 1 : pos;
+                
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == s[j]) {
+                            return i;
+                        }
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1488,6 +1691,7 @@
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                 // Not Yet Implemented
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1500,6 +1704,7 @@
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                 // Not Yet Implemented
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1511,7 +1716,21 @@
                     size_t ret = _string.find_last_of(str, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    // Not Yet Implemented
+                    size_t strLength = str.size();
+
+                    if (strLength == 0 || pos >= _size) {
+                        return cpstd::string::npos;
+                    }
+
+                    for (size_t i = pos; i < _size; ++i) {
+                        for (size_t j = 0; j < strLength; ++j) {
+                            if (_buffer[i] == str[j]) {
+                                return i;
+                            }
+                        }
+                    }
+
+                    return cpstd::string::npos;
                 #endif
                 }
             #endif
@@ -1529,7 +1748,26 @@
                 size_t ret = _string.find_first_not_of(str._string, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = str.size();
+
+                if (strLength == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                bool found = false;
+                for (size_t i = pos; i < _size; ++i) {
+                    found = false;
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == str[j]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1541,7 +1779,26 @@
                 auto ret =_string.find_first_not_of(s, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = strlen(s);
+
+                if (strLength == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                bool found = false;
+                for (size_t i = pos; i < _size; ++i) {
+                    found = false;
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == s[j]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1553,7 +1810,25 @@
                 size_t ret = _string.find_first_not_of(s, pos, n);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+
+                if (n == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                bool found = false;
+                for (size_t i = pos; i < _size; ++i) {
+                    found = false;
+                    for (size_t j = 0; j < n; ++j) {
+                        if (_buffer[i] == s[j]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1565,7 +1840,16 @@
                 size_t ret = _string.find_first_not_of(c, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                if (pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i < _size; ++i) {
+                    if (_buffer[i] != c) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1577,7 +1861,26 @@
                     size_t ret = _string.find_first_not_of(str, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    // Not Yet Implemented
+                    size_t strLength = str.size();
+
+                    if (strLength == 0 || pos >= _size) {
+                        return cpstd::string::npos;
+                    }
+
+                    bool found = false;
+                    for (size_t i = pos; i < _size; ++i) {
+                        found = false;
+                        for (size_t j = 0; j < strLength; ++j) {
+                            if (_buffer[i] == str[j]) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            return i;
+                        }
+                    }
+                    return cpstd::string::npos;
                 #endif
                 }
             #endif
@@ -1595,7 +1898,28 @@
                 size_t ret = _string.find_last_not_of(str._string, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = str.size();
+
+                if (strLength == 0) {
+                    return (_size > 0) ? _size - 1 : cpstd::string::npos;
+                }
+
+                size_t searchStart = (pos == cpstd::string::npos || pos >= _size) ? _size - 1 : std::min(pos, _size - 1);
+
+                for (size_t i = searchStart; i != static_cast<size_t>(-1); --i) {
+                    bool found = false;
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == str[j]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return i;
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1607,7 +1931,26 @@
                 auto ret =_string.find_last_not_of(s, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                size_t strLength = strlen(s);
+
+                if (strLength == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    bool found = false;
+                    for (size_t j = 0; j < strLength; ++j) {
+                        if (_buffer[i] == s[j]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return i;
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1619,7 +1962,24 @@
                 size_t ret = _string.find_last_not_of(s, pos, n);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                if (n == 0 || pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    bool found = false;
+                    for (size_t j = 0; j < n; ++j) {
+                        if (_buffer[i] == s[j]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        return i;
+                    }
+                }
+
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1631,7 +1991,16 @@
                 size_t ret = _string.find_last_not_of(c, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                if (pos >= _size) {
+                    return cpstd::string::npos;
+                }
+
+                for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                    if (_buffer[i] != c) {
+                        return i;
+                    }
+                }
+                return cpstd::string::npos;
             #endif
             }
         //
@@ -1643,7 +2012,26 @@
                     size_t ret = _string.find_last_not_of(str, pos);
                 return (ret == std::string::npos) ? cpstd::string::npos : ret;
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    // Not Yet Implemented
+                    size_t strLength = str.size();
+
+                    if (strLength == 0 || pos >= _size) {
+                        return cpstd::string::npos;
+                    }
+
+                    for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
+                        bool found = false;
+                        for (size_t j = 0; j < strLength; ++j) {
+                            if (_buffer[i] == str[j]) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            return i;
+                        }
+                    }
+
+                    return cpstd::string::npos;
                 #endif
                 }
             #endif
@@ -1656,6 +2044,13 @@
         cpstd::string cpstd::string::substr(size_t pos, size_t len) const{
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             return cpstd::string::string(_string.substr(pos, len));
+        #else
+            cpstd::string ret;
+            if (pos < _size) {
+                auto length = (len != npos) ? ((_size < pos + len) ? _size - pos : len ) : _size - pos;
+                ret = cpstd::move(cpstd::string(_buffer + pos, length));
+            }
+            return ret;
         #endif
         }
     //
@@ -1669,26 +2064,55 @@
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.compare(str._string);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+                for (size_t i = 0; (i < _size) && (i < str.size()); ++i) {
+                    if (_buffer[i] != str[i]) {
+                        return _buffer[i] - str[i];
+                    }
+                }
+
+                if (_size != str.size()) {
+                    return (_size < str.size()) ? -1 : 1;
+                }
+
+                return 0;
             #endif
             }
         //
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // substrings
 
-            int cpstd::string::compare(size_t pos, size_t len, const string& str) const{
+            int cpstd::string::compare(size_t pos, size_t len, const cpstd::stringstring& str) const{
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.compare(pos, len, str);
-            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                // Not Yet Implemented
+            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)const size_t thisSize = _size;
+                if (pos >= thisSize || len == 0) {
+                    if (len > thisSize)
+                        return 1;
+                    return 0;
+                }
+
+                const size_t compareLen = (len == npos || pos + len > thisSize) ? thisSize - pos : len;
+
+                for (size_t i = 0; i < compareLen && i < str.size(); ++i) {
+                    if (_buffer[pos + i] != str[i]) {
+                        return _buffer[pos + i] - str[i];
+                    }
+                }
+
+                if (compareLen < str.size()) {
+                    return (compareLen < str.size()) ? -1 : 1;
+                }
+
+                return 0;
             #endif
             }
 
-            int cpstd::string::compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen) const{
+            int cpstd::string::compare(size_t pos, size_t len, const cpstd::stringstring& str, size_t subpos, size_t sublen) const{
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.compare(pos, len, str, subpos, sublen);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                 // Not Yet Implemented
+                return 0;
             #endif
             }
         //
@@ -1700,6 +2124,7 @@
                 return _string.compare(s);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                 // Not Yet Implemented
+                return 0;
             #endif
             }
 
@@ -1708,6 +2133,7 @@
                 return _string.compare(pos, len, s);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                 // Not Yet Implemented
+                return 0;
             #endif
             }
         //
@@ -1719,6 +2145,7 @@
                 return _string.compare(pos, len, s, n);
             #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                 // Not Yet Implemented
+                return 0;
             #endif
             }
         //
@@ -1731,6 +2158,7 @@
                     return _string.compare(str);
                 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
                     // Not Yet Implemented
+                    return 0;
                 #endif
                 }
             #endif
@@ -1980,7 +2408,11 @@
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
             
             std::istream& cpstd::operator>>(std::istream& is, cpstd::string& String){
+#           if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return is >> String._string;
+            #else
+                return is >> std::string(String.c_str(), String.size());
+            #endif  
             }
         #endif
     //
@@ -1999,19 +2431,35 @@
     // 
         #if defined(CPSTL_USING_STL) || defined(CPSTL_STRING_USING_STD_ALLOCATION)
             std::istream& cpstd::getline (std::istream&  is, cpstd::string& str, char delim){
-                return std::getline(is,str._string,delim);
+            #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                return std::getline(is, str._string, delim);
+            #else
+                return std::getline(is, std::string(str.c_str(), str.size()), delim);
+            #endif  
             }
 
             std::istream& cpstd::getline (std::istream&& is, cpstd::string& str, char delim){
-                return std::getline(is,str._string,delim);
+            #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                return std::getline(is, str._string, delim);
+            #else
+                return std::getline(is, std::string(str.c_str(), str.size()), delim);
+            #endif  
             }
             
             std::istream& cpstd::getline (std::istream&  is, cpstd::string& str){
-                return std::getline(is,str._string);
+            #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                return std::getline(is, str._string);
+            #else
+                return std::getline(is, std::string(str.c_str(), str.size()));
+            #endif  
             }
 
             std::istream& cpstd::getline (std::istream&& is, cpstd::string& str){
-                return std::getline(is,str._string);
+            #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                return std::getline(is, str._string);
+            #else
+                return std::getline(is, std::string(str.c_str(), str.size()));
+            #endif  
             }
         #endif
     //

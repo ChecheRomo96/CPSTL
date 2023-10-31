@@ -2,6 +2,15 @@
 #include <iostream>
 #include <CPinitializer_list>
 
+void SplitFilename(const cpstd::string& str, cpstd::string& path, cpstd::string& file)
+{
+    std::cout << "Splitting: " << str << '\n';
+    auto found = str.find_last_of("/\\");
+
+    path = str.substr(0, found);
+    file = str.substr(found + 1);
+}
+
 int main(){
     std::cout<<"This project uses CPSTL version: "<<CPSTL_VERSION << std::endl << std::endl;
     
@@ -21,34 +30,15 @@ int main(){
 
             std::cout << std::endl;
     #endif
-            
+            cpstd::string str("Please, erase trailing white-spaces   \n");
+            cpstd::string whitespaces(" \t\f\v\n\r");
 
+            size_t found = str.find_last_not_of(whitespaces);
 
-            cpstd::vector<cpstd::vector<uint8_t>> myVector(8);
+            if (found != cpstd::string::npos) { str.erase(found + 1); }
+            else { str.clear(); }
 
-            std::cout<<myVector.size()<<std::endl;
-
-            for (uint8_t i = 0; i < myVector.size(); i++) {
-                std::cout << myVector[i].size()<<" - ";
-                myVector[i].resize(8);
-                std::cout << myVector[i].size() << std::endl;
-
-                for (uint8_t j = 0; j < myVector[i].size(); j++) {
-                    myVector[i][j] = (8 * i) + j;
-                    //EXPECT_EQ(myVector[i][j], (8 * i) + j);
-                    std::cout << myVector[i][j] << std::endl;
-                }
-            }
-
-            for (uint8_t i = 0; i < myVector.size(); i++) {
-                for (uint8_t j = 0; j < myVector[i].size(); j++) {
-                    myVector[i][j] = (8 * i) + j;
-                    std::cout << myVector[i][j] << std::endl;
-                }
-                myVector[i].clear();
-            }
-
-            myVector.clear();
+            std::cout << str << std::endl;
 
     return 0;
 }

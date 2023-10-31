@@ -3,7 +3,22 @@
 
     #include <CPinitializer_list.h>
     #include <utility/CPSTL_Move.h>
-    #include <CPstring.h>
+    
+    #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_STRING_USING_CPP_ALLOCATION)
+        #include <string>
+        #include <string.h>
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <math.h>
+        #include <sstream>
+    #elif defined(CPSTL_STRING_USING_C_ALLOCATION) 
+        #include <string.h> 
+        #include <stdio.h>
+    #endif
+
+    #if defined(CPSTL_VECTOR_EXCEPTIONS_ENABLED) || defined(CPSTL_EXCEPTIONS_ENABLED)
+        #include <CPexception.h>
+    #endif
 
     namespace cpstd{  
         class string{
@@ -222,7 +237,6 @@
                         #if defined(CPSTL_USING_STL) || defined(CPSTL_STRING_USING_STD_ALLOCATION)
                             cpstd::string& assign(const std::string& str);
                         #endif
-
                     //
                     ////////////////////////////////////////////////////////////////////////////////////////
                     // insert
@@ -284,7 +298,7 @@
                     ////////////////////////////////////////////////////////////////////////////////////////
                     // std::string cast
 
-                        #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                        #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
                             operator std::string() const;
                         #endif
                     //

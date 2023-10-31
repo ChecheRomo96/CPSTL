@@ -14,7 +14,6 @@
     #if defined(CPSTRING_USING_STD_STRING)
         TEST(CPSTL_String_StringOperations, std_string_cast_operator) {
             cpstd::string myString("Hello");
-            std::cout << ((std::string)myString).c_str() <<std::endl;
             ASSERT_EQ( strcmp( ((std::string)myString).c_str(), "Hello"), 0);
         }
     #endif
@@ -106,8 +105,9 @@
 
         std::size_t found = str.rfind(key);
         ASSERT_EQ( found, 23);
-        if (found!=cpstd::string::npos)
-        str.replace (found,key.length(),"seventh");
+        if (found!=cpstd::string::npos){
+            str.replace (found,key.length(),"seventh");
+        }
 
         ASSERT_EQ( strcmp(str.c_str(), "The sixth sick sheik's seventh sheep's sick."), 0);
     }
@@ -122,15 +122,32 @@
 //! of the size() method.
     
     TEST(CPSTL_String_StringOperations, find_first_of) {
-        cpstd::string str ("Please, replace the vowels in this sentence by asterisks.");
-        auto found = str.find_first_of("aeiou");
-        
-        while (found!=cpstd::string::npos){
-            str[found]='*';
-            found=str.find_first_of("aeiou",found+1);
+
+        // cpstd::string
+        { 
+            cpstd::string str ("Please, replace the vowels in this sentence by asterisks.");
+            auto found = str.find_first_of(cpstd::string("aeiou"));
+            
+            while (found!=cpstd::string::npos){
+                str[found]='*';
+                found=str.find_first_of(cpstd::string("aeiou"),found+1);
+            }
+
+            ASSERT_EQ( strcmp(str.c_str(), "Pl**s*, r*pl*c* th* v*w*ls *n th*s s*nt*nc* by *st*r*sks."), 0);
         }
 
-        ASSERT_EQ( strcmp(str.c_str(), "Pl**s*, r*pl*c* th* v*w*ls *n th*s s*nt*nc* by *st*r*sks."), 0);
+        // c string
+        { 
+            cpstd::string str ("Please, replace the vowels in this sentence by asterisks.");
+            auto found = str.find_first_of("aeiou");
+            
+            while (found!=cpstd::string::npos){
+                str[found]='*';
+                found=str.find_first_of("aeiou",found+1);
+            }
+
+            ASSERT_EQ( strcmp(str.c_str(), "Pl**s*, r*pl*c* th* v*w*ls *n th*s s*nt*nc* by *st*r*sks."), 0);
+        }
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -155,21 +172,37 @@
 
     TEST(CPSTL_String_StringOperations, find_last_of) {
 
-        cpstd::string path;
-        cpstd::string file;
+        // cpstd::string
+        {
+            cpstd::string path;
+            cpstd::string file;
 
+            cpstd::string str1(cpstd::string("/usr/bin/man"));
+            SplitFilename (str1, path, file);
+            ASSERT_EQ(strcmp(path.c_str(), "/usr/bin"), 0);
+            ASSERT_EQ(strcmp(file.c_str(), "man"), 0);
 
-        cpstd::string str1("/usr/bin/man");
-        SplitFilename (str1, path, file);
-        ASSERT_EQ( strcmp(path.c_str(), "/usr/bin"), 0);
-        ASSERT_EQ( strcmp(file.c_str(), "man"), 0);
+            cpstd::string str2 (cpstd::string("c:\\windows\\winhelp.exe"));
+            SplitFilename (str2, path, file);
+            ASSERT_EQ(strcmp(path.c_str(), "c:\\windows"), 0);
+            ASSERT_EQ(strcmp(file.c_str(), "winhelp.exe"), 0);
+        }
 
+        // c string
+        {
+            cpstd::string path;
+            cpstd::string file;
 
-        cpstd::string str2 ("c:\\windows\\winhelp.exe");
-        SplitFilename (str2, path, file);
-        ASSERT_EQ( strcmp(path.c_str(), "c:\\windows"), 0);
-        ASSERT_EQ( strcmp(file.c_str(), "winhelp.exe"), 0);
+            cpstd::string str1("/usr/bin/man");
+            SplitFilename (str1, path, file);
+            ASSERT_EQ( strcmp(path.c_str(), "/usr/bin"), 0);
+            ASSERT_EQ( strcmp(file.c_str(), "man"), 0);
 
+            cpstd::string str2 ("c:\\windows\\winhelp.exe");
+            SplitFilename (str2, path, file);
+            ASSERT_EQ( strcmp(path.c_str(), "c:\\windows"), 0);
+            ASSERT_EQ( strcmp(file.c_str(), "winhelp.exe"), 0);
+        }
     }
 //
 //////////////////////////////////////////////////////////////////////////////////

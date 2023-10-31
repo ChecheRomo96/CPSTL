@@ -26,7 +26,7 @@
             myString.append(c);
 
             ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
-        }   
+        }  
 
         { // std::string
             std::string a,b,c;
@@ -56,7 +56,7 @@
             myString.append(b,4,5); //Extract "World" from b
 
             ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
-        }
+        } 
 
         { // C String
             cpstd::string myString;
@@ -78,13 +78,11 @@
             ASSERT_EQ( strcmp(myString.c_str(), "*****"), 0);
         }
 
-        #if defined(CPSTRING_USING_STL)
         { // Initializer list
             cpstd::string myString;
             myString.append({'H','e','l','l','o'});
             ASSERT_EQ( strcmp(myString.c_str(), "Hello"), 0);
         }
-        #endif
 
     }
 //
@@ -214,13 +212,11 @@
             cpstd::string myString2;
             ASSERT_EQ( strcmp(myString2.c_str(), ""), 0);
 
-            myString2.assign(std::move(myString));
-
+            myString2.assign(cpstd::move(myString));
             ASSERT_EQ( strcmp(myString.c_str(), ""), 0);
             ASSERT_EQ( strcmp(myString2.c_str(), "Hello World"), 0);
         }
 
-        #if defined(CPSTRING_USING_STL)
         { // Initializer list
             cpstd::string myString("Hello World");
             ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
@@ -228,7 +224,6 @@
             myString.assign({'H','e','l','l','o'});
             ASSERT_EQ( strcmp(myString.c_str(), "Hello"), 0);
         }
-        #endif
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
@@ -317,7 +312,7 @@
             myString.insert(0, {'H','e','l','l','o'});
             ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
         }
-        #endif
+        #endif 
     }
 //
 //////////////////////////////////////////////////////////////////////////////////
