@@ -1,4 +1,5 @@
 #include "CPSTL_String.h"
+#include <string.h>
 
 namespace {
     static const char EmptyCString[] = {'\0'};
