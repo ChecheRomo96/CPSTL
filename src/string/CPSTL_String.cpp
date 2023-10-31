@@ -2084,7 +2084,8 @@ namespace {
             int cpstd::string::compare(size_t pos, size_t len, const cpstd::stringstring& str) const{
             #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
                 return _string.compare(pos, len, str);
-            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)const size_t thisSize = _size;
+            #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+                const size_t thisSize = _size;
                 if (pos >= thisSize || len == 0) {
                     if (len > thisSize)
                         return 1;
