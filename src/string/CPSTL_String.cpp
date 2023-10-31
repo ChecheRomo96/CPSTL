@@ -2054,12 +2054,7 @@ namespace {
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             return cpstd::string::string(_string.substr(pos, len));
         #else
-            cpstd::string ret;
-            if (pos < _size) {
-                auto length = (len != npos) ? ((_size < pos + len) ? _size - pos : len ) : _size - pos;
-                ret = cpstd::move(cpstd::string(_buffer + pos, length));
-            }
-            return ret;
+            
         #endif
         }
     //
