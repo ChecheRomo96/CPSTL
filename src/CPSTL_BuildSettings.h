@@ -38,10 +38,6 @@
                     #undef CPSTL_VECTOR_USING_CPP_ALLOCATION
                 #endif
 
-                #if defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
-                    #undef CPSTL_VECTOR_USING_CPP_ALLOCATION
-                #endif
-
                 #if defined(CPVECTOR_USING_STD_ALLOCATION)
                     #undef CPVECTOR_USING_STD_ALLOCATION
                 #endif
