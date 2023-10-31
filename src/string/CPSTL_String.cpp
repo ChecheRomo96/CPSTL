@@ -2053,8 +2053,13 @@ namespace {
         cpstd::string cpstd::string::substr(size_t pos, size_t len) const{
         #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
             return cpstd::string::string(_string.substr(pos, len));
-        #else
-            
+        #elif defined(CPSTL_STRING_USING_C_ALLOCATION) || defined(CPSTL_STRING_USING_CPP_ALLOCATION)
+            cpstd::string ret;
+            if (pos < _size) {
+                auto length = (len != npos) ? ((_size < pos + len) ? _size - pos : len ) : _size - pos;
+                ret = cpstd::move(cpstd::string(_buffer + pos, length));
+            }
+            return ret;
         #endif
         }
     //
