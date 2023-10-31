@@ -14,7 +14,7 @@
         #include <sstream>
     #elif defined(CPSTL_STRING_USING_C_ALLOCATION) 
         #include <string.h> 
-        #include <stdio.h>asdaas
+        #include <stdio.h>
         #include <stdlib.h>
     #endif
 
