@@ -1,5 +1,13 @@
 #include "CPSTL_String.h"
-#include <string.h>
+
+#include <string.h> 
+#include <stdio.h>
+#include <stdlib.h>
+
+#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_STRING_USING_CPP_ALLOCATION)
+    #include <string>
+    #include <sstream>
+#endif
 
 namespace {
     static const char EmptyCString[] = {'\0'};

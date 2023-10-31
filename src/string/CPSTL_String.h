@@ -5,14 +5,6 @@
     #include <CPinitializer_list.h>
     #include <utility/CPSTL_Move.h>
     
-    #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_STRING_USING_CPP_ALLOCATION)
-        #include <string>
-        #include <string.h>
-        #include <stdio.h>
-        #include <stdlib.h>
-        #include <math.h>
-        #include <sstream>
-    #endif
 
     #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
         #include <CPexception.h>
