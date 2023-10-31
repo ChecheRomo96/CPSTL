@@ -1,5 +1,6 @@
 #include "CPSTL_String.h"
 
+#include <CPSTL_BuildSettings.h>
 #include <string.h> 
 #include <stdio.h>
 #include <stdlib.h>
