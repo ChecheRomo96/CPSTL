@@ -12,13 +12,9 @@
         #include <stdlib.h>
         #include <math.h>
         #include <sstream>
-    #elif defined(CPSTL_STRING_USING_C_ALLOCATION) 
-        #include <string.h> 
-        #include <stdio.h>
-        #include <stdlib.h>
     #endif
 
-    #if defined(CPSTL_VECTOR_EXCEPTIONS_ENABLED) || defined(CPSTL_EXCEPTIONS_ENABLED)
+    #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
         #include <CPexception.h>
     #endif
 
