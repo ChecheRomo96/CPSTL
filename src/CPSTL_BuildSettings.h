@@ -58,7 +58,7 @@
                 #endif
 
                 #if !defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    #define CPSTRING_USING_C_ALLOCATION
+                    //#define CPSTRING_USING_C_ALLOCATION
                 #endif
             #endif
 
