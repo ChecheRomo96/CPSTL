@@ -161,7 +161,7 @@ namespace {
         ////////////////////////////////////////////////////////////////////////////////////////////////
         // Arduino String
 
-            #if defined(Arduino_h)
+            #if defined(ARDUINO)
                 cpstd::string::string(const String& Source) : string(){
                     resize(Source.size());
 
