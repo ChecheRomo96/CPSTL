@@ -627,20 +627,22 @@
                 ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
             }  
 
-            { // std::string
-                std::string a,b,c;
+            #if defined(CPSTRING_USING_STL) || defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                { // std::string
+                    std::string a,b,c;
 
-                a = "Hello";
-                b = " ";
-                c = "World";
+                    a = "Hello";
+                    b = " ";
+                    c = "World";
 
-                cpstd::string myString;
-                myString.append(a);
-                myString.append(b);
-                myString.append(c);
+                    cpstd::string myString;
+                    myString.append(a);
+                    myString.append(b);
+                    myString.append(c);
 
-                ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
-            }
+                    ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
+                }
+            #endif
 
             { // substring
                 cpstd::string a,b,c;
