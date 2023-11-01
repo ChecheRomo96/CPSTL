@@ -869,7 +869,7 @@
             for(size_t i = 1; i < 10; i++){
                 testClass tmp(static_cast<uint8_t>(i));
                 myVector.emplace(0, cpstd::move(tmp));
-                ASSERT_EQ(myVector[0], i);
+                ASSERT_EQ(myVector[0].A(), i);
                 ASSERT_EQ(tmp.A(), 0);
             }
         }
@@ -909,7 +909,7 @@
             for(uint8_t i = 0; i < 10; i++){
                 testClass tmp(i);
                 myVector.emplace_back(cpstd::move(tmp));
-                ASSERT_EQ(myVector.back(), i);
+                ASSERT_EQ(myVector.back().A(), i);
                 ASSERT_EQ(tmp.A(), 0);
             }
         }
