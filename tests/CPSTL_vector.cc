@@ -619,7 +619,7 @@
                 testClass tmp(i);
                 ASSERT_EQ(tmp.A(), i);
                 myVector.push_back(cpstd::move(tmp));
-                ASSERT_EQ(myVector.back(), i);
+                ASSERT_EQ(myVector.back().A(), i);
                 ASSERT_EQ(tmp.A(), 0);
             }
         }
@@ -692,7 +692,7 @@
             myVector.insert(cpstd::move(2),2);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
-                ASSERT_EQ(myVector[i],i);
+                ASSERT_EQ(myVector[i].A(),i);
             }
         }
     //
@@ -869,7 +869,7 @@
             for(size_t i = 1; i < 10; i++){
                 testClass tmp(static_cast<uint8_t>(i));
                 myVector.emplace(0, cpstd::move(tmp));
-                ASSERT_EQ(myVector[0], i);
+                ASSERT_EQ(myVector[0].A(), i);
                 ASSERT_EQ(tmp.A(), 0);
             }
         }
@@ -909,7 +909,7 @@
             for(uint8_t i = 0; i < 10; i++){
                 testClass tmp(i);
                 myVector.emplace_back(cpstd::move(tmp));
-                ASSERT_EQ(myVector.back(), i);
+                ASSERT_EQ(myVector.back().A(), i);
                 ASSERT_EQ(tmp.A(), 0);
             }
         }
