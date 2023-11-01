@@ -1214,9 +1214,7 @@
         namespace {
             void SplitFilename (const cpstd::string& str, cpstd::string& path, cpstd::string& file)
             {
-              std::cout << "Splitting: " << str << '\n';
               auto found = str.find_last_of("/\\");
-
               path = str.substr(0,found);
               file = str.substr(found+1);
             }
