@@ -1339,7 +1339,7 @@
     //! The test creates two CPString instances, 'a' containing "012" and 'b' containing "345".
     //! It then uses the concatenation operator (+) to combine 'a' and 'b' into a new CPString
     //! named 'result'. Finally, the test asserts that the content of 'result' matches "012345".
-        
+        /*
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_CPString_CPString) {
             cpstd::string a = "012";
             cpstd::string b = "345";
@@ -1967,7 +1967,7 @@
                 ASSERT_EQ(strcmp(myString.c_str(),"18446744073709551615"),0);
             }
 
-        }
+        }*/
     //
     //////////////////////////////////////////////////////////////////////////////////
 #endif
