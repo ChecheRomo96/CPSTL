@@ -1,6 +1,7 @@
 if( ${CPSTL_TESTING}  AND ${CPSTL_VECTOR_TESTING})
-    message("Appending CPSTL vector Unit Tests")
-    add_subdirectory(vector)
+    add_executable( CPSTL_string_tests CPSTL_string.cc ) 
+    target_link_libraries( CPSTL_string_tests PUBLIC CPSTL PUBLIC GTest::gtest_main )
+    gtest_discover_tests(CPSTL_string_tests)
 endif() 
 
 if( ${CPSTL_TESTING}  AND ${CPSTL_STRING_TESTING})

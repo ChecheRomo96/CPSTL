@@ -1,6 +1,13 @@
-#include <Aunit.h>
+#if defined(ARDUINO)
+    #include <Aunit.h>
+    #include <aunit/contrib/gtest.h>
+#endif
+
+#if __has_include(<gtest/gtest.h>)
+    #include <gtest/gtest.h>
+#endif
+
 #include <CPstring.h>
-#include <aunit/contrib/gtest.h>
 
 #if defined(CPSTL_STRING_ENABLED)
     
