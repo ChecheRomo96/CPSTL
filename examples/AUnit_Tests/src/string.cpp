@@ -707,7 +707,6 @@
 
             for(uint8_t i = 0; i < 10; i++){
                 myString.push_back((char)('0'+i));
-                std::cout<<myString.c_str()<<std::endl;
             }
 
             ASSERT_GE(myString.capacity(), 10);
