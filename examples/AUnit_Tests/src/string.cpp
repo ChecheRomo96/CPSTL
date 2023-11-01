@@ -37,8 +37,8 @@
             ASSERT_GE(myString.capacity(), 5);
             ASSERT_EQ(substring.size(), 2);
             ASSERT_GE(substring.capacity(), 2);
-            EXPECT_EQ(substring[0], 'B');
-            EXPECT_EQ(substring[1], 'C');
+            ASSERT_EQ(substring[0], 'B');
+            ASSERT_EQ(substring[1], 'C');
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +228,7 @@
                 ASSERT_EQ(myString[3], 'l');
                 ASSERT_EQ(myString[4], 'o');
 
-                cpstd::string myCopy(std::move(myString));
+                cpstd::string myCopy(cpstd::move(myString));
 
                 ASSERT_GE(myString.capacity(), 0);
                 ASSERT_GE(myCopy.capacity(), 5);
