@@ -77,6 +77,10 @@
                         #if defined(CPSTL_USING_STL)
                             string(const std::string& Source);
                         #endif
+
+                        #if defined(ARDUINO)
+                            string(const String& Source);
+                        #endif
                     //
                     ////////////////////////////////////////////////////////////////////////////////////////
                     // Move Constructors
