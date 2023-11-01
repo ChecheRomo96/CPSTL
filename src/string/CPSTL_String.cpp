@@ -163,7 +163,7 @@ namespace {
 
             #if defined(ARDUINO)
                 cpstd::string::string(const String& Source) : string(){
-                    resize(Source.size());
+                    resize(Source.length());
 
                     for(size_t i = 0; i < size(); i++){
                         (*this)[i] = Source[i];
