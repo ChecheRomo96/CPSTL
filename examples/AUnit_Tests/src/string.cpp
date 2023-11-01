@@ -303,13 +303,13 @@
 
         TEST(CPSTSL_String_Capacity, length) {
             cpstd::string myString("Hello");
-            ASSERT_EQ(myString.length(), (size_t) 5);
+            ASSERT_EQ(myString.length(), 5);
 
             myString = cpstd::string("World");
-            ASSERT_EQ(myString.length(), (size_t) 5);
+            ASSERT_EQ(myString.length(), 5);
 
             myString = cpstd::string("ABCDEFG");
-            ASSERT_EQ(myString.length(), (size_t) 7);
+            ASSERT_EQ(myString.length(), 7);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -323,13 +323,13 @@
 
         TEST(CPSTSL_String_Capacity, capacity) {
             cpstd::string myString("Hello");
-            ASSERT_GE(myString.capacity(), (size_t) 5);
+            ASSERT_GE(myString.capacity(), 5);
 
             myString = cpstd::string("World");
-            ASSERT_GE(myString.capacity(), (size_t) 5);
+            ASSERT_GE(myString.capacity(), 5);
 
             myString = cpstd::string("ABCDEFG");
-            ASSERT_GE(myString.capacity(), (size_t) 7);
+            ASSERT_GE(myString.capacity(), 7);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -342,13 +342,13 @@
 
         TEST(CPSTSL_String_Capacity, resize) {
             cpstd::string myString("Hello");
-            ASSERT_GE(myString.capacity(), (size_t) 5);
+            ASSERT_GE(myString.capacity(), 5);
 
             myString.resize(3);
-            ASSERT_EQ(myString.size(), (size_t) 3);
+            ASSERT_EQ(myString.size(), 3);
 
             myString.resize(5, 'x');
-            ASSERT_EQ(myString.size(), (size_t) 5);
+            ASSERT_EQ(myString.size(), 5);
             ASSERT_EQ(myString[0], 'H');
             ASSERT_EQ(myString[1], 'e');
             ASSERT_EQ(myString[2], 'l');
@@ -368,16 +368,16 @@
             cpstd::string myString;
             myString.reserve(20);
 
-            ASSERT_EQ(myString.size(), (size_t) 0);
-            ASSERT_GE(myString.capacity(), (size_t) 20);
+            ASSERT_EQ(myString.size(), 0);
+            ASSERT_GE(myString.capacity(), 20);
 
             myString.resize(10);
-            ASSERT_EQ(myString.size(), (size_t) 10);
-            ASSERT_GE(myString.capacity(), (size_t) 20);
+            ASSERT_EQ(myString.size(), 10);
+            ASSERT_GE(myString.capacity(), 20);
 
             myString.resize(5);
-            ASSERT_EQ(myString.size(), (size_t) 5);
-            ASSERT_GE(myString.capacity(), (size_t) 20);
+            ASSERT_EQ(myString.size(), 5);
+            ASSERT_GE(myString.capacity(), 20);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -391,13 +391,13 @@
         TEST(CPSTSL_String_Capacity, clear) {
             cpstd::string myString("Hello");
 
-            ASSERT_EQ(myString.size(), (size_t) 5);
-            ASSERT_GE(myString.capacity(), (size_t) 5);
+            ASSERT_EQ(myString.size(), 5);
+            ASSERT_GE(myString.capacity(), 5);
 
             myString.clear();
 
-            ASSERT_EQ(myString.size(), (size_t) 0);
-            ASSERT_GE(myString.capacity(), (size_t) 5);
+            ASSERT_EQ(myString.size(), 0);
+            ASSERT_GE(myString.capacity(), 5);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -411,11 +411,11 @@
         TEST(CPSTSL_String_Capacity, empty) {
             cpstd::string myString("Hello");
 
-            ASSERT_EQ(myString.empty(), (bool) false);
+            ASSERT_EQ(myString.empty(), false);
 
             myString.clear();
 
-            ASSERT_EQ(myString.empty(), (bool) true);
+            ASSERT_EQ(myString.empty(), true);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -428,17 +428,17 @@
 
         TEST(CPSTSL_String_Capacity, shrink_to_fit) {
             cpstd::string myString("Hello");
-            ASSERT_EQ(myString.size(), (size_t) 5);
-            ASSERT_GE(myString.capacity(), (size_t) 5);
+            ASSERT_EQ(myString.size(), 5);
+            ASSERT_GE(myString.capacity(), 5);
 
             myString.resize(3);
-            ASSERT_EQ(myString.size(), (size_t) 3);
-            ASSERT_GE(myString.capacity(), (size_t) 5);
+            ASSERT_EQ(myString.size(), 3);
+            ASSERT_GE(myString.capacity(), 5);
 
             myString.shrink_to_fit();
 
-            ASSERT_EQ(myString.size(), (size_t) 3);
-            ASSERT_GE(myString.capacity(), (size_t) 3);
+            ASSERT_EQ(myString.size(), 3);
+            ASSERT_GE(myString.capacity(), 3);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
