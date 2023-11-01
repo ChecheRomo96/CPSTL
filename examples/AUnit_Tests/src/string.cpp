@@ -283,13 +283,13 @@
 
         TEST(CPSTSL_String_Capacity, size) {
             cpstd::string myString("Hello");
-            ASSERT_EQ(myString.size(), (size_t) 5);
+            ASSERT_EQ(myString.size(), 5);
 
             myString = cpstd::string("World");
-            ASSERT_EQ(myString.size(), (size_t) 5);
+            ASSERT_EQ(myString.size(), 5);
 
             myString = cpstd::string("ABCDEFG");
-            ASSERT_EQ(myString.size(), (size_t) 7);
+            ASSERT_EQ(myString.size(), 7);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
