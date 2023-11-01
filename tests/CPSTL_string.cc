@@ -288,7 +288,7 @@
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
 
-        TEST(CPSTSL_String_Capacity, size) {
+        TEST(CPSTL_String_Capacity, size) {
             cpstd::string myString("Hello");
             ASSERT_EQ(myString.size(), 5);
 
@@ -308,7 +308,7 @@
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the length() method.
 
-        TEST(CPSTSL_String_Capacity, length) {
+        TEST(CPSTL_String_Capacity, length) {
             cpstd::string myString("Hello");
             ASSERT_EQ(myString.length(), 5);
 
@@ -328,7 +328,7 @@
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the capacity() method.
 
-        TEST(CPSTSL_String_Capacity, capacity) {
+        TEST(CPSTL_String_Capacity, capacity) {
             cpstd::string myString("Hello");
             ASSERT_GE(myString.capacity(), 5);
 
@@ -347,7 +347,7 @@
     //! The test resizes CPString instances and checks their size and content
     //! to ensure the correctness of the resize() method.
 
-        TEST(CPSTSL_String_Capacity, resize) {
+        TEST(CPSTL_String_Capacity, resize) {
             cpstd::string myString("Hello");
             ASSERT_GE(myString.capacity(), 5);
 
@@ -371,7 +371,7 @@
     //! The test reserves memory for CPString instances, checks their size,
     //! and ensures their capacity meets the expected values.
 
-        TEST(CPSTSL_String_Capacity, reserve) {
+        TEST(CPSTL_String_Capacity, reserve) {
             cpstd::string myString;
             myString.reserve(20);
 
@@ -395,7 +395,7 @@
     //! The test clears CPString instances, checks their size, and ensures
     //! their capacity remains unchanged.
 
-        TEST(CPSTSL_String_Capacity, clear) {
+        TEST(CPSTL_String_Capacity, clear) {
             cpstd::string myString("Hello");
 
             ASSERT_EQ(myString.size(), 5);
@@ -415,7 +415,7 @@
     //! The test checks the emptiness of CPString instances and ensures
     //! the empty() method produces the expected results.
 
-        TEST(CPSTSL_String_Capacity, empty) {
+        TEST(CPSTL_String_Capacity, empty) {
             cpstd::string myString("Hello");
 
             ASSERT_EQ(myString.empty(), false);
@@ -433,7 +433,7 @@
     //! The test checks the size and capacity of CPString instances before
     //! and after calling shrink_to_fit() to ensure its correctness.
 
-        TEST(CPSTSL_String_Capacity, shrink_to_fit) {
+        TEST(CPSTL_String_Capacity, shrink_to_fit) {
             cpstd::string myString("Hello");
             ASSERT_EQ(myString.size(), 5);
             ASSERT_GE(myString.capacity(), 5);
