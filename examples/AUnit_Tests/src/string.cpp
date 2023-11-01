@@ -870,7 +870,7 @@
                     ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
                 }
             #endif
-                
+
             { // substring
                 cpstd::string a,b,c;
 
@@ -1129,7 +1129,7 @@
             cpstd::string str2 ("needle");
 
             // different member versions of find in the same order as above:
-            std::size_t found = str.find(str2);
+            size_t found = str.find(str2);
             ASSERT_EQ( found, 14);
 
             found=str.find("needles are small",found+1,6);
@@ -1155,7 +1155,7 @@
             cpstd::string str ("The sixth sick sheik's sixth sheep's sick.");
             cpstd::string key ("sixth");
 
-            std::size_t found = str.rfind(key);
+            size_t found = str.rfind(key);
             ASSERT_EQ( found, 23);
             if (found!=cpstd::string::npos){
                 str.replace (found,key.length(),"seventh");
@@ -1309,7 +1309,7 @@
         TEST(CPSTL_String_StringOperations, substr) {
             cpstd::string str("We think in generalities, but we live in details.");
             cpstd::string str2 = str.substr (3,5);
-            std::size_t pos = str.find("live"); 
+            size_t pos = str.find("live"); 
             cpstd::string str3 = str.substr (pos);
             str2 += " ";
             str2 += str3;
