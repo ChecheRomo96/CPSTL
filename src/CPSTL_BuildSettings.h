@@ -1,5 +1,5 @@
-#ifndef CROSS_PLATFORM_STL_BUILD_SETTINGS_H
-#define CROSS_PLATFORM_STL_BUILD_SETTINGS_H
+#ifndef CPSTL_BUILD_SETTINGS_H
+#define CPSTL_BUILD_SETTINGS_H
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // CPString Version
@@ -12,7 +12,7 @@
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Arduino IDE
 
-        #if defined(Arduino_h)
+        #if defined(ARDUINO)
             #include <Arduino.h>
             #include "CPSTL_UserSetup.h"
         #endif
@@ -151,4 +151,4 @@
         #endif
     #endif
 
-#endif//CROSS_PLATFORM_STRING_BUILD_SETTINGS_H
+#endif//CPSTL_BUILD_SETTINGS_H
