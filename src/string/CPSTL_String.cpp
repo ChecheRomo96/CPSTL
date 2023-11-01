@@ -1914,7 +1914,9 @@ namespace {
                     return (_size > 0) ? _size - 1 : cpstd::string::npos;
                 }
 
-                size_t searchStart = (pos == cpstd::string::npos || pos >= _size) ? _size - 1 : std::min(pos, _size - 1);
+                size_t searchStart = (pos == cpstd::string::npos || pos >= _size)
+                    ? _size - 1 // If pos is out of range, use _size - 1
+                    : ((pos < _size - 1) ? pos : _size - 1); // Otherwise, choose pos if it's within range, otherwise use _size - 1
 
                 for (size_t i = searchStart; i != static_cast<size_t>(-1); --i) {
                     bool found = false;
