@@ -57,7 +57,7 @@
             cpstd::vector<uint8_t> myVector2(myVector);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
-                EXPECT_EQ(myVector[i], myVector2[i]);
+                ASSERT_EQ(myVector[i], myVector2[i]);
             }
         }
     //
@@ -76,7 +76,7 @@
             ASSERT_EQ(myVector.size(),UINT8_MAX);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
-                EXPECT_EQ(myVector[i], i);
+                ASSERT_EQ(myVector[i], i);
             }
         }
     //
@@ -97,16 +97,16 @@
             ASSERT_EQ(myVector.size(),3);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
-                EXPECT_EQ(myVector[i], i);
+                ASSERT_EQ(myVector[i], i);
             }
 
             cpstd::vector<uint8_t> myVec2 = cpstd::move(myVector);
 
-            EXPECT_EQ(myVector.size(), 0);
-            EXPECT_EQ(myVector.capacity(), 0);
+            ASSERT_EQ(myVector.size(), 0);
+            ASSERT_EQ(myVector.capacity(), 0);
 
             for (uint8_t i = 0; i < myVec2.size(); i++){
-                EXPECT_EQ(myVec2[i], i);
+                ASSERT_EQ(myVec2[i], i);
             }
 
         }
@@ -127,11 +127,11 @@
 
                 cpstd::vector<uint8_t> myVec2 = cpstd::move(myVector);
 
-                EXPECT_EQ(myVector.size(), 0);
-                EXPECT_EQ(myVector.capacity(), 0);
+                ASSERT_EQ(myVector.size(), 0);
+                ASSERT_EQ(myVector.capacity(), 0);
 
                 for (uint8_t i = 0; i < myVec2.size(); i++){
-                    EXPECT_EQ(myVec2[i], i);
+                    ASSERT_EQ(myVec2[i], i);
                 }
             }
         #endif
@@ -150,11 +150,11 @@
 
                 cpstd::vector<uint8_t> myVector = {0, 1, 2};
 
-                EXPECT_EQ(myVector.size(), 3);
-                EXPECT_EQ(myVector.capacity(), 3);
+                ASSERT_EQ(myVector.size(), 3);
+                ASSERT_EQ(myVector.capacity(), 3);
 
                 for (uint8_t i = 0; i < myVector.size(); i++){
-                    EXPECT_EQ(myVector[i], i);
+                    ASSERT_EQ(myVector[i], i);
                 }
 
             }
@@ -508,12 +508,12 @@
 
             myVector.assign(5, 0xFF);
 
-            EXPECT_EQ(myVector.size(), 5);
-            EXPECT_EQ(myVector[0], 0xFF);
-            EXPECT_EQ(myVector[1], 0xFF);
-            EXPECT_EQ(myVector[2], 0xFF);
-            EXPECT_EQ(myVector[3], 0xFF);
-            EXPECT_EQ(myVector[4], 0xFF);
+            ASSERT_EQ(myVector.size(), 5);
+            ASSERT_EQ(myVector[0], 0xFF);
+            ASSERT_EQ(myVector[1], 0xFF);
+            ASSERT_EQ(myVector[2], 0xFF);
+            ASSERT_EQ(myVector[3], 0xFF);
+            ASSERT_EQ(myVector[4], 0xFF);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -530,14 +530,14 @@
                 
                 cpstd::vector<uint8_t> myVector;
                 myVector.assign({ 0,1,2,3,4 });
-                EXPECT_EQ(myVector.size(), 5);
+                ASSERT_EQ(myVector.size(), 5);
 
-                EXPECT_EQ(myVector.size(), 5);
-                EXPECT_EQ(myVector[0], 0);
-                EXPECT_EQ(myVector[1], 1);
-                EXPECT_EQ(myVector[2], 2);
-                EXPECT_EQ(myVector[3], 3);
-                EXPECT_EQ(myVector[4], 4);
+                ASSERT_EQ(myVector.size(), 5);
+                ASSERT_EQ(myVector[0], 0);
+                ASSERT_EQ(myVector[1], 1);
+                ASSERT_EQ(myVector[2], 2);
+                ASSERT_EQ(myVector[3], 3);
+                ASSERT_EQ(myVector[4], 4);
             }
         #endif
     //
@@ -761,7 +761,7 @@
             uint8_t counter = 0;
             
             while( !myVector.empty() ){
-                EXPECT_EQ(myVector[0],counter++);
+                ASSERT_EQ(myVector[0],counter++);
                 myVector.erase(0);
             }
         }
@@ -780,10 +780,10 @@
 
             cpstd::vector<uint8_t> myVector = { 0,1,2,3,4 };
             myVector.erase(2,4);
-            EXPECT_EQ(myVector.size(), 3);
-            EXPECT_EQ(myVector[0], 0);
-            EXPECT_EQ(myVector[1], 1);
-            EXPECT_EQ(myVector[2], 4);
+            ASSERT_EQ(myVector.size(), 3);
+            ASSERT_EQ(myVector[0], 0);
+            ASSERT_EQ(myVector[1], 1);
+            ASSERT_EQ(myVector[2], 4);
         }
     //
     /////////////////////////////////////////////////////////////////////////////////
@@ -800,13 +800,13 @@
             cpstd::vector<uint8_t> myVector = { 0,1,2,3,4 };
             cpstd::vector<uint8_t> myVector2 = { 0,1,2,3 };
 
-            EXPECT_EQ(myVector.size(), 5);
-            EXPECT_EQ(myVector2.size(), 4);
+            ASSERT_EQ(myVector.size(), 5);
+            ASSERT_EQ(myVector2.size(), 4);
 
             myVector.swap(myVector2);
 
-            EXPECT_EQ(myVector.size(), 4);
-            EXPECT_EQ(myVector2.size(), 5);
+            ASSERT_EQ(myVector.size(), 4);
+            ASSERT_EQ(myVector2.size(), 5);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -841,11 +841,11 @@
 
             cpstd::vector<uint8_t> myVector;
 
-            EXPECT_EQ(myVector.size(),0);
+            ASSERT_EQ(myVector.size(),0);
 
             for (size_t i = 1; i < 10; i++) {
                 myVector.emplace(0, cpstd::move(static_cast<uint8_t>(i)));
-                EXPECT_EQ(myVector[0], i);
+                ASSERT_EQ(myVector[0], i);
             }
         }
     //
@@ -864,12 +864,12 @@
 
             cpstd::vector<testClass> myVector;
 
-            EXPECT_EQ(myVector.size(),0);
+            ASSERT_EQ(myVector.size(),0);
 
             for(size_t i = 1; i < 10; i++){
                 testClass tmp(static_cast<uint8_t>(i));
                 myVector.emplace(0, cpstd::move(tmp));
-                EXPECT_EQ(myVector[0], i);
+                ASSERT_EQ(myVector[0], i);
                 ASSERT_EQ(tmp.A(), 0);
             }
         }
@@ -931,9 +931,9 @@
             cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
             cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-            EXPECT_EQ(myVector == myVector2, 1);
+            ASSERT_EQ(myVector == myVector2, 1);
             myVector2 = {0,1,2,3};
-            EXPECT_EQ(myVector == myVector2, 0);
+            ASSERT_EQ(myVector == myVector2, 0);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -953,9 +953,9 @@
             cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
             cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-            EXPECT_EQ(myVector != myVector2, 0);
+            ASSERT_EQ(myVector != myVector2, 0);
             myVector2 = {0,1,2,3};
-            EXPECT_EQ(myVector != myVector2, 1);
+            ASSERT_EQ(myVector != myVector2, 1);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -975,9 +975,9 @@
             cpstd::vector<uint8_t> myVector = {0,1,2,3};
             cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-            EXPECT_EQ(myVector < myVector2, 1);
+            ASSERT_EQ(myVector < myVector2, 1);
             myVector2 = {0,1,2,3};
-            EXPECT_EQ(myVector < myVector2, 0);
+            ASSERT_EQ(myVector < myVector2, 0);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -997,9 +997,9 @@
             cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
             cpstd::vector<uint8_t> myVector2 = {0,1,2,3};
 
-            EXPECT_EQ(myVector > myVector2, 1);
+            ASSERT_EQ(myVector > myVector2, 1);
             myVector2 = {0,1,2,3,4};
-            EXPECT_EQ(myVector > myVector2, 0);
+            ASSERT_EQ(myVector > myVector2, 0);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -1019,11 +1019,11 @@
             cpstd::vector<uint8_t> myVector = {0,1,2,3};
             cpstd::vector<uint8_t> myVector2 = {0,1,2,3,4};
 
-            EXPECT_EQ(myVector <= myVector2, 1);
+            ASSERT_EQ(myVector <= myVector2, 1);
             myVector2 = {0,1,2,3};
-            EXPECT_EQ(myVector <= myVector2, 1);
+            ASSERT_EQ(myVector <= myVector2, 1);
             myVector2 = {0,1,2};
-            EXPECT_EQ(myVector <= myVector2, 0);
+            ASSERT_EQ(myVector <= myVector2, 0);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -1044,11 +1044,11 @@
             cpstd::vector<int> myVector = {0,1,2,3,4};
             cpstd::vector<int> myVector2 = {0,1,2,3};
 
-            EXPECT_EQ(myVector >= myVector2, 1);
+            ASSERT_EQ(myVector >= myVector2, 1);
             myVector2 = {0,1,2,3,4};
-            EXPECT_EQ(myVector >= myVector2, 1);
+            ASSERT_EQ(myVector >= myVector2, 1);
             myVector2 = {0,1,2,3,4,5};
-            EXPECT_EQ(myVector >= myVector2, 0);
+            ASSERT_EQ(myVector >= myVector2, 0);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -1068,13 +1068,13 @@
             cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
             cpstd::vector<uint8_t> myVector2 = {0,1,2,3};
 
-            EXPECT_EQ(myVector.size(), 5);
-            EXPECT_EQ(myVector2.size(), 4);
+            ASSERT_EQ(myVector.size(), 5);
+            ASSERT_EQ(myVector2.size(), 4);
 
             cpstd::swap(myVector, myVector2);
 
-            EXPECT_EQ(myVector.size(), 4);
-            EXPECT_EQ(myVector2.size(), 5);
+            ASSERT_EQ(myVector.size(), 4);
+            ASSERT_EQ(myVector2.size(), 5);
 
         }
     //
@@ -1094,27 +1094,27 @@
             #if defined(CPVECTOR_USING_STD_VECTOR_ALLOCATION) || defined(CPVECTOR_USING_CPP_ALLOCATION)
                 cpstd::vector<uint8_t>* myVectorptr = nullptr;
 
-                EXPECT_EQ((void*)myVectorptr,nullptr);
+                ASSERT_EQ((void*)myVectorptr,nullptr);
                 
                 myVectorptr = new cpstd::vector<uint8_t>(12);
 
                 ASSERT_NE(myVectorptr,nullptr);
 
-                EXPECT_EQ(myVectorptr->size(),12);
+                ASSERT_EQ(myVectorptr->size(),12);
 
                 delete(myVectorptr);
             #elif (CPVECTOR_USING_C_ALLOCATION)
 
                 cpstd::vector<uint8_t>* myVectorptr = NULL;
 
-                EXPECT_EQ(myVectorptr,(void*)NULL);
+                ASSERT_EQ(myVectorptr,(void*)NULL);
                 
                 myVectorptr = (cpstd::vector<uint8_t>*)calloc(1, sizeof(cpstd::vector<uint8_t>));
                 (*myVectorptr) = cpstd::vector<uint8_t>(12);
 
                 ASSERT_NE(myVectorptr,(void*)NULL);
 
-                EXPECT_EQ(myVectorptr->size(),12);
+                ASSERT_EQ(myVectorptr->size(),12);
 
                 delete(myVectorptr);
 
@@ -1137,7 +1137,7 @@
 
             cpstd::vector<uint8_t>* myVectorptr = nullptr;
 
-            EXPECT_EQ((void*)myVectorptr,nullptr);
+            ASSERT_EQ((void*)myVectorptr,nullptr);
             
             myVectorptr = new cpstd::vector<uint8_t>[8];
 
@@ -1154,7 +1154,7 @@
             
             for(uint8_t i = 0; i < 8; i++){
                 for(uint8_t j = 0; j < 8; j++){
-                    EXPECT_EQ(myVectorptr[i][j], (8*i) + j);
+                    ASSERT_EQ(myVectorptr[i][j], (8*i) + j);
                 }
             }
 
@@ -1177,7 +1177,7 @@
             
             for(uint8_t i = 0; i < 8; i++){
                 for(uint8_t j = 0; j < 8; j++){
-                    EXPECT_EQ(myVectorptr[i][j], (8*i) + j);
+                    ASSERT_EQ(myVectorptr[i][j], (8*i) + j);
                 }
                 myVectorptr[i].cpstd::vector<uint8_t>::~vector();
             }
@@ -1211,14 +1211,14 @@
 
                 for(uint8_t j = 0; j < myVector[i].size(); j++){
                     myVector[i][j] = (8*i) + j;
-                    EXPECT_EQ(myVector[i][j], (8*i) + j);
+                    ASSERT_EQ(myVector[i][j], (8*i) + j);
                 }
             }
 
             for(uint8_t i = 0; i < myVector.size(); i++){
                 for(uint8_t j = 0; j < myVector[i].size(); j++){
                     myVector[i][j] = (8*i) + j;
-                    EXPECT_EQ(myVector[i][j], (8*i) + j);
+                    ASSERT_EQ(myVector[i][j], (8*i) + j);
                 }
                 myVector[i].clear();
             }
