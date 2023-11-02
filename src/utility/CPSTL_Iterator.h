@@ -82,6 +82,10 @@
 
         template <typename InputIt, typename Distance>
         void advance(InputIt& it, Distance n) {
+            if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::random_access_iterator_tag>) {
+               it += n;
+            }
+
             while (n > 0) {
                 ++it;
                 --n;
@@ -94,10 +98,15 @@
 
         template <typename InputIt>
         auto distance(InputIt first, InputIt last) {
-            auto count = 0;
-            while (first != last) {
-                ++first;
-                ++count;
+            if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::random_access_iterator_tag>) {
+                return last - first;
+            } 
+            else {
+                auto count = 0;
+                while (first != last) {
+                    ++first;
+                    ++count;
+                }
             }
             return count;
         }
