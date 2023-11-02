@@ -9,6 +9,7 @@
 
 #include <CPtype_traits.h>
 #include <CPutility.h>
+/*
 
 struct A {
     int fn() { return 0; }
@@ -25,7 +26,6 @@ union MyUnion {
 int user_defined_function() { return 0; }
 
 
-/*
 TEST(CPSTL_TypeTraitsTest, RemoveConst) {
     using NoConst = cpstd::remove_const<const int>::type;
     EXPECT_TRUE((cpstd::is_same_v<NoConst, int>));
