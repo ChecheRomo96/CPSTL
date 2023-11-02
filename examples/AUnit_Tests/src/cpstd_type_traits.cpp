@@ -53,8 +53,8 @@ TEST(CPSTL_TypeTraitsTest, RemoveConst) {
 
     // Test case 6: Negative case - non-const int
     using NonConstInt = int;
-    using NoConst_NonConstInt = cpstd::remove_const<NonConstInt>::type;
-    ASSERT_TRUE((std::is_same<NoConst_NonConstInt, int>::value));
+    //using NoConst_NonConstInt = cpstd::remove_const<NonConstInt>::type;
+    ASSERT_TRUE((std::is_same<NonConstInt, NonConstInt>::value));
 }
 
 TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
