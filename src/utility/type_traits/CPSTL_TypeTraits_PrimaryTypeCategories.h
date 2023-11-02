@@ -64,10 +64,10 @@
         struct is_class {
         private:
             template<typename C>
-            static cpstd::true_type test(int C::*); // for non-static member variables
+            static cpstd::true_type test__(int C::*); // for non-static member variables
             
             template<typename C>
-            static cpstd::false_type test(...);
+            static cpstd::false_type test__(...);
 
         public:
             static constexpr bool value = cpstd::is_same<decltype(test<T>(nullptr)), cpstd::true_type>::value;
@@ -96,10 +96,10 @@
         struct is_function {
         private:
             template <typename U>
-            static cpstd::true_type test(U(*)());
+            static cpstd::true_type test__(U(*)());
 
             template <typename U>
-            static cpstd::false_type test(...);
+            static cpstd::false_type test__(...);
 
         public:
             using type = decltype(test<T>(nullptr));
