@@ -94,11 +94,11 @@
 
         // This primary template is intentionally left undefined
         template <typename>
-        struct is_function : std::false_type {};
+        struct is_function : cpstd::false_type {};
 
         // This specialization will be enabled only if the type is a function
         template <typename Ret, typename... Args>
-        struct is_function<Ret(Args...)> : std::true_type {};
+        struct is_function<Ret(Args...)> : cpstd::true_type {};
 
 
 
