@@ -124,12 +124,12 @@
         }
 
         template <typename Container>
-        auto begin(Container& c) {
+        typename Container::iterator begin(Container& c) {
             return c.begin();
         }
 
         template <typename Container>
-        auto end(Container& c) {
+        typename Container::iterator end(Container& c) {
             return c.end();
         }
     #endif
