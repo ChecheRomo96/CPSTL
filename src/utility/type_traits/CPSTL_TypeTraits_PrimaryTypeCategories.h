@@ -92,19 +92,13 @@
 
 
 
-        template <typename T>
-        struct is_function {
-        private:
-            template <typename U>
-            static cpstd::true_type test__(U(*)());
+        // This primary template is intentionally left undefined
+        template <typename>
+        struct is_function : std::false_type {};
 
-            template <typename U>
-            static cpstd::false_type test__(...);
-
-        public:
-            using type = decltype(test__<T>(nullptr));
-            static constexpr bool value = cpstd::is_same_v<type, cpstd::true_type>;
-        };
+        // This specialization will be enabled only if the type is a function
+        template <typename Ret, typename... Args>
+        struct is_function<Ret(Args...)> : std::true_type {};
 
 
 
