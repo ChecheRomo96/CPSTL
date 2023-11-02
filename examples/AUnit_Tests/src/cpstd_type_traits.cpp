@@ -9,22 +9,22 @@
 
 #include <CPtype_traits.h>
 #include <CPutility.h>
-/*
 
-struct A {
-    int fn() { return 0; }
-    int x;
-};
+namespace {
+    struct A {
+        int fn() { return 0; }
+        int x;
+    };
 
-enum MyEnum { Value1, Value2 };
+    enum MyEnum { Value1, Value2 };
 
-union MyUnion {
-    int a;
-    float b;
-};
+    union MyUnion {
+        int a;
+        float b;
+    };
 
-int user_defined_function() { return 0; }
-
+    int user_defined_function() { return 0; }
+}
 
 TEST(CPSTL_TypeTraitsTest, RemoveConst) {
     using NoConst = cpstd::remove_const<const int>::type;
@@ -134,5 +134,3 @@ TEST(CPSTL_TypeTraitsTest, IsVoid) {
     EXPECT_FALSE((cpstd::is_void<int>::value));
     EXPECT_FALSE((cpstd::is_void<decltype(nullptr)>::value));
 }
-
-*/
