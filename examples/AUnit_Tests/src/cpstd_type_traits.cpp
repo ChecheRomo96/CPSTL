@@ -101,11 +101,13 @@ TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
         using MyOtherType = cpstd::integral_constant<int, 100>;
         ASSERT_FALSE((cpstd::is_same<MyOtherType, cpstd::integral_constant<int, 42>>::value));
     }
-
+    
+    #if defined(CPSTL_USING_STL)
     // Test case 5: Cross-verification - Compare with standard library traits
     {
         ASSERT_TRUE((cpstd::is_same<cpstd::integral_constant<int, 42>, std::integral_constant<int, 42>>::value));
     }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsSame) {
