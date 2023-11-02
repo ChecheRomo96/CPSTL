@@ -225,7 +225,7 @@
                         //! This operator is used to assign new contents to the container by replacing the existing contents.
                         //! @tparam source Another container of the same type.
                          
-                            vector& operator=(vector&& source){
+                            vector& operator=(vector&& source) noexcept{
 
                                 if(this == &source){return *this;}
                                 clear();
@@ -448,7 +448,7 @@
                                 
                                 if((ptr = (T*)calloc(new_cap, sizeof(T)) ) != NULL){
 
-                                    for(uint32_t i = 0; i < _Size; i++){
+                                    for(size_t i = 0; i < _Size; i++){
                                         ptr[i] = _Buffer[i];
                                     }
 
