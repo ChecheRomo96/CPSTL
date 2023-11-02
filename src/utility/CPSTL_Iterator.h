@@ -7,6 +7,7 @@
     namespace cpstd {
     #if defined(CPSTL_USING_STL)
 
+        /*
         using input_iterator_tag = std::input_iterator_tag;
         using output_iterator_tag = std::output_iterator_tag;
         using forward_iterator_tag = std::forward_iterator_tag;
@@ -132,6 +133,8 @@
         typename Container::iterator end(Container& c) {
             return c.end();
         }
+
+        */
     #endif
     }
 
