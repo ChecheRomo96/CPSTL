@@ -102,7 +102,8 @@
             static cpstd::false_type test(...);
 
         public:
-            static constexpr bool value = decltype(test<T>(nullptr))::value;
+            using type = decltype(test<T>(nullptr));
+            static constexpr bool value = cpstd::is_same<type, true_type>::value;
         };
 
 
