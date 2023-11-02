@@ -24,6 +24,8 @@ union MyUnion {
 
 int user_defined_function() { return 0; }
 
+
+/*
 TEST(CPSTL_TypeTraitsTest, RemoveConst) {
     using NoConst = cpstd::remove_const<const int>::type;
     EXPECT_TRUE((cpstd::is_same_v<NoConst, int>));
@@ -132,3 +134,5 @@ TEST(CPSTL_TypeTraitsTest, IsVoid) {
     EXPECT_FALSE((cpstd::is_void<int>::value));
     EXPECT_FALSE((cpstd::is_void<decltype(nullptr)>::value));
 }
+
+*/

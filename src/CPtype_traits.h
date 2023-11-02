@@ -40,7 +40,7 @@
         };
 
         template <typename T, typename U>
-        inline constexpr bool is_same_v = is_same<T, U>::value;
+        inline constexpr bool is_same_v = cpstd::is_same<T, U>::value;
 
 
         template <typename T>
