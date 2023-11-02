@@ -1,7 +1,7 @@
 #ifndef CPSTL_TYPE_TRAITS_HEADER
 #define CPSTL_TYPE_TRAITS_HEADER
     
-    #include <CPSTL_BuildSettings.h
+    #include <CPSTL_BuildSettings.h>
     #include <CPtype_traits.h>
 
 #endif//CPSTL_TYPE_TRAITS_HEADER
