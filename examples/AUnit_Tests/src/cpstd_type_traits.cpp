@@ -71,8 +71,41 @@ TEST(CPSTL_TypeTraitsTest, RemoveConst) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
-    using MyConstant = cpstd::integral_constant<int, 42u>;
-    ASSERT_EQ(MyConstant::value, 42);
+    // Test case 1: Basic integral constant with value 42
+    {
+        using MyConstant = cpstd::integral_constant<int, 42>;
+        ASSERT_EQ(MyConstant::value, 42);
+    }
+
+    // Test case 2: Integral constant at language limits
+    {
+        using MinInt = cpstd::integral_constant<int, std::numeric_limits<int>::min()>;
+        #ifdef CPSTL_USING_STL
+        ASSERT_EQ(MinInt::value, std::numeric_limits<int>::min());
+        #endif
+    }
+
+    // Test case 3: Qualifier variations - const, volatile, and const-volatile combinations
+    {
+        using ConstMyConstant = const cpstd::integral_constant<int, 42>;
+        using VolatileMyConstant = volatile cpstd::integral_constant<int, 42>;
+        using ConstVolatileMyConstant = const volatile cpstd::integral_constant<int, 42>;
+
+        ASSERT_TRUE((cpstd::is_same<const int, ConstMyConstant::value_type>::value));
+        ASSERT_TRUE((cpstd::is_same<volatile int, VolatileMyConstant::value_type>::value));
+        ASSERT_TRUE((cpstd::is_same<const volatile int, ConstVolatileMyConstant::value_type>::value));
+    }
+
+    // Test case 4: Negative scenarios - Non-conforming types
+    {
+        using MyOtherType = cpstd::integral_constant<int, 100>;
+        ASSERT_FALSE((cpstd::is_same<MyOtherType, cpstd::integral_constant<int, 42>>::value));
+    }
+
+    // Test case 5: Cross-verification - Compare with standard library traits
+    {
+        ASSERT_TRUE((cpstd::is_same<cpstd::integral_constant<int, 42>, std::integral_constant<int, 42>>::value));
+    }
 }
 
 TEST(CPSTL_TypeTraitsTest, IsSame) {
