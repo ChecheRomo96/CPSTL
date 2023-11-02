@@ -47,7 +47,7 @@
         template <typename T>
         using is_void = std::is_void  <T>;
 
-    #else /* 
+    #else 
 
         template<class T>
         struct is_array : cpstd::false_type {};
@@ -186,7 +186,7 @@
         template<typename T>
         struct is_void {
             static constexpr bool value = cpstd::is_same<void, typename cpstd::remove_cv<T>::type>::value;
-        }; */
+        };
     #endif
 
 
