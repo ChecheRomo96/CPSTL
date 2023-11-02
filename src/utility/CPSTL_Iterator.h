@@ -97,7 +97,7 @@
         }
 
         template <typename InputIt>
-        auto distance(InputIt first, InputIt last) {
+        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last) {
             if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::random_access_iterator_tag>) {
                 return last - first;
             } 
