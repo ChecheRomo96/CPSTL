@@ -30,7 +30,7 @@
         using remove_volatile = std::remove_volatile<T>;
     #else
         template <typename T, typename U>
-        struct is_same {
+        struct is_same<T,U>{
             static constexpr bool value = false;
         };
 
