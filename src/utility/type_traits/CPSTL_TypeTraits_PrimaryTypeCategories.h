@@ -103,7 +103,7 @@
 
         public:
             using type = decltype(test<T>(nullptr));
-            static constexpr bool value = cpstd::is_same<type, cpstd::true_type>::value;
+            static constexpr bool value = cpstd::is_same_v<type, cpstd::true_type>;
         };
 
 
