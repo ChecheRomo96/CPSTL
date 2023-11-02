@@ -29,44 +29,44 @@ namespace {
 TEST(CPSTL_TypeTraitsTest, RemoveConst) {
     // Test case 1: Type is const int
     {
-        using Const_Int = const int;
-        using NoConst_Const_Int = cpstd::remove_const<Const_Int>::type;
-        ASSERT_TRUE((std::is_same<NoConst_Const_Int, int>::value));
+        using TypeWithConstInt = const int;
+        using TypeWithoutConstInt = cpstd::remove_const<TypeWithConstInt>::type;
+        ASSERT_TRUE((cpstd::is_same<TypeWithoutConstInt, int>::value));
     }
 
     // Test case 2: Type is const volatile float
     {
-        using ConstVolatile_Float = const volatile float;
-        using NoConst_ConstVolatile_Float = cpstd::remove_const<ConstVolatile_Float>::type;
-        ASSERT_TRUE((std::is_same<NoConst_ConstVolatile_Float, volatile float>::value));
+        using TypeWithConstVolatileFloat = const volatile float;
+        using TypeWithoutConstVolatileFloat = cpstd::remove_const<TypeWithConstVolatileFloat>::type;
+        ASSERT_TRUE((cpstd::is_same<TypeWithoutConstVolatileFloat, volatile float>::value));
     }
 
     // Test case 3: Type is const volatile char
     {
-        using ConstVolatile_Char = const volatile char;
-        using NoConst_ConstVolatile_Char = cpstd::remove_const<ConstVolatile_Char>::type;
-        ASSERT_TRUE((std::is_same<NoConst_ConstVolatile_Char, volatile char>::value));
+        using TypeWithConstVolatileChar = const volatile char;
+        using TypeWithoutConstVolatileChar = cpstd::remove_const<TypeWithConstVolatileChar>::type;
+        ASSERT_TRUE((cpstd::is_same<TypeWithoutConstVolatileChar, volatile char>::value));
     }
 
     // Test case 4: Type is int
     {
-        using Regular_Int = int;
-        using NoConst_Regular_Int = cpstd::remove_const<Regular_Int>::type;
-        ASSERT_TRUE((std::is_same<NoConst_Regular_Int, int>::value));
+        using RegularInt = int;
+        using TypeWithoutConstRegularInt = cpstd::remove_const<RegularInt>::type;
+        ASSERT_TRUE((cpstd::is_same<TypeWithoutConstRegularInt, int>::value));
     }
 
     // Test case 5: Standard usage with const int
     {
-        using Const_Int = const int;
-        using NoConst_Const_Int = cpstd::remove_const<Const_Int>::type;
-        ASSERT_TRUE((std::is_same<NoConst_Const_Int, int>::value));
+        using TypeWithConstIntStandard = const int;
+        using TypeWithoutConstIntStandard = cpstd::remove_const<TypeWithConstIntStandard>::type;
+        ASSERT_TRUE((cpstd::is_same<TypeWithoutConstIntStandard, int>::value));
     }
 
     // Test case 6: Negative case - non-const int
     {
-        using NonConst_Int = int;
-        using NoConst_NonConst_Int = cpstd::remove_const<NonConst_Int>::type;
-        ASSERT_TRUE((std::is_same<NoConst_NonConst_Int, int>::value));
+        using NonConstInt = int;
+        using TypeWithoutConstNonConstInt = cpstd::remove_const<NonConstInt>::type;
+        ASSERT_TRUE((cpstd::is_same<TypeWithoutConstNonConstInt, int>::value));
     }
 }
 
