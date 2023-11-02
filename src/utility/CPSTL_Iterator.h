@@ -102,7 +102,7 @@
                 return last - first;
             } 
             else {
-                auto count = 0;
+                typename std::iterator_traits<InputIt>::difference_type count = 0;
                 while (first != last) {
                     ++first;
                     ++count;
