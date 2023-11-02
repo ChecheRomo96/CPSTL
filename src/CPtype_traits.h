@@ -18,7 +18,6 @@
         template<class T>
         using remove_reference = std::remove_reference<T>;
 
-
         template<class T>
         using remove_cv = typename std::remove_cv<T>::type;
 
