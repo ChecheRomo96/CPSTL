@@ -8,6 +8,7 @@
 #endif
 
 #include <CPstring.h>
+#include <CPutility.h>
 
 #if defined(CPSTL_STRING_ENABLED)
     
