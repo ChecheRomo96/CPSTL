@@ -43,7 +43,7 @@
         template <typename T> struct remove_cv<const T> { typedef T type; };
         template <typename T> struct remove_cv<volatile T> { typedef T type; };
         template <typename T> struct remove_cv<const volatile T> { typedef T type; };
-        template <typename T> inline constexpr T remove_cv_t = cpstd::remove_cv<T>::type;
+        inline constexpr typename cpstd::remove_cv<T>::type remove_cv_t = {};
 
         template <typename T> struct remove_volatile { typedef T type; };
         template <typename T> struct remove_volatile<volatile T> { typedef T type; };
