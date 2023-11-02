@@ -33,7 +33,6 @@
         template <class T> struct remove_reference<T&&> { using type = T; };
 
         template <typename T> struct is_same<T, T> { static constexpr bool value = true; };
-
         template <typename T, typename U> struct is_same{ static constexpr bool value = false; };
         template <typename T, typename U> bool is_same_v = cpstd::is_same<T, U>::value;
 
