@@ -3,7 +3,6 @@
     
     #include <CPSTL_BuildSettings.h>
     
-    #include <Utility/type_traits/CPSTL_TypeTraits.h>
 
     namespace cpstd{
     #if defined(CPSTL_USING_STL)
@@ -52,7 +51,9 @@
         template<class T> struct remove_volatile<volatile T> { typedef T type; };
 
     #endif
-
     }
+
+    
+    #include <Utility/type_traits/CPSTL_TypeTraits.h>
 
 #endif//CPSTL_TYPE_TRAITS_H
