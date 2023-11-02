@@ -85,9 +85,9 @@
         template<typename T>
         struct is_floating_point {
             static constexpr bool value =
-                    cpstd::is_same<cpstd::remove_cv<T>, float>::value ||
-                    cpstd::is_same<cpstd::remove_cv<T>, double>::value ||
-                    cpstd::is_same<cpstd::remove_cv<T>, long double>::value;
+                cpstd::is_same<cpstd::remove_cv<T>, float>::value ||
+                cpstd::is_same<cpstd::remove_cv<T>, double>::value ||
+                cpstd::is_same<cpstd::remove_cv<T>, long double>::value;
         };
 
 
