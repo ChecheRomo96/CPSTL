@@ -107,8 +107,8 @@
                     ++first;
                     ++count;
                 }
+                return count;
             }
-            return count;
         }
 
         template <typename InputIt, typename Distance>
