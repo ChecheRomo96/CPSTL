@@ -55,7 +55,7 @@
         template<class T>
         struct is_array<T[]> : cpstd::true_type {};
 
-        template<class T, cpstd::size_t N>
+        template<class T, size_t N>
         struct is_array<T[N]> : cpstd::true_type {};
 
 
