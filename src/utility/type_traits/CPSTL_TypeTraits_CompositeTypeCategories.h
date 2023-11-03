@@ -27,7 +27,10 @@
         template <typename T>
         using is_scalar = cpstd::is_lvalue_reference<T>;
     #else 
-        
+                template <typename T>
+        struct is_reference : cpstd::integral_constant<bool,
+            cpstd::is_lvalue_reference<T>::value || cpstd::is_rvalue_reference<T>::value> {};
+
         template <typename T>
         struct is_member_pointer : cpstd::integral_constant<bool,
             cpstd::is_member_object_pointer<T>::value || cpstd::is_void<T>::value || cpstd::is_reference<T>::value> {};
@@ -35,10 +38,6 @@
         template <typename T>
         struct is_object : cpstd::integral_constant<bool,
             !cpstd::is_function<T>::value && !cpstd::is_void<T>::value && !cpstd::is_member_function_pointer<T>::value> {};
-
-        template <typename T>
-        struct is_reference : cpstd::integral_constant<bool,
-            cpstd::is_lvalue_reference<T>::value || cpstd::is_rvalue_reference<T>::value> {};
 
         template <typename T>
         struct is_scalar : cpstd::integral_constant<bool,
