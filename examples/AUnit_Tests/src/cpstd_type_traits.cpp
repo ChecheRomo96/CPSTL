@@ -91,9 +91,9 @@ TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
         using VolatileMyConstant = volatile cpstd::integral_constant<int, 42>;
         using ConstVolatileMyConstant = const volatile cpstd::integral_constant<int, 42>;
 
-        ASSERT_TRUE((cpstd::is_same<const int, ConstMyConstant::value_type>::value));
-        ASSERT_TRUE((cpstd::is_same<volatile int, VolatileMyConstant::value_type>::value));
-        ASSERT_TRUE((cpstd::is_same<const volatile int, ConstVolatileMyConstant::value_type>::value));
+        ASSERT_TRUE((cpstd::is_same_v<const int, ConstMyConstant::value_type>));
+        ASSERT_TRUE((cpstd::is_same_v<volatile int, VolatileMyConstant::value_type>));
+        ASSERT_TRUE((cpstd::is_same_v<const volatile int, ConstVolatileMyConstant::value_type>));
     }
 
     // Test case 4: Negative scenarios - Non-conforming types
