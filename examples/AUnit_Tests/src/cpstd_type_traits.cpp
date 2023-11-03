@@ -243,11 +243,12 @@ TEST(CPSTL_TypeTraitsTest, IsClass) {
     // Test case 2: Non-class types
     {
         struct MyStruct {};
+        class MyClass {};
         enum MyEnum { A, B, C };
         ASSERT_FALSE((cpstd::is_class_v<int>));
-        ASSERT_FALSE((cpstd::is_class_v<MyStruct>));
         ASSERT_FALSE((cpstd::is_class_v<MyEnum>));
         ASSERT_FALSE((cpstd::is_class_v<float>));
+        ASSERT_TRUE((cpstd::is_class_v<MyStruct>));
     }
 
     // Test case 3: Pointer types and references
