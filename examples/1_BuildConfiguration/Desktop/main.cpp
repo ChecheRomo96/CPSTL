@@ -8,11 +8,19 @@ int user_defined_function() {
 }
 
 struct A { void fn() {}; };
+class B { void fn() {}; };
+class ExampleClass {
+public:
+    int member_var;
+    static int static_member_var;
+};
 
 union MyUnion {
     int a;
     float b;
 };
+
+enum ExampleEnum { C, D };
 
 int main(){
     std::cout<<"This project uses CPSTL version: "<<CPSTL_VERSION << std::endl << std::endl;
@@ -63,7 +71,7 @@ int main(){
     // Test is_class
     std::cout << "\nTesting is_class:" << std::endl;
     std::cout << "Is int a class? " << cpstd::is_class<int>::value << std::endl;
-    std::cout << "Is a class a class? " << cpstd::is_class<class A>::value << std::endl;
+    std::cout << "Is a class a class? " << cpstd::is_class<B>::value << std::endl;
     std::cout << std::endl;
 
     // Test is_enum
@@ -162,6 +170,118 @@ int main(){
     std::cout << "decltype(nullptr): " << cpstd::is_void<decltype(nullptr)>::value << std::endl;
     std::cout << std::endl;
 
+    // Test is_arithmetic
+    std::cout << "Testing cpstd::is_arithmetic:" << std::endl;
+
+    std::cout << "int: " << cpstd::is_arithmetic<int>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "float: " << cpstd::is_arithmetic<float>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "char: " << cpstd::is_arithmetic<char>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "bool: " << cpstd::is_arithmetic<bool>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "void: " << cpstd::is_arithmetic<void>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "ExampleClass: " << cpstd::is_arithmetic<class ExampleClass>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "int*: " << cpstd::is_arithmetic<int*>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "ExampleClass*: " << cpstd::is_arithmetic<ExampleClass*>::value << " // Expected: 0 (false)" << std::endl;
+
+    std::cout << std::endl;
+
+    // Test is_compound
+    std::cout << "Testing cpstd::is_compound:" << std::endl;
+
+    std::cout << "int: " << cpstd::is_compound<int>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "float: " << cpstd::is_compound<float>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "char: " << cpstd::is_compound<char>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "bool: " << cpstd::is_compound<bool>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "void: " << cpstd::is_compound<void>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "ExampleClass: " << cpstd::is_compound<ExampleClass>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "int*: " << cpstd::is_compound<int*>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "ExampleClass*: " << cpstd::is_compound<ExampleClass*>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "ExampleEnum: " << cpstd::is_compound<ExampleEnum>::value << " // Expected: 0 (false)" << std::endl;
+
+    std::cout << std::endl;
+
+
+    // Test is_fundamental
+    std::cout << "Testing cpstd::is_fundamental:" << std::endl;
+
+    std::cout << "int: " << cpstd::is_fundamental<int>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "float: " << cpstd::is_fundamental<float>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "char: " << cpstd::is_fundamental<char>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "bool: " << cpstd::is_fundamental<bool>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "void: " << cpstd::is_fundamental<void>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "ExampleClass: " << cpstd::is_fundamental<class ExampleClass>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "int*: " << cpstd::is_fundamental<int*>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "ExampleClass*: " << cpstd::is_fundamental<ExampleClass*>::value << " // Expected: 0 (false)" << std::endl;
+
+    std::cout << std::endl;
+
+
+    // Test is_member_pointer
+    std::cout << "Testing cpstd::is_member_pointer:" << std::endl;
+
+    std::cout << "int ExampleClass::*: " << cpstd::is_member_pointer<int ExampleClass::*>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "int ExampleClass::* (static): " << cpstd::is_member_pointer<decltype(&ExampleClass::static_member_var)>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "int ExampleClass::* (non-static): " << cpstd::is_member_pointer<decltype(&ExampleClass::member_var)>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "int: " << cpstd::is_member_pointer<int>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "ExampleClass: " << cpstd::is_member_pointer<ExampleClass>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "void: " << cpstd::is_member_pointer<void>::value << " // Expected: 0 (false)" << std::endl;
+
+    std::cout << std::endl;
+
+   
+
+    // Test is_object
+    std::cout << "Testing is_object:" << std::endl;
+
+    int i = 5;
+    int* ptr_i = &i;
+    int& ref_i = i;
+    ExampleClass obj;
+    ExampleClass& ref_obj = obj;
+
+    std::cout << "int: " << std::is_object<int>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "int*: " << std::is_object<int*>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "int&: " << std::is_object<int&>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "ExampleClass: " << std::is_object<ExampleClass>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "ExampleClass&: " << std::is_object<ExampleClass&>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "ExampleEnum: " << std::is_object<ExampleEnum>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "void: " << std::is_object<void>::value << " // Expected: 0 (false)" << std::endl;
+
+    std::cout << std::endl;
+
+    //Test is_reference
+    std::cout << "Testing is_reference:" << std::endl;
+
+    const int& const_ref_i = i;
+    int&& rref_i = std::move(i); // rvalue reference
+    const int&& const_rref_i = std::move(i); // const rvalue reference
+
+    std::cout << "int: " << std::is_reference<int>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "int&: " << std::is_reference<int&>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "int&&: " << std::is_reference<int&&>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "const int&: " << std::is_reference<const int&>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "const int&&: " << std::is_reference<const int&&>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "ExampleClass&: " << std::is_reference<ExampleClass&>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "ExampleClass: " << std::is_reference<ExampleClass>::value << " // Expected: 0 (false)" << std::endl;
+
+    std::cout << std::endl;
+
+
+    // Test is_scalar
+    std::cout << "Testing is_scalar:" << std::endl;
+    std::cout << "int: " << std::is_scalar<int>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "float: " << std::is_scalar<float>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "char: " << std::is_scalar<char>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "bool: " << std::is_scalar<bool>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "void: " << std::is_scalar<void>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "std::nullptr_t: " << std::is_scalar<std::nullptr_t>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "enum: " << std::is_scalar<ExampleEnum>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "class: " << std::is_scalar<B>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "pointer to int: " << std::is_scalar<int*>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "pointer to member: " << std::is_scalar<int B::*>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "pointer to member function: " << std::is_scalar<void (B::*)()>::value << " // Expected: 1 (true)" << std::endl;
+    std::cout << "reference to int: " << std::is_scalar<int&>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << "reference to class: " << std::is_scalar<B&>::value << " // Expected: 0 (false)" << std::endl;
+    std::cout << std::endl;
 
 
     std::cout << "All tests completed successfully!" << std::endl;
