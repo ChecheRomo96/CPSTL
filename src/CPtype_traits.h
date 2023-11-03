@@ -50,32 +50,7 @@
     }
 
     namespace cpstd{
-        struct nullptr_t {
-            template<typename T>
-            operator T*() const {
-                return nullptr;
-            }
-
-            template<typename T>
-            friend bool operator==(nullptr_t, T* ptr) {
-                return ptr == nullptr;
-            }
-
-            template<typename T>
-            friend bool operator==(T* ptr, nullptr_t) {
-                return ptr == nullptr;
-            }
-
-            template<typename T>
-            friend bool operator!=(nullptr_t, T* ptr) {
-                return ptr != nullptr;
-            }
-
-            template<typename T>
-            friend bool operator!=(T* ptr, nullptr_t) {
-                return ptr != nullptr;
-            }
-        };
+        using nullptr_t = std::nullptr_t;
     }
     
     
