@@ -18,6 +18,9 @@
         template <typename T>
         using is_class = std::is_class<T>;
 
+        template <typename T> 
+        inline constexpr bool is_class_v = is_class_v<T>::value;
+
         template <typename T>
         using is_enum = std::is_enum<T>;
 
@@ -80,6 +83,8 @@
             static constexpr bool value = cpstd::is_same<decltype(test__<T>(nullptr)), cpstd::true_type>::value;
         };
 
+        template <typename T> 
+        inline constexpr bool is_class_v = is_class<T>::value;
 
 
         template<typename T>
