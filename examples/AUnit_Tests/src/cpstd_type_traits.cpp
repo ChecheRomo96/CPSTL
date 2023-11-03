@@ -121,7 +121,56 @@ TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsSame) {
-    ASSERT_TRUE((cpstd::is_same_v< float, cpstd::remove_const<const float>::type >));
+    // Test case 1: Basic type identity check
+    {
+        ASSERT_TRUE((cpstd::is_same_v<int, int>));
+    }
+
+    // Test case 2: Comparing different non-const types
+    {
+        ASSERT_FALSE((cpstd::is_same_v<int, float>));
+    }
+
+    // Test case 3: Const type comparison
+    {
+        ASSERT_TRUE((cpstd::is_same_v<const int, const int>));
+        ASSERT_FALSE((cpstd::is_same_v<int, const int>));
+    }
+
+    // Test case 4: Volatile type comparison
+    {
+        ASSERT_TRUE((cpstd::is_same_v<volatile int, volatile int>));
+        ASSERT_FALSE((cpstd::is_same_v<int, volatile int>));
+    }
+
+    // Test case 5: Const-volatile type comparison
+    {
+        ASSERT_TRUE((cpstd::is_same_v<const volatile int, const volatile int>));
+        ASSERT_FALSE((cpstd::is_same_v<int, const volatile int>));
+    }
+
+    // Test case 6: Type comparison with remove_cv
+    {
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<const volatile int>::type>));
+        ASSERT_TRUE((cpstd::is_same_v<const int, cpstd::remove_cv<const volatile int>::type>));
+        ASSERT_FALSE((cpstd::is_same_v<int, cpstd::remove_cv<int>::type>));
+    }
+
+    // Test case 7: Negative scenarios - Non-conforming types
+    {
+        ASSERT_FALSE((cpstd::is_same_v<int, float>));
+        ASSERT_FALSE((cpstd::is_same_v<float, double>));
+        ASSERT_FALSE((cpstd::is_same_v<char, short>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 8: Cross-verification - Compare with standard library traits
+    {
+        ASSERT_TRUE((cpstd::is_same<cpstd::remove_cv<const int>::type, std::remove_cv<const int>::type>::value));
+        ASSERT_TRUE((cpstd::is_same<cpstd::remove_cv<int>::type, std::remove_cv<int>::type>::value));
+        ASSERT_FALSE((cpstd::is_same<cpstd::remove_cv<int>::type, std::remove_cv<const int>::type>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsArray) {
