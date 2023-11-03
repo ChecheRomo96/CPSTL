@@ -71,17 +71,17 @@
 
 
         template<typename T>
-        struct is_class : cpstd::integral_constant<bool, __is_class(T)> {};
+        struct is_class : cpstd::bool_constant<__is_class(T)> {};
 
         template <typename T> 
         inline constexpr bool is_class_v = is_class<T>::value;
 
 
         template<typename T>
-        struct is_enum {
-            static constexpr bool value = __is_enum(T);
-        };
+        struct is_enum : cpstd::bool_constant<__is_enum(T)> {};
 
+        template <typename T> 
+        inline constexpr bool is_enum_v = is_enum<T>::value;
 
 
         template<typename T>
