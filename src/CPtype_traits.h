@@ -27,7 +27,6 @@
         template <class T>
         using remove_volatile = std::remove_volatile<T>;
     #else
-
         template <class T> struct remove_reference { using type = T; };
         template <class T> struct remove_reference<T&> { using type = T; };
         template <class T> struct remove_reference<T&&> { using type = T; };
