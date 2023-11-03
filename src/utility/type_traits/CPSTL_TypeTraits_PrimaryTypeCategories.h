@@ -71,22 +71,7 @@
 
 
         template<typename T>
-        struct is_class {
-        private:
-            template<typename C>
-            static cpstd::true_type test__(int C::*); // for non-static member variables
-            
-            template<typename C>
-            static cpstd::false_type test__(...);
-            
-            template<typename C>
-            static cpstd::false_type test__(int C::* const volatile); // for structs
-
-
-        public:
-            static constexpr bool value = decltype(test__<T>(nullptr))::value;
-
-        };
+        struct is_class : cpstd::integral_constant<bool, __is_class(T)> {};
 
         template <typename T> 
         inline constexpr bool is_class_v = is_class<T>::value;
