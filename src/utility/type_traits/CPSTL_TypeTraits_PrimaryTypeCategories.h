@@ -63,7 +63,7 @@
         struct is_array<T[N]> : cpstd::true_type {};
 
         template <typename T> 
-        using is_array_t = typename cpstd::is_array<T>::type;
+        inline constexpr bool is_array_v = is_array<T>::value;
 
 
 
