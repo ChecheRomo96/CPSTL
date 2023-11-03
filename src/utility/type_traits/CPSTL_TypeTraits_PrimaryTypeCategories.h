@@ -11,6 +11,10 @@
         template <typename T>
         using is_array = std::is_array<T>;
 
+        template <typename T> 
+        inline constexpr bool is_array_v = is_array<T>::value;
+
+
         template <typename T>
         using is_class = std::is_class<T>;
 
@@ -57,6 +61,9 @@
 
         template<class T, size_t N>
         struct is_array<T[N]> : cpstd::true_type {};
+
+        template <typename T> 
+        using is_array_t = typename cpstd::is_array<T>::type;
 
 
 
