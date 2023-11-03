@@ -87,13 +87,23 @@ TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
 
     // Test case 3: Qualifier variations - const, volatile, and const-volatile combinations
     {
-        using ConstMyConstant = const cpstd::integral_constant<int, 42>;
-        using VolatileMyConstant = volatile cpstd::integral_constant<int, 42>;
-        using ConstVolatileMyConstant = const volatile cpstd::integral_constant<int, 42>;
+        // Approach 1: Directly specifying qualifiers in the integral_constant type
+        using ConstMyConstant = cpstd::integral_constant<const int, 42>;
+        using VolatileMyConstant = cpstd::integral_constant<volatile int, 42>;
+        using ConstVolatileMyConstant = cpstd::integral_constant<const volatile int, 42>;
 
         ASSERT_TRUE((cpstd::is_same_v<const int, ConstMyConstant::value_type>));
         ASSERT_TRUE((cpstd::is_same_v<volatile int, VolatileMyConstant::value_type>));
         ASSERT_TRUE((cpstd::is_same_v<const volatile int, ConstVolatileMyConstant::value_type>));
+
+        // Approach 2: Applying qualifiers during usage with integral_constant
+        using ConstMyConstant2 = cpstd::integral_constant<int, 42>;
+        using VolatileMyConstant2 = cpstd::integral_constant<int, 42>;
+        using ConstVolatileMyConstant2 = cpstd::integral_constant<int, 42>;
+
+        ASSERT_TRUE((cpstd::is_same_v<const int, const ConstMyConstant2::value_type>));
+        ASSERT_TRUE((cpstd::is_same_v<volatile int, volatile VolatileMyConstant2::value_type>));
+        ASSERT_TRUE((cpstd::is_same_v<const volatile int, const volatile ConstVolatileMyConstant2::value_type>));
     }
 
     // Test case 4: Negative scenarios - Non-conforming types
