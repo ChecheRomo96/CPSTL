@@ -234,8 +234,52 @@ TEST(CPSTL_TypeTraitsTest, IsArray) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsClass) {
-    ASSERT_FALSE((cpstd::is_class<int>::value));
-    ASSERT_TRUE((cpstd::is_class<class A>::value));
+    // Test case 1: Basic class type identification
+    {
+        class MyClass {};
+        ASSERT_TRUE((cpstd::is_class_v<MyClass>));
+    }
+
+    // Test case 2: Non-class types
+    {
+        struct MyStruct {};
+        enum MyEnum { A, B, C };
+        ASSERT_FALSE((cpstd::is_class_v<int>));
+        ASSERT_FALSE((cpstd::is_class_v<MyStruct>));
+        ASSERT_FALSE((cpstd::is_class_v<MyEnum>));
+        ASSERT_FALSE((cpstd::is_class_v<float>));
+    }
+
+    // Test case 3: Pointer types and references
+    {
+        MyClass* ptr = nullptr;
+        ASSERT_FALSE((cpstd::is_class_v<decltype(ptr)>));
+
+        MyClass& ref = *ptr;
+        ASSERT_FALSE((cpstd::is_class_v<decltype(ref)>));
+    }
+
+    // Test case 4: Inheritance scenarios
+    {
+        class BaseClass {};
+        class DerivedClass : public BaseClass {};
+        ASSERT_TRUE((cpstd::is_class_v<BaseClass>));
+        ASSERT_TRUE((cpstd::is_class_v<DerivedClass>));
+    }
+
+    // Test case 5: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_class_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 6: Cross-verification - Compare with standard library traits
+    {
+        class StdClass {};
+        ASSERT_TRUE((cpstd::is_class<StdClass>::value == std::is_class<StdClass>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsEnum) {
