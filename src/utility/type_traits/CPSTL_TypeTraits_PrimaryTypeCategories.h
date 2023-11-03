@@ -80,7 +80,7 @@
             static cpstd::false_type test__(...);
             
             template<typename C>
-            static std::false_type test__(int C::* const volatile); // for structs
+            static cpstd::false_type test__(int C::* const volatile); // for structs
 
 
         public:
