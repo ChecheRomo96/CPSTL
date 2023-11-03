@@ -154,7 +154,7 @@ TEST(CPSTL_TypeTraitsTest, IsSame) {
         ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<const int>::type>));
         ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<volatile int>::type>));
         ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<const volatile int>::type>));
-        ASSERT_FALSE((cpstd::is_same_v<int, cpstd::remove_cv<int>::type>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<int>::type>));
     }
 
     // Test case 7: Negative scenarios - Non-conforming types
