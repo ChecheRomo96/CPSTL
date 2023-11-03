@@ -5,9 +5,7 @@
     #include "CPSTL_TypeTraits.h"
     
     namespace cpstd{
-
     #if defined(CPSTL_USING_STL)
-
         template <typename T>
         using is_arithmetic = std::is_arithmetic<T>;
 
@@ -28,15 +26,30 @@
 
         template <typename T>
         using is_scalar = std::is_lvalue_reference<T>;
-
     #else 
+        template<class T>
+        struct is_compound : std::integral_constant <bool, !std::is_fundamental<T>::value> {};
+
         template <typename U>
-        struct is_scalar {
-            static const bool value =
-                cpstd::is_integral<U>::value || cpstd::is_floating_point<U>::value || cpstd::is_pointer<U>::value;
-        };
+        struct is_fundamental : cpstd::integral_constant<bool,
+            cpstd::is_integral<U>::value || cpstd::is_floating_point<U>::value || cpstd::is_void<U>::value ||
+            cpstd::is_same<std::nullptr_t, typename cpstd::remove_cv<U>::type>::value> {};
 
+        template <typename U>
+        struct is_member_pointer : cpstd::integral_constant<bool,
+            cpstd::is_member_object_pointer<U>::value || cpstd::is_void<U>::value || cpstd::is_reference<U>::value> {};
 
+        template <typename U>
+        struct is_object : cpstd::integral_constant<bool,
+            !cpstd::is_function<U>::value && !cpstd::is_void<U>::value && !cpstd::is_member_function_pointer<U>::value> {};
+
+        template <typename U>
+        struct is_reference : cpstd::integral_constant<bool,
+            cpstd::is_lvalue_reference<U>::value || cpstd::is_rvalue_reference<U>::value> {};
+
+        template <typename U>
+        struct is_scalar : cpstd::integral_constant<bool,
+            cpstd::is_integral<U>::value || cpstd::is_floating_point<U>::value || cpstd::is_pointer<U>::value> {};
     #endif
     }
 
