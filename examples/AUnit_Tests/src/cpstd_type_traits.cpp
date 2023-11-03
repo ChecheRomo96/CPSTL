@@ -252,6 +252,7 @@ TEST(CPSTL_TypeTraitsTest, IsClass) {
 
     // Test case 3: Pointer types and references
     {
+        class MyClass {};
         MyClass* ptr = nullptr;
         ASSERT_FALSE((cpstd::is_class_v<decltype(ptr)>));
 
