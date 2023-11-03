@@ -285,8 +285,45 @@ TEST(CPSTL_TypeTraitsTest, IsClass) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsEnum) {
-    ASSERT_TRUE((cpstd::is_enum<MyEnum>::value));
-    ASSERT_FALSE((cpstd::is_enum<int>::value));
+    // Test case 1: Basic enum type identification
+    {
+        enum MyEnum { A, B, C };
+        ASSERT_TRUE((cpstd::is_enum_v<MyEnum>));
+    }
+
+    // Test case 2: Non-enum types
+    {
+        struct MyStruct {};
+        class MyClass {};
+        ASSERT_FALSE((cpstd::is_enum_v<int>));
+        ASSERT_FALSE((cpstd::is_enum_v<MyStruct>));
+        ASSERT_FALSE((cpstd::is_enum_v<MyClass>));
+        ASSERT_FALSE((cpstd::is_enum_v<float>));
+    }
+
+    // Test case 3: Pointer types and references
+    {
+        enum MyEnum { A, B, C };
+        MyEnum* ptr = nullptr;
+        ASSERT_FALSE((cpstd::is_enum_v<decltype(ptr)>));
+
+        MyEnum& ref = *ptr;
+        ASSERT_FALSE((cpstd::is_enum_v<decltype(ref)>));
+    }
+
+    // Test case 4: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_enum_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 5: Cross-verification - Compare with standard library traits
+    {
+        enum StdEnum { X, Y, Z };
+        ASSERT_TRUE((cpstd::is_enum<StdEnum>::value == std::is_enum<StdEnum>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsFloatingPoint) {
