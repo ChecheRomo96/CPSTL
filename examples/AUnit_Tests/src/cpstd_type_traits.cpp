@@ -174,9 +174,62 @@ TEST(CPSTL_TypeTraitsTest, IsSame) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsArray) {
-    ASSERT_TRUE((cpstd::is_array<int[]>::value));
-    ASSERT_TRUE((cpstd::is_array<int[5]>::value));
-    ASSERT_FALSE((cpstd::is_array<int>::value));
+    // Test case 1: Basic array type identification
+    {
+        int array[5];
+        ASSERT_TRUE((cpstd::is_array_v<decltype(array)>));
+    }
+
+    // Test case 2: Non-array types
+    {
+        int non_array = 10;
+        ASSERT_FALSE((cpstd::is_array_v<decltype(non_array)>));
+
+        // Non-array types passed directly
+        ASSERT_FALSE((cpstd::is_array_v<int>));
+        ASSERT_FALSE((cpstd::is_array_v<float>));
+    }
+
+    // Test case 3: Array type with const qualifiers
+    {
+        const double const_array[10];
+        ASSERT_TRUE((cpstd::is_array_v<decltype(const_array)>));
+    }
+
+    // Test case 4: Array type with volatile qualifiers
+    {
+        volatile char volatile_array[3];
+        ASSERT_TRUE((cpstd::is_array_v<decltype(volatile_array)>));
+    }
+
+    // Test case 5: Array type with const-volatile qualifiers
+    {
+        const volatile long cv_array[7];
+        ASSERT_TRUE((cpstd::is_array_v<decltype(cv_array)>));
+    }
+
+    // Test case 6: Pointer types and references
+    {
+        int* ptr_array = new int[8];
+        int& ref_array = *ptr_array;
+        ASSERT_FALSE((cpstd::is_array_v<decltype(ptr_array)>));
+        ASSERT_FALSE((cpstd::is_array_v<decltype(ref_array)>));
+    }
+
+    // Test case 7: Negative scenarios - Non-conforming types
+    {
+        ASSERT_FALSE((cpstd::is_array_v<int>));
+        ASSERT_FALSE((cpstd::is_array_v<float>));
+        ASSERT_FALSE((cpstd::is_array_v<const char>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 8: Cross-verification - Compare with standard library traits
+    {
+        int std_array[5];
+        ASSERT_TRUE((cpstd::is_array<decltype(std_array)>::value == std::is_array<decltype(std_array)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsClass) {
