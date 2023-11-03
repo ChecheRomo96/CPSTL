@@ -49,6 +49,26 @@
     #endif
     }
 
+
+    struct nullptr_t {
+        // Define a conversion operator to any pointer type
+        template<typename T>
+        operator T*() const {
+            return 0; // or nullptr in environments supporting it
+        }
+
+        // Define a comparison operator for equality
+        template<typename T>
+        bool operator==(T* ptr) const {
+            return ptr == nullptr;
+        }
+
+        // Define a comparison operator for inequality
+        template<typename T>
+        bool operator!=(T* ptr) const {
+            return ptr != nullptr;
+        }
+    };
     
     #include <Utility/type_traits/CPSTL_TypeTraits.h>
 
