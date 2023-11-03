@@ -27,29 +27,30 @@
         template <typename T>
         using is_scalar = cpstd::is_lvalue_reference<T>;
     #else 
+        template <typename T>
+        struct is_fundamental : cpstd::integral_constant<bool,
+            cpstd::is_integral<T>::value || cpstd::is_floating_point<T>::value || cpstd::is_void<T>::value ||
+            cpstd::is_same<cpstd::nullptr_t, typename cpstd::remove_cv<T>::type>::value> {};
+
         template<class T>
         struct is_compound : cpstd::integral_constant <bool, !cpstd::is_fundamental<T>::value> {};
 
-        template <typename U>
-        struct is_fundamental : cpstd::integral_constant<bool,
-            cpstd::is_integral<U>::value || cpstd::is_floating_point<U>::value || cpstd::is_void<U>::value ||
-            cpstd::is_same<cpstd::nullptr_t, typename cpstd::remove_cv<U>::type>::value> {};
 
-        template <typename U>
+        template <typename T>
         struct is_member_pointer : cpstd::integral_constant<bool,
-            cpstd::is_member_object_pointer<U>::value || cpstd::is_void<U>::value || cpstd::is_reference<U>::value> {};
+            cpstd::is_member_object_pointer<T>::value || cpstd::is_void<T>::value || cpstd::is_reference<T>::value> {};
 
-        template <typename U>
+        template <typename T>
         struct is_object : cpstd::integral_constant<bool,
-            !cpstd::is_function<U>::value && !cpstd::is_void<U>::value && !cpstd::is_member_function_pointer<U>::value> {};
+            !cpstd::is_function<T>::value && !cpstd::is_void<T>::value && !cpstd::is_member_function_pointer<T>::value> {};
 
-        template <typename U>
+        template <typename T>
         struct is_reference : cpstd::integral_constant<bool,
-            cpstd::is_lvalue_reference<U>::value || cpstd::is_rvalue_reference<U>::value> {};
+            cpstd::is_lvalue_reference<T>::value || cpstd::is_rvalue_reference<T>::value> {};
 
-        template <typename U>
+        template <typename T>
         struct is_scalar : cpstd::integral_constant<bool,
-            cpstd::is_integral<U>::value || cpstd::is_floating_point<U>::value || cpstd::is_pointer<U>::value> {};
+            cpstd::is_integral<T>::value || cpstd::is_floating_point<T>::value || cpstd::is_pointer<T>::value> {};
     #endif
     }
 
