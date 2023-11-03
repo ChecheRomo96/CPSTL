@@ -50,7 +50,7 @@
     }
 
     namespace cpstd{
-        using nullptr_t = std::nullptr_t;
+        using nullptr_t = ::nullptr_t;
     }
     
     
