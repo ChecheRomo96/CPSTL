@@ -15,6 +15,10 @@ namespace {
         int fn() { return 0; }
         int x;
     };
+    class B {
+        int fn() { return 0; }
+        int x;
+    };
 
     enum MyEnum { Value1, Value2 };
 
@@ -132,7 +136,7 @@ TEST(CPSTL_TypeTraitsTest, IsArray) {
 
 TEST(CPSTL_TypeTraitsTest, IsClass) {
     ASSERT_FALSE((cpstd::is_class<int>::value));
-    ASSERT_TRUE((cpstd::is_class<class A>::value));
+    ASSERT_TRUE((cpstd::is_class<class B>::value));
 }
 
 TEST(CPSTL_TypeTraitsTest, IsEnum) {
