@@ -80,7 +80,8 @@
             static cpstd::false_type test__(...);
 
         public:
-            static constexpr bool value = cpstd::is_same<decltype(test__<T>(nullptr)), cpstd::true_type>::value;
+            static constexpr bool value = decltype(test__<T>(nullptr))::value;
+
         };
 
         template <typename T> 
