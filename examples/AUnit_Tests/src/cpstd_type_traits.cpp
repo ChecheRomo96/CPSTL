@@ -77,13 +77,13 @@ TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
         ASSERT_EQ(MyConstant::value, 42);
     }
 
+    #ifdef CPSTL_USING_STL
     // Test case 2: Integral constant at language limits
     {
         using MinInt = cpstd::integral_constant<int, std::numeric_limits<int>::min()>;
-        #ifdef CPSTL_USING_STL
         ASSERT_EQ(MinInt::value, std::numeric_limits<int>::min());
-        #endif
     }
+    #endif
 
     // Test case 3: Qualifier variations - const, volatile, and const-volatile combinations
     {
