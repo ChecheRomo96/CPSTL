@@ -151,8 +151,9 @@ TEST(CPSTL_TypeTraitsTest, IsSame) {
 
     // Test case 6: Type comparison with remove_cv
     {
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<const int>::type>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<volatile int>::type>));
         ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<const volatile int>::type>));
-        ASSERT_TRUE((cpstd::is_same_v<const int, cpstd::remove_cv<const volatile int>::type>));
         ASSERT_FALSE((cpstd::is_same_v<int, cpstd::remove_cv<int>::type>));
     }
 
