@@ -7,25 +7,25 @@
     namespace cpstd{
     #if defined(CPSTL_USING_STL)
         template <typename T>
-        using is_arithmetic = cpstd::is_arithmetic<T>;
+        using is_arithmetic = std::is_arithmetic<T>;
 
         template <typename T>
-        using is_compound = cpstd::is_compound<T>;
+        using is_compound = std::is_compound<T>;
 
         template <typename T>
-        using is_fundamental = cpstd::is_fundamental<T>;
+        using is_fundamental = std::is_fundamental<T>;
 
         template <typename T>
-        using is_member_pointer = cpstd::is_member_pointer<T>;
+        using is_member_pointer = std::is_member_pointer<T>;
 
         template <typename T>
-        using is_object = cpstd::is_object<T>;
+        using is_object = std::is_object<T>;
 
         template <typename T>
-        using is_reference = cpstd::is_integral<T>;
+        using is_reference = std::is_integral<T>;
 
         template <typename T>
-        using is_scalar = cpstd::is_lvalue_reference<T>;
+        using is_scalar = std::is_lvalue_reference<T>;
     #else 
                 template <typename T>
         struct is_reference : cpstd::integral_constant<bool,

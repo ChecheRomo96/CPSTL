@@ -18,10 +18,13 @@
         using is_class = std::is_class<T>;
 
         template <typename T> 
-        inline constexpr bool is_class_v = is_class_v<T>::value;
+        inline constexpr bool is_class_v = cpstd::is_class<T>::value;
 
         template <typename T>
         using is_enum = std::is_enum<T>;
+
+        template <typename T>
+        inline constexpr bool is_enum_v = cpstd::is_enum<T>::value;
 
         template <typename T>
         using is_floating_point = std::is_floating_point<T>;
@@ -33,10 +36,19 @@
         using is_function = std::is_function<T>;
 
         template <typename T>
+        inline constexpr bool is_function_v = is_function<T>::value;
+
+        template <typename T>
         using is_integral = std::is_integral<T>;
 
         template <typename T>
+        inline constexpr bool is_integral_v = is_integral<T>::value;
+
+        template <typename T>
         using is_lvalue_reference = std::is_lvalue_reference<T>;
+
+        template <typename T>
+        inline constexpr bool is_lvalue_reference_v = is_lvalue_reference<T>::value;
 
         template <typename T>
         using is_member_function_pointer = std::is_member_function_pointer<T>;
@@ -49,6 +61,9 @@
 
         template <typename T>
         using is_rvalue_reference = std::is_rvalue_reference<T>;
+
+        template <typename T>
+        inline constexpr bool is_rvalue_reference_v = is_rvalue_reference<T>::value;
 
         template <typename T>
         using is_union = std::is_union <T>;

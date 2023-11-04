@@ -15,21 +15,22 @@
         template <typename T>
         using remove_const = std::remove_const<T>;
 
-        template <class T>
+        template <typename T>
         using remove_reference = std::remove_reference<T>;
 
-        template <class T>
-        using remove_cv = typename std::remove_cv<T>::type;
+        template <typename T> using remove_cv = std::remove_cv<T>;
+        template <typename T> using remove_cv_t = typename cpstd::remove_cv<T>::type;
 
-        template <class T>
+
+        template <typename T>
         using remove_const = std::remove_const<T>;
 
-        template <class T>
+        template <typename T>
         using remove_volatile = std::remove_volatile<T>;
     #else
-        template <class T> struct remove_reference { using type = T; };
-        template <class T> struct remove_reference<T&> { using type = T; };
-        template <class T> struct remove_reference<T&&> { using type = T; };
+        template <typename T> struct remove_reference { using type = T; };
+        template <typename T> struct remove_reference<T&> { using type = T; };
+        template <typename T> struct remove_reference<T&&> { using type = T; };
 
         template <typename T, typename U> struct is_same{ static constexpr bool value = false; };
         template <typename T> struct is_same<T, T> { static constexpr bool value = true; };

@@ -15,10 +15,6 @@ namespace {
         int fn() { return 0; }
         int x;
     };
-    class B {
-        int fn() { return 0; }
-        int x;
-    };
 
     enum MyEnum { Value1, Value2 };
 
@@ -125,94 +121,499 @@ TEST(CPSTL_TypeTraitsTest, IntegralConstant) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsSame) {
-    ASSERT_TRUE((cpstd::is_same_v< float, cpstd::remove_const<const float>::type >));
+    // Test case 1: Basic type identity check
+    {
+        ASSERT_TRUE((cpstd::is_same_v<int, int>));
+    }
+
+    // Test case 2: Comparing different non-const types
+    {
+        ASSERT_FALSE((cpstd::is_same_v<int, float>));
+    }
+
+    // Test case 3: Const type comparison
+    {
+        ASSERT_TRUE((cpstd::is_same_v<const int, const int>));
+        ASSERT_FALSE((cpstd::is_same_v<int, const int>));
+    }
+
+    // Test case 4: Volatile type comparison
+    {
+        ASSERT_TRUE((cpstd::is_same_v<volatile int, volatile int>));
+        ASSERT_FALSE((cpstd::is_same_v<int, volatile int>));
+    }
+
+    // Test case 5: Const-volatile type comparison
+    {
+        ASSERT_TRUE((cpstd::is_same_v<const volatile int, const volatile int>));
+        ASSERT_FALSE((cpstd::is_same_v<int, const volatile int>));
+    }
+
+    // Test case 6: Type comparison with remove_cv
+    {
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<const int>>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<volatile int>>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<const volatile int>>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<int>>));
+    }
+
+    // Test case 7: Negative scenarios - Non-conforming types
+    {
+        ASSERT_FALSE((cpstd::is_same_v<int, float>));
+        ASSERT_FALSE((cpstd::is_same_v<float, double>));
+        ASSERT_FALSE((cpstd::is_same_v<char, short>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 8: Cross-verification - Compare with standard library traits
+    {
+        ASSERT_TRUE((cpstd::is_same_v<cpstd::remove_cv_t<const int>, std::remove_cv_t<const int> >));
+        ASSERT_TRUE((cpstd::is_same_v<cpstd::remove_cv_t<int>, std::remove_cv_t<int>>));
+        ASSERT_TRUE((cpstd::is_same_v<cpstd::remove_cv_t<int>, std::remove_cv_t<const int>>));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsArray) {
-    ASSERT_TRUE((cpstd::is_array<int[]>::value));
-    ASSERT_TRUE((cpstd::is_array<int[5]>::value));
-    ASSERT_FALSE((cpstd::is_array<int>::value));
+    // Test case 1: Basic array type identification
+    {
+        int array[5];
+        ASSERT_TRUE((cpstd::is_array_v<decltype(array)>));
+    }
+
+    // Test case 2: Non-array types
+    {
+        int non_array = 10;
+        ASSERT_FALSE((cpstd::is_array_v<decltype(non_array)>));
+
+        // Non-array types passed directly
+        ASSERT_FALSE((cpstd::is_array_v<int>));
+        ASSERT_FALSE((cpstd::is_array_v<float>));
+    }
+
+    // Test case 3: Array type with const qualifiers
+    {
+        const double const_array[10] = {};
+        ASSERT_TRUE((cpstd::is_array_v<decltype(const_array)>));
+    }
+
+    // Test case 4: Array type with volatile qualifiers
+    {
+        volatile char volatile_array[3];
+        ASSERT_TRUE((cpstd::is_array_v<decltype(volatile_array)>));
+    }
+
+    // Test case 5: Array type with const-volatile qualifiers
+    {
+        const volatile long cv_array[7] = {};
+        ASSERT_TRUE((cpstd::is_array_v<decltype(cv_array)>));
+    }
+
+    // Test case 6: Pointer types and references
+    {
+        int* ptr_array = new int[8];
+        int& ref_array = *ptr_array;
+        ASSERT_FALSE((cpstd::is_array_v<decltype(ptr_array)>));
+        ASSERT_FALSE((cpstd::is_array_v<decltype(ref_array)>));
+    }
+
+    // Test case 7: Negative scenarios - Non-conforming types
+    {
+        ASSERT_FALSE((cpstd::is_array_v<int>));
+        ASSERT_FALSE((cpstd::is_array_v<float>));
+        ASSERT_FALSE((cpstd::is_array_v<const char>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 8: Cross-verification - Compare with standard library traits
+    {
+        int std_array[5];
+        ASSERT_TRUE((cpstd::is_array<decltype(std_array)>::value == std::is_array<decltype(std_array)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsClass) {
-    ASSERT_FALSE((cpstd::is_class<int>::value));
-    ASSERT_TRUE((cpstd::is_class<class B>::value));
+    // Test case 1: Basic class type identification
+    {
+        class MyClass {};
+        ASSERT_TRUE((cpstd::is_class_v<MyClass>));
+    }
+
+    // Test case 2: Non-class types
+    {
+        struct MyStruct {};
+        class MyClass {};
+        enum MyEnum { A, B, C };
+        ASSERT_FALSE((cpstd::is_class_v<int>));
+        ASSERT_FALSE((cpstd::is_class_v<MyEnum>));
+        ASSERT_FALSE((cpstd::is_class_v<float>));
+        ASSERT_TRUE((cpstd::is_class_v<MyStruct>));
+    }
+
+    // Test case 3: Pointer types and references
+    {
+        class MyClass {};
+        MyClass* ptr = nullptr;
+        ASSERT_FALSE((cpstd::is_class_v<decltype(ptr)>));
+
+        MyClass& ref = *ptr;
+        ASSERT_FALSE((cpstd::is_class_v<decltype(ref)>));
+    }
+
+    // Test case 4: Inheritance scenarios
+    {
+        class BaseClass {};
+        class DerivedClass : public BaseClass {};
+        ASSERT_TRUE((cpstd::is_class_v<BaseClass>));
+        ASSERT_TRUE((cpstd::is_class_v<DerivedClass>));
+    }
+
+    // Test case 5: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_class_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 6: Cross-verification - Compare with standard library traits
+    {
+        class StdClass {};
+        ASSERT_TRUE((cpstd::is_class<StdClass>::value == std::is_class<StdClass>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsEnum) {
-    ASSERT_TRUE((cpstd::is_enum<MyEnum>::value));
-    ASSERT_FALSE((cpstd::is_enum<int>::value));
+    // Test case 1: Basic enum type identification
+    {
+        enum MyEnum { A, B, C };
+        ASSERT_TRUE((cpstd::is_enum_v<MyEnum>));
+    }
+
+    // Test case 2: Non-enum types
+    {
+        struct MyStruct {};
+        class MyClass {};
+        ASSERT_FALSE((cpstd::is_enum_v<int>));
+        ASSERT_FALSE((cpstd::is_enum_v<MyStruct>));
+        ASSERT_FALSE((cpstd::is_enum_v<MyClass>));
+        ASSERT_FALSE((cpstd::is_enum_v<float>));
+    }
+
+    // Test case 3: Pointer types and references
+    {
+        enum MyEnum { A, B, C };
+        MyEnum* ptr = nullptr;
+        ASSERT_FALSE((cpstd::is_enum_v<decltype(ptr)>));
+
+        MyEnum& ref = *ptr;
+        ASSERT_FALSE((cpstd::is_enum_v<decltype(ref)>));
+    }
+
+    // Test case 4: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_enum_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 5: Cross-verification - Compare with standard library traits
+    {
+        enum StdEnum { X, Y, Z };
+        ASSERT_TRUE((cpstd::is_enum<StdEnum>::value == std::is_enum<StdEnum>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsFloatingPoint) {
-    ASSERT_TRUE((cpstd::is_floating_point<float>::value));
-    ASSERT_FALSE((cpstd::is_floating_point<int>::value));
-    ASSERT_TRUE((cpstd::is_floating_point<double>::value));
+    // Test case 1: Basic floating-point type identification
+    {
+        ASSERT_TRUE((cpstd::is_floating_point_v<float>));
+        ASSERT_TRUE((cpstd::is_floating_point_v<double>));
+        ASSERT_TRUE((cpstd::is_floating_point_v<long double>));
+    }
+
+    // Test case 2: Non-floating-point types
+    {
+        ASSERT_FALSE((cpstd::is_floating_point_v<int>));
+        ASSERT_FALSE((cpstd::is_floating_point_v<unsigned int>));
+        ASSERT_FALSE((cpstd::is_floating_point_v<long>));
+        ASSERT_FALSE((cpstd::is_floating_point_v<char>));
+    }
+
+    // Test case 3: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_floating_point_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 4: Cross-verification - Compare with standard library traits
+    {
+        ASSERT_TRUE((cpstd::is_floating_point<double>::value == std::is_floating_point<double>::value));
+    }
+    #endif
 }
 
-TEST(CPSTL_TypeTraitsTest, IsFunction) {
-    ASSERT_FALSE((cpstd::is_function<int>::value));
-    typedef void FunctionType();
-    ASSERT_FALSE((cpstd::is_function<FunctionType*>::value));
-    //ASSERT_FALSE((cpstd::is_function<std::function<int()>>::value));
-    ASSERT_TRUE((cpstd::is_function<decltype(user_defined_function)>::value));
+TEST(CPSTL_TypeTraitsTest, IsFunction) { 
+    // Test case 1: Basic function type identification
+    {
+        using FunctionPointer = decltype(&user_defined_function); // Function pointer
+        ASSERT_FALSE((cpstd::is_function_v<FunctionPointer>)); // Function pointers are not considered functions
+        ASSERT_TRUE((cpstd::is_function_v<decltype(user_defined_function)>)); // Function pointers are not considered functions
+    }
+
+    // Test case 2: Non-function types
+    {
+        struct Functor { // Class with overloaded operator()
+            void operator()() const {}
+        };
+
+        auto lambda = []() {}; // Lambda function
+
+        ASSERT_FALSE((cpstd::is_function_v<int>));
+        ASSERT_FALSE((cpstd::is_function_v<Functor>));
+        ASSERT_FALSE((cpstd::is_function_v<decltype(lambda)>));
+    }
+
+    // Test case 3: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_function_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 4: Cross-verification - Compare with standard library traits
+    {
+        ASSERT_TRUE((cpstd::is_function<decltype(user_defined_function)>::value == std::is_function<decltype(user_defined_function)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsIntegral) {
-    ASSERT_TRUE((cpstd::is_integral<int>::value));
-    ASSERT_TRUE((cpstd::is_integral<long long>::value));
-    ASSERT_FALSE((cpstd::is_integral<double>::value));
+    // Test case 1: Basic integral type identification
+    {
+        ASSERT_TRUE((cpstd::is_integral_v<int>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned int>));
+        ASSERT_TRUE((cpstd::is_integral_v<long>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned long>));
+        ASSERT_TRUE((cpstd::is_integral_v<short>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned short>));
+        ASSERT_TRUE((cpstd::is_integral_v<char>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned char>));
+        ASSERT_TRUE((cpstd::is_integral_v<bool>));
+    }
+
+    // Test case 2: Non-integral types
+    {
+        ASSERT_FALSE((cpstd::is_integral_v<float>));
+        ASSERT_FALSE((cpstd::is_integral_v<double>));
+        ASSERT_FALSE((cpstd::is_integral_v<long double>));
+    }
+
+    // Test case 3: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_integral_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 4: Cross-verification - Compare with standard library traits
+    {
+        ASSERT_TRUE((cpstd::is_integral<unsigned long>::value == std::is_integral<unsigned long>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsLValueReference) {
-    ASSERT_FALSE((cpstd::is_lvalue_reference<int>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<int&>::value));
-    ASSERT_FALSE((cpstd::is_lvalue_reference<float>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<float&>::value));
-    ASSERT_FALSE((cpstd::is_lvalue_reference<double>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<double&>::value));
-    ASSERT_FALSE((cpstd::is_lvalue_reference<const int>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<const int&>::value));
+    // Test case 1: Basic lvalue reference type identification
+    {
+        int x = 5;
+        int& ref = x;
+        ASSERT_TRUE((cpstd::is_lvalue_reference_v<decltype(ref)>));
+    }
+
+    // Test case 2: Non-lvalue reference types
+    {
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<int>));
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<int*>));
+    }
+
+    // Test case 3: Negative scenarios - Non-conforming types
+    {
+        struct MyStruct {};
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<MyStruct>));
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 4: Cross-verification - Compare with standard library traits
+    {
+        int x = 5;
+        int& ref = x;
+        ASSERT_TRUE((cpstd::is_lvalue_reference_v<decltype(ref)> == std::is_lvalue_reference<decltype(ref)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsMemberFunctionPointer) {
-    int(A::* pt)() = &A::fn;
-    ASSERT_FALSE((cpstd::is_member_function_pointer<A*>::value));
-    ASSERT_TRUE((cpstd::is_member_function_pointer<void(A::*)()>::value));
-    ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(pt)>::value));
+    // Test case 1: Basic member function pointer identification
+    {
+        class MyClass {
+        public:
+            void memberFunc() {}
+        };
+        ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(&MyClass::memberFunc)>::value));
+    }
+
+    // Test case 2: Non-member function pointer types
+    {
+        class MyClass {};
+        ASSERT_FALSE((cpstd::is_member_function_pointer<MyClass>::value));
+        ASSERT_FALSE((cpstd::is_member_function_pointer<int>::value));
+        ASSERT_FALSE((cpstd::is_member_function_pointer<void>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        class StdClass {
+        public:
+            void memberFunc() {}
+        };
+        ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value == std::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsMemberObjectPointer) {
-    int A::* pt2 = nullptr;
-    ASSERT_FALSE((cpstd::is_member_object_pointer<decltype(nullptr)>::value));
-    ASSERT_TRUE((cpstd::is_member_object_pointer<int A::*>::value));
-    ASSERT_TRUE((cpstd::is_member_object_pointer<decltype(pt2)>::value));
+    // Test case 1: Basic member object pointer identification
+    {
+        class MyClass {
+        public:
+            int memberVar;
+        };
+        ASSERT_TRUE((cpstd::is_member_object_pointer<decltype(&MyClass::memberVar)>::value));
+    }
+
+    // Test case 2: Non-member object pointer types
+    {
+        class MyClass {};
+        ASSERT_FALSE((cpstd::is_member_object_pointer<MyClass>::value));
+        ASSERT_FALSE((cpstd::is_member_object_pointer<int>::value));
+        ASSERT_FALSE((cpstd::is_member_object_pointer<void>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        class StdClass {
+        public:
+            int memberVar;
+        };
+        ASSERT_TRUE((cpstd::is_member_object_pointer<decltype(&StdClass::memberVar)>::value == std::is_member_object_pointer<decltype(&StdClass::memberVar)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsPointer) {
-    int* ptr = nullptr;
-    ASSERT_FALSE((cpstd::is_pointer<int>::value));
-    ASSERT_TRUE((cpstd::is_pointer<int*>::value));
-    ASSERT_TRUE((cpstd::is_pointer<decltype(ptr)>::value));
+    // Test case 1: Basic pointer type identification
+    {
+        int* ptr = nullptr;
+        ASSERT_TRUE((cpstd::is_pointer<decltype(ptr)>::value));
+    }
+
+    // Test case 2: Non-pointer types
+    {
+        int x = 5;
+        ASSERT_FALSE((cpstd::is_pointer<int>::value));
+        ASSERT_FALSE((cpstd::is_pointer<int&>::value));
+        ASSERT_FALSE((cpstd::is_pointer<decltype(x)>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        int* ptr = nullptr;
+        ASSERT_TRUE((cpstd::is_pointer<decltype(ptr)>::value == std::is_pointer<decltype(ptr)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsRValueReference) {
-    int x = 5;
-    ASSERT_TRUE((cpstd::is_rvalue_reference<int&&>::value));
-    int&& rvalue_ref = cpstd::move(x);
-    ASSERT_TRUE((cpstd::is_rvalue_reference<decltype(rvalue_ref)>::value));
-    int& lvalue_ref = x;
-    ASSERT_FALSE((cpstd::is_rvalue_reference<decltype(lvalue_ref)>::value));
+    // Test case 1: Basic rvalue reference type identification
+    {
+        int x = 5;
+        ASSERT_TRUE((cpstd::is_rvalue_reference<decltype(cpstd::move(x))>::value));
+    }
+
+    // Test case 2: Non-rvalue reference types
+    {
+        int x = 5;
+        ASSERT_FALSE((cpstd::is_rvalue_reference<int>::value));
+        ASSERT_FALSE((cpstd::is_rvalue_reference<int&>::value));
+        ASSERT_FALSE((cpstd::is_rvalue_reference<decltype(x)>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        int x = 5;
+        ASSERT_TRUE((cpstd::is_rvalue_reference<decltype(cpstd::move(x))>::value == std::is_rvalue_reference<decltype(std::move(x))>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsUnion) {
-    ASSERT_FALSE((cpstd::is_union<int>::value));
-    ASSERT_FALSE((cpstd::is_union<float>::value));
-    ASSERT_TRUE((cpstd::is_union<MyUnion>::value));
+    // Test case 1: Basic union type identification
+    {
+        union MyUnion {
+            int a;
+            float b;
+        };
+        ASSERT_TRUE((cpstd::is_union<MyUnion>::value));
+    }
+
+    // Test case 2: Non-union types
+    {
+        struct NotAUnion { int x; };
+        ASSERT_FALSE((cpstd::is_union<int>::value));
+        ASSERT_FALSE((cpstd::is_union<float>::value));
+        ASSERT_FALSE((cpstd::is_union<NotAUnion>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        union StdUnion {
+            int a;
+            float b;
+        };
+        ASSERT_TRUE((cpstd::is_union<StdUnion>::value == std::is_union<StdUnion>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsVoid) {
-    ASSERT_TRUE((cpstd::is_void<void>::value));
-    ASSERT_FALSE((cpstd::is_void<int>::value));
-    ASSERT_FALSE((cpstd::is_void<decltype(nullptr)>::value));
+    // Test case 1: Basic void type identification
+    {
+        ASSERT_TRUE((cpstd::is_void<void>::value));
+    }
+
+    // Test case 2: Non-void types
+    {
+        ASSERT_FALSE((cpstd::is_void<int>::value));
+        ASSERT_FALSE((cpstd::is_void<float>::value));
+        ASSERT_FALSE((cpstd::is_void<double>::value));
+        ASSERT_FALSE((cpstd::is_void<char>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        ASSERT_TRUE((cpstd::is_void<void>::value == std::is_void<void>::value));
+    }
+    #endif
 }
