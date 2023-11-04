@@ -436,11 +436,8 @@ TEST(CPSTL_TypeTraitsTest, IsLValueReference) {
 
     // Test case 2: Non-lvalue reference types
     {
-        int x = 5;
-        int* ptr = &x;
         ASSERT_FALSE((cpstd::is_lvalue_reference_v<int>));
-        ASSERT_FALSE((cpstd::is_lvalue_reference_v<int&>));
-        ASSERT_FALSE((cpstd::is_lvalue_reference_v<decltype(ptr)>));
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<int*>));
     }
 
     // Test case 3: Negative scenarios - Non-conforming types
