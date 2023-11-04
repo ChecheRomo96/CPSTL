@@ -462,6 +462,7 @@ TEST(CPSTL_TypeTraitsTest, IsMemberFunctionPointer) {
     // Test case 1: Basic member function pointer identification
     {
         class MyClass {
+        public:
             void memberFunc() {}
         };
         ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(&MyClass::memberFunc)>::value));
