@@ -151,10 +151,10 @@ TEST(CPSTL_TypeTraitsTest, IsSame) {
 
     // Test case 6: Type comparison with remove_cv
     {
-        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<const int>::type>));
-        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<volatile int>::type>));
-        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<const volatile int>::type>));
-        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv<int>::type>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<const int>>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<volatile int>>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<const volatile int>>));
+        ASSERT_TRUE((cpstd::is_same_v<int, cpstd::remove_cv_t<int>>));
     }
 
     // Test case 7: Negative scenarios - Non-conforming types
@@ -167,9 +167,9 @@ TEST(CPSTL_TypeTraitsTest, IsSame) {
     #if defined(CPSTL_USING_STL)
     // Test case 8: Cross-verification - Compare with standard library traits
     {
-        ASSERT_TRUE((cpstd::is_same<cpstd::remove_cv<const int>::type, std::remove_cv<const int>::type>::value));
-        ASSERT_TRUE((cpstd::is_same<cpstd::remove_cv<int>::type, std::remove_cv<int>::type>::value));
-        ASSERT_FALSE((cpstd::is_same<cpstd::remove_cv<int>::type, std::remove_cv<const int>::type>::value));
+        ASSERT_TRUE((cpstd::is_same_v<cpstd::remove_cv_t<const int>, std::remove_cv_t<const int> >));
+        ASSERT_TRUE((cpstd::is_same_v<cpstd::remove_cv_t<int>, std::remove_cv_t<int>>));
+        ASSERT_TRUE((cpstd::is_same_v<cpstd::remove_cv_t<int>, std::remove_cv_t<const int>>));
     }
     #endif
 }
@@ -193,7 +193,7 @@ TEST(CPSTL_TypeTraitsTest, IsArray) {
 
     // Test case 3: Array type with const qualifiers
     {
-        const double const_array[10];
+        const double const_array[10] = {};
         ASSERT_TRUE((cpstd::is_array_v<decltype(const_array)>));
     }
 
@@ -205,7 +205,7 @@ TEST(CPSTL_TypeTraitsTest, IsArray) {
 
     // Test case 5: Array type with const-volatile qualifiers
     {
-        const volatile long cv_array[7];
+        const volatile long cv_array[7] = {};
         ASSERT_TRUE((cpstd::is_array_v<decltype(cv_array)>));
     }
 
@@ -483,7 +483,7 @@ TEST(CPSTL_TypeTraitsTest, IsMemberFunctionPointer) {
         public:
             void memberFunc() {}
         };
-        ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value == std::cpstd::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value));
+        ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value == std::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value));
     }
     #endif
 }
