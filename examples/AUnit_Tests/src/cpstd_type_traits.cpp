@@ -360,7 +360,8 @@ TEST(CPSTL_TypeTraitsTest, IsFunction) {
     // Test case 1: Basic function type identification
     {
         using FunctionPointer = decltype(&user_defined_function); // Function pointer
-        ASSERT_TRUE((cpstd::is_function_v<FunctionPointer>)); // Function pointers are not considered functions
+        ASSERT_FALSE((cpstd::is_function_v<FunctionPointer>)); // Function pointers are not considered functions
+        ASSERT_FALSE((cpstd::is_function_v<user_defined_function>)); // Function pointers are not considered functions
     }
 
     // Test case 2: Non-function types
