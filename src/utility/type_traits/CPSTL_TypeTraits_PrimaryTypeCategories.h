@@ -84,7 +84,7 @@
         struct is_floating_point : cpstd::bool_constant<
                 cpstd::is_same<cpstd::remove_cv_t<T>, float>::value ||
                 cpstd::is_same<cpstd::remove_cv_t<T>, double>::value ||
-                cpstd::is_same<cpstd::remove_cv_t<T>, long double>::value >;
+                cpstd::is_same<cpstd::remove_cv_t<T>, long double>::value>{};
 
         // This primary template is intentionally left undefined
         template <typename>
