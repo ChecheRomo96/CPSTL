@@ -459,10 +459,31 @@ TEST(CPSTL_TypeTraitsTest, IsLValueReference) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsMemberFunctionPointer) {
-    int(A::* pt)() = &A::fn;
-    ASSERT_FALSE((cpstd::is_member_function_pointer<A*>::value));
-    ASSERT_TRUE((cpstd::is_member_function_pointer<void(A::*)()>::value));
-    ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(pt)>::value));
+    // Test case 1: Basic member function pointer identification
+    {
+        class MyClass {
+            void memberFunc() {}
+        };
+        ASSERT_TRUE((is_member_function_pointer<decltype(&MyClass::memberFunc)>::value));
+    }
+
+    // Test case 2: Non-member function pointer types
+    {
+        class MyClass {};
+        ASSERT_FALSE((is_member_function_pointer<MyClass>::value));
+        ASSERT_FALSE((is_member_function_pointer<int>::value));
+        ASSERT_FALSE((is_member_function_pointer<void>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        class StdClass {
+            void memberFunc() {}
+        };
+        ASSERT_TRUE((is_member_function_pointer<decltype(&StdClass::memberFunc)>::value == std::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsMemberObjectPointer) {
