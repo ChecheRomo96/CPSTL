@@ -99,6 +99,9 @@
         template <typename Ret, typename... Args>
         struct is_function<Ret(Args...)> : cpstd::true_type {};
 
+        template <typename T> 
+        inline constexpr bool is_function_v = is_function<T>::value;
+
         template <typename T>
         struct is_integral : cpstd::bool_constant<
                 cpstd::is_same_v<T, int> ||
