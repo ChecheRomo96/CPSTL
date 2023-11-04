@@ -44,7 +44,6 @@
 
     #endif
 
-
         template <typename T> inline constexpr bool is_arithmetic_v = cpstd::is_arithmetic<T>::value;
         template <typename T> inline constexpr bool is_fundamental_v = cpstd::is_fundamental<T>::value;
         template <typename T> inline constexpr bool is_member_pointer_v = cpstd::is_member_pointer<T>::value;
