@@ -14,7 +14,6 @@
         template <typename T> 
         inline constexpr bool is_array_v = is_array<T>::value;
 
-
         template <typename T>
         using is_class = std::is_class<T>;
 
