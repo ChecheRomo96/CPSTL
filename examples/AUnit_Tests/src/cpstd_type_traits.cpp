@@ -543,22 +543,77 @@ TEST(CPSTL_TypeTraitsTest, IsPointer) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsRValueReference) {
-    int x = 5;
-    ASSERT_TRUE((cpstd::is_rvalue_reference<int&&>::value));
-    int&& rvalue_ref = cpstd::move(x);
-    ASSERT_TRUE((cpstd::is_rvalue_reference<decltype(rvalue_ref)>::value));
-    int& lvalue_ref = x;
-    ASSERT_FALSE((cpstd::is_rvalue_reference<decltype(lvalue_ref)>::value));
+    // Test case 1: Basic rvalue reference type identification
+    {
+        int x = 5;
+        ASSERT_TRUE((cpstd::is_rvalue_reference<decltype(std::move(x))>::value));
+    }
+
+    // Test case 2: Non-rvalue reference types
+    {
+        int x = 5;
+        ASSERT_FALSE((cpstd::is_rvalue_reference<int>::value));
+        ASSERT_FALSE((cpstd::is_rvalue_reference<int&>::value));
+        ASSERT_FALSE((cpstd::is_rvalue_reference<decltype(x)>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        int x = 5;
+        ASSERT_TRUE((cpstd::is_rvalue_reference<decltype(std::move(x))>::value == std::is_rvalue_reference<decltype(std::move(x))>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsUnion) {
-    ASSERT_FALSE((cpstd::is_union<int>::value));
-    ASSERT_FALSE((cpstd::is_union<float>::value));
-    ASSERT_TRUE((cpstd::is_union<MyUnion>::value));
+    // Test case 1: Basic union type identification
+    {
+        union MyUnion {
+            int a;
+            float b;
+        };
+        ASSERT_TRUE((is_union<MyUnion>::value));
+    }
+
+    // Test case 2: Non-union types
+    {
+        struct NotAUnion { int x; };
+        ASSERT_FALSE((is_union<int>::value));
+        ASSERT_FALSE((is_union<float>::value));
+        ASSERT_FALSE((is_union<NotAUnion>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        union StdUnion {
+            int a;
+            float b;
+        };
+        ASSERT_TRUE((is_union<StdUnion>::value == std::is_union<StdUnion>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsVoid) {
-    ASSERT_TRUE((cpstd::is_void<void>::value));
-    ASSERT_FALSE((cpstd::is_void<int>::value));
-    ASSERT_FALSE((cpstd::is_void<decltype(nullptr)>::value));
+    // Test case 1: Basic void type identification
+    {
+        ASSERT_TRUE((is_void<void>::value));
+    }
+
+    // Test case 2: Non-void types
+    {
+        ASSERT_FALSE((is_void<int>::value));
+        ASSERT_FALSE((is_void<float>::value));
+        ASSERT_FALSE((is_void<double>::value));
+        ASSERT_FALSE((is_void<char>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        ASSERT_TRUE((is_void<void>::value == std::is_void<void>::value));
+    }
+    #endif
 }
