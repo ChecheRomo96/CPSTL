@@ -492,6 +492,7 @@ TEST(CPSTL_TypeTraitsTest, IsMemberObjectPointer) {
     // Test case 1: Basic member object pointer identification
     {
         class MyClass {
+        public:
             int memberVar;
         };
         ASSERT_TRUE((cpstd::is_member_object_pointer<decltype(&MyClass::memberVar)>::value));
@@ -509,6 +510,7 @@ TEST(CPSTL_TypeTraitsTest, IsMemberObjectPointer) {
     #if defined(CPSTL_USING_STL)
     {
         class StdClass {
+        public:
             int memberVar;
         };
         ASSERT_TRUE((cpstd::is_member_object_pointer<decltype(&StdClass::memberVar)>::value == std::is_member_object_pointer<decltype(&StdClass::memberVar)>::value));
