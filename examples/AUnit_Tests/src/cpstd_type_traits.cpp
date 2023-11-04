@@ -427,14 +427,38 @@ TEST(CPSTL_TypeTraitsTest, IsIntegral) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsLValueReference) {
-    ASSERT_FALSE((cpstd::is_lvalue_reference<int>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<int&>::value));
-    ASSERT_FALSE((cpstd::is_lvalue_reference<float>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<float&>::value));
-    ASSERT_FALSE((cpstd::is_lvalue_reference<double>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<double&>::value));
-    ASSERT_FALSE((cpstd::is_lvalue_reference<const int>::value));
-    ASSERT_TRUE((cpstd::is_lvalue_reference<const int&>::value));
+    // Test case 1: Basic lvalue reference type identification
+    {
+        int x = 5;
+        int& ref = x;
+        ASSERT_TRUE((cpstd::is_lvalue_reference_v<decltype(ref)>));
+    }
+
+    // Test case 2: Non-lvalue reference types
+    {
+        int x = 5;
+        int* ptr = &x;
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<int>));
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<int&>));
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<decltype(ptr)>));
+    }
+
+    // Test case 3: Negative scenarios - Non-conforming types
+    {
+        struct MyStruct {};
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<MyStruct>));
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_lvalue_reference_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 4: Cross-verification - Compare with standard library traits
+    {
+        int x = 5;
+        int& ref = x;
+        ASSERT_TRUE((cpstd::is_lvalue_reference_v<decltype(ref)> == std::is_lvalue_reference<decltype(ref)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsMemberFunctionPointer) {
