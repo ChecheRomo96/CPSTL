@@ -21,7 +21,7 @@
 
         template <typename T>
         struct is_member_pointer : cpstd::integral_constant<bool,
-            cpstd::is_member_object_pointer<T>::value || cpstd::is_void<T>::value || cpstd::is_reference<T>::value> {};
+            cpstd::is_member_object_pointer<T>::value || cpstd::is_member_function_pointer<T>::value {};
 
         template <typename T>
         struct is_object : cpstd::integral_constant<bool,
