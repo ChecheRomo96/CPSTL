@@ -8,7 +8,7 @@
 #endif
 
 #include <CPtype_traits.h>
-#include <CPutility.h>
+#include <CPSTL.h>
 
 namespace {
     struct A {
@@ -254,10 +254,12 @@ TEST(CPSTL_TypeTraitsTest, IsClass) {
     // Test case 3: Pointer types and references
     {
         class MyClass {};
+        MyClass A;
+
         MyClass* ptr = nullptr;
         ASSERT_FALSE((cpstd::is_class_v<decltype(ptr)>));
 
-        MyClass& ref = *ptr;
+        MyClass& ref = A;
         ASSERT_FALSE((cpstd::is_class_v<decltype(ref)>));
     }
 
@@ -304,10 +306,10 @@ TEST(CPSTL_TypeTraitsTest, IsEnum) {
     // Test case 3: Pointer types and references
     {
         enum MyEnum { A, B, C };
-        MyEnum* ptr = nullptr;
+        MyEnum x = A;
+        MyEnum* ptr = &x;
+        MyEnum& ref = x;
         ASSERT_FALSE((cpstd::is_enum_v<decltype(ptr)>));
-
-        MyEnum& ref = *ptr;
         ASSERT_FALSE((cpstd::is_enum_v<decltype(ref)>));
     }
 
@@ -615,5 +617,211 @@ TEST(CPSTL_TypeTraitsTest, IsVoid) {
     {
         ASSERT_TRUE((cpstd::is_void<void>::value == std::is_void<void>::value));
     }
+    #endif
+}
+
+TEST(CPSTL_TypeTraitsTest, IsArithmetic) {
+    // Test case 1: Basic arithmetic type identification
+    {
+        ASSERT_TRUE((cpstd::is_arithmetic_v<int>));
+        ASSERT_TRUE((cpstd::is_arithmetic_v<float>));
+        ASSERT_TRUE((cpstd::is_arithmetic_v<double>));
+        ASSERT_TRUE((cpstd::is_arithmetic_v<char>));
+    }
+
+    // Test case 2: Non-arithmetic types
+    {
+        ASSERT_FALSE((cpstd::is_arithmetic_v<void>));
+        ASSERT_FALSE((cpstd::is_arithmetic_v<std::string>));
+        ASSERT_FALSE((cpstd::is_arithmetic_v<std::vector<int>>));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        ASSERT_TRUE((cpstd::is_arithmetic_v<float> == std::is_arithmetic_v<float>));
+        ASSERT_TRUE((cpstd::is_arithmetic_v<int> == std::is_arithmetic_v<int>));
+        ASSERT_TRUE((cpstd::is_arithmetic_v<float> == std::is_arithmetic_v<float>));
+        ASSERT_TRUE((cpstd::is_arithmetic_v<double> == std::is_arithmetic_v<double>));
+        ASSERT_TRUE((cpstd::is_arithmetic_v<char> == std::is_arithmetic_v<char>));
+    }
+    #endif
+}
+
+TEST(CPSTL_TypeTraitsTest, IsCompound) {
+    // Test case 1: Basic compound type identification
+    {
+        ASSERT_TRUE((cpstd::is_compound<int*>::value));
+        ASSERT_TRUE((cpstd::is_compound<cpstd::vector<int>>::value));
+        ASSERT_TRUE((cpstd::is_compound<cpstd::string>::value));
+    }
+
+    // Test case 2: Non-compound types
+    {
+        ASSERT_FALSE((cpstd::is_compound<int>::value));
+        ASSERT_FALSE((cpstd::is_compound<float>::value));
+        ASSERT_FALSE((cpstd::is_compound<void>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        ASSERT_TRUE((cpstd::is_compound<std::array<int, 5>>::value));
+        ASSERT_TRUE((cpstd::is_compound<std::function<int()>>::value));
+
+
+        ASSERT_TRUE((cpstd::is_compound<int*>::value == std::is_compound_v<int*>));
+        ASSERT_TRUE((cpstd::is_compound<std::array<int, 5>>::value == std::is_compound_v<std::array<int, 5>>));
+        ASSERT_TRUE((cpstd::is_compound<cpstd::vector<int>>::value == std::is_compound_v<cpstd::vector<int>>));
+        ASSERT_TRUE((cpstd::is_compound<cpstd::vector<int>>::value == std::is_compound_v<std::vector<int>>));
+        ASSERT_TRUE((cpstd::is_compound<std::function<int()>>::value == std::is_compound_v<std::function<int()>>));
+    }
+    #endif
+}
+
+TEST(CPSTL_TypeTraitsTest, IsFundamental) {
+    // Test case 1: Basic fundamental type identification
+    {
+        ASSERT_TRUE((cpstd::is_fundamental_v<int>));
+        ASSERT_TRUE((cpstd::is_fundamental_v<float>));
+        ASSERT_TRUE((cpstd::is_fundamental_v<double>));
+        ASSERT_TRUE((cpstd::is_fundamental_v<void>));
+    }
+
+    // Test case 2: Non-fundamental types
+    {
+        ASSERT_FALSE((cpstd::is_fundamental_v<int*>));
+        ASSERT_FALSE((cpstd::is_fundamental_v<cpstd::vector<int>>));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        ASSERT_FALSE((cpstd::is_fundamental_v<std::function<int()>>));
+        ASSERT_FALSE((cpstd::is_fundamental_v<std::array<int, 5>>));
+
+        ASSERT_TRUE((cpstd::is_fundamental_v<int> == std::is_fundamental_v<int>));
+        ASSERT_TRUE((cpstd::is_fundamental_v<float> == std::is_fundamental_v<float>));
+        ASSERT_TRUE((cpstd::is_fundamental_v<double> == std::is_fundamental_v<double>));
+        ASSERT_TRUE((cpstd::is_fundamental_v<void> == std::is_fundamental_v<void>));
+    }
+    #endif
+}
+
+TEST(CPSTL_TypeTraitsTest, IsMemberPointer) {
+    // Test case 1: Basic member pointer type identification
+    {
+        struct MyClass {
+            int memberVar;
+            void memberFunc() {}
+        };
+
+        ASSERT_TRUE((cpstd::is_member_pointer_v<decltype(&MyClass::memberVar)>));
+        ASSERT_TRUE((cpstd::is_member_pointer_v<decltype(&MyClass::memberFunc)>));
+    }
+
+    // Test case 2: Non-member pointer types
+    {
+        ASSERT_FALSE((cpstd::is_member_pointer_v<int>));
+        ASSERT_FALSE((cpstd::is_member_pointer_v<float>));
+        ASSERT_FALSE((cpstd::is_member_pointer_v<void>));
+        ASSERT_FALSE((cpstd::is_member_pointer_v<int*>));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+        {
+            struct StdClass {
+                int memberVar;
+                void memberFunc() {}
+            };
+
+            ASSERT_TRUE((cpstd::is_member_pointer_v<decltype(&StdClass::memberVar)> == std::is_member_pointer_v<decltype(&StdClass::memberVar)>));
+            ASSERT_TRUE((cpstd::is_member_pointer_v<decltype(&StdClass::memberFunc)> == std::is_member_pointer_v<decltype(&StdClass::memberFunc)>));
+        }
+    #endif
+}
+
+TEST(CPSTL_TypeTraitsTest, IsObject) {
+    // Test case 1: Basic object type identification
+    {
+        ASSERT_TRUE((cpstd::is_object_v<int>));
+        ASSERT_TRUE((cpstd::is_object_v<float>));
+        ASSERT_TRUE((cpstd::is_object_v<std::string>));
+        ASSERT_TRUE((cpstd::is_object_v<std::array<int, 5>>));
+        ASSERT_TRUE((cpstd::is_object_v<int*>));
+        ASSERT_TRUE((cpstd::is_object_v<std::function<int()>>));
+    }
+
+    // Test case 2: Non-object types
+    {
+        ASSERT_FALSE((cpstd::is_object_v<void>));
+        ASSERT_FALSE((cpstd::is_object_v<int&>));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        ASSERT_TRUE((cpstd::is_object_v<int> == std::is_object_v<int>));
+        ASSERT_TRUE((cpstd::is_object_v<float> == std::is_object_v<float>));
+        ASSERT_TRUE((cpstd::is_object_v<std::string> == std::is_object_v<std::string>));
+        ASSERT_TRUE((cpstd::is_object_v<std::array<int, 5>> == std::is_object_v<std::array<int, 5>>));
+    }
+    #endif
+}
+
+TEST(CPSTL_TypeTraitsTest, IsReference) {
+    // Test case 1: Basic reference type identification
+    {
+        int x = 5;
+        int& ref = x;
+        ASSERT_TRUE((cpstd::is_reference_v<int&>));
+        ASSERT_TRUE((cpstd::is_reference_v<decltype(ref)>));
+    }
+
+    // Test case 2: Non-reference types
+    {
+        ASSERT_FALSE((cpstd::is_reference_v<int>));
+        ASSERT_FALSE((cpstd::is_reference_v<float>));
+        ASSERT_FALSE((cpstd::is_reference_v<void>));
+        ASSERT_FALSE((cpstd::is_reference_v<int*>));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        int x = 5;
+        int& ref = x;
+        ASSERT_TRUE((cpstd::is_reference_v<int&> == std::is_reference_v<int&>));
+        ASSERT_TRUE((cpstd::is_reference_v<decltype(ref)> == std::is_reference_v<decltype(ref)>));
+    }
+    #endif
+}
+
+TEST(CPSTL_TypeTraitsTest, IsScalar) {
+    // Test case 1: Basic scalar type identification
+    {
+        ASSERT_TRUE((cpstd::is_scalar_v<int>));
+        ASSERT_TRUE((cpstd::is_scalar_v<float>));
+        ASSERT_TRUE((cpstd::is_scalar_v<double>));
+        ASSERT_TRUE((cpstd::is_scalar_v<char*>));
+    }
+
+    // Test case 2: Non-scalar types
+    {
+        ASSERT_FALSE((cpstd::is_scalar_v<void>));
+        ASSERT_FALSE((cpstd::is_scalar_v<int&>));
+        ASSERT_FALSE((cpstd::is_scalar_v<std::string>));
+        ASSERT_FALSE((cpstd::is_scalar_v<std::vector<int>>));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+        {
+            ASSERT_TRUE((cpstd::is_scalar_v<int> == std::is_scalar_v<int>));
+            ASSERT_TRUE((cpstd::is_scalar_v<float> == std::is_scalar_v<float>));
+            ASSERT_TRUE((cpstd::is_scalar_v<double> == std::is_scalar_v<double>));
+            ASSERT_TRUE((cpstd::is_scalar_v<char*> == std::is_scalar_v<char*>));
+        }
     #endif
 }
