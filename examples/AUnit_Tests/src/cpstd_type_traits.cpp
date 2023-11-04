@@ -356,28 +356,32 @@ TEST(CPSTL_TypeTraitsTest, IsFloatingPoint) {
     #endif
 }
 
-TEST(CPSTL_TypeTraitsTest, IsFunction) {
+TEST(CPSTL_TypeTraitsTest, IsFunction) { 
     // Test case 1: Basic function type identification
     {
-        auto lambda = []() {}; // Lambda function
-        ASSERT_TRUE((cpstd::is_function_v<decltype(lambda)>));
+        using FunctionPointer = decltype(&user_defined_function); // Function pointer
+        ASSERT_TRUE((cpstd::is_function_v<FunctionPointer>)); // Function pointers are not considered functions
     }
 
     // Test case 2: Non-function types
     {
-        struct MyStruct {};
-        int x = 5;
+        struct Functor { // Class with overloaded operator()
+            void operator()() const {}
+        };
+
+        auto lambda = []() {}; // Lambda function
+
         ASSERT_FALSE((cpstd::is_function_v<int>));
-        ASSERT_FALSE((cpstd::is_function_v<MyStruct>));
-        ASSERT_FALSE((cpstd::is_function_v<decltype(x)>));
+        ASSERT_FALSE((cpstd::is_function_v<Functor>));
+        ASSERT_FALSE((cpstd::is_function_v<decltype(lambda)>));
     }
 
     // Test case 3: Pointer types and references
     {
-        void (*functionPtr)() = nullptr; // Function pointer
-        auto& ref = functionPtr; // Reference to a function pointer
+        using FunctionPointer = decltype(&user_defined_function); // Function pointer
+        auto& ref = FunctionPointer; // Reference to a function pointer
 
-        ASSERT_FALSE((cpstd::is_function_v<decltype(functionPtr)>));
+        ASSERT_FALSE((cpstd::is_function_v<FunctionPointer>));
         ASSERT_FALSE((cpstd::is_function_v<decltype(ref)>));
     }
 
@@ -390,8 +394,7 @@ TEST(CPSTL_TypeTraitsTest, IsFunction) {
     #if defined(CPSTL_USING_STL)
     // Test case 5: Cross-verification - Compare with standard library traits
     {
-        void myFunction() {} // Sample function
-        ASSERT_TRUE((cpstd::is_function<decltype(myFunction)>::value == std::is_function<decltype(myFunction)>::value));
+        ASSERT_TRUE((cpstd::is_function<decltype(user_defined_function)>::value == std::is_function<decltype(user_defined_function)>::value));
     }
     #endif
 }
