@@ -517,10 +517,27 @@ TEST(CPSTL_TypeTraitsTest, IsMemberObjectPointer) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsPointer) {
-    int* ptr = nullptr;
-    ASSERT_FALSE((cpstd::is_pointer<int>::value));
-    ASSERT_TRUE((cpstd::is_pointer<int*>::value));
-    ASSERT_TRUE((cpstd::is_pointer<decltype(ptr)>::value));
+    // Test case 1: Basic pointer type identification
+    {
+        int* ptr = nullptr;
+        ASSERT_TRUE((cpstd::is_pointer<decltype(ptr)>::value));
+    }
+
+    // Test case 2: Non-pointer types
+    {
+        int x = 5;
+        ASSERT_FALSE((cpstd::is_pointer<int>::value));
+        ASSERT_FALSE((cpstd::is_pointer<int&>::value));
+        ASSERT_FALSE((cpstd::is_pointer<decltype(x)>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        int* ptr = nullptr;
+        ASSERT_TRUE((cpstd::is_pointer<decltype(ptr)>::value == std::is_pointer<decltype(ptr)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsRValueReference) {
