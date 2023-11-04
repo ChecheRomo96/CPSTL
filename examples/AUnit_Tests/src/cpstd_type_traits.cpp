@@ -479,6 +479,7 @@ TEST(CPSTL_TypeTraitsTest, IsMemberFunctionPointer) {
     #if defined(CPSTL_USING_STL)
     {
         class StdClass {
+        public:
             void memberFunc() {}
         };
         ASSERT_TRUE((cpstd::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value == std::cpstd::is_member_function_pointer<decltype(&StdClass::memberFunc)>::value));
