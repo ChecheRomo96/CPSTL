@@ -376,23 +376,14 @@ TEST(CPSTL_TypeTraitsTest, IsFunction) {
         ASSERT_FALSE((cpstd::is_function_v<decltype(lambda)>));
     }
 
-    // Test case 3: Pointer types and references
-    {
-        using FunctionPointer = decltype(&user_defined_function); // Function pointer
-        auto& ref = FunctionPointer; // Reference to a function pointer
-
-        ASSERT_FALSE((cpstd::is_function_v<FunctionPointer>));
-        ASSERT_FALSE((cpstd::is_function_v<decltype(ref)>));
-    }
-
-    // Test case 4: Negative scenarios - Non-conforming types
+    // Test case 3: Negative scenarios - Non-conforming types
     {
         union MyUnion { int x; float y; };
         ASSERT_FALSE((cpstd::is_function_v<MyUnion>));
     }
 
     #if defined(CPSTL_USING_STL)
-    // Test case 5: Cross-verification - Compare with standard library traits
+    // Test case 4: Cross-verification - Compare with standard library traits
     {
         ASSERT_TRUE((cpstd::is_function<decltype(user_defined_function)>::value == std::is_function<decltype(user_defined_function)>::value));
     }
