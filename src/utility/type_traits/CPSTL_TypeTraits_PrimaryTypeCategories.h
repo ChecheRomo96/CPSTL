@@ -117,6 +117,9 @@
                 cpstd::is_same_v<T, unsigned char> ||
                 cpstd::is_same_v<T, bool> >{};
 
+        template <typename T> 
+        inline constexpr bool is_integral_v = is_integral<T>::value;
+
         template <typename T>
         struct is_lvalue_reference : cpstd::false_type {};
 
