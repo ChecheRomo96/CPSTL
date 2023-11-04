@@ -357,11 +357,43 @@ TEST(CPSTL_TypeTraitsTest, IsFloatingPoint) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsFunction) {
-    ASSERT_FALSE((cpstd::is_function<int>::value));
-    typedef void FunctionType();
-    ASSERT_FALSE((cpstd::is_function<FunctionType*>::value));
-    //ASSERT_FALSE((cpstd::is_function<std::function<int()>>::value));
-    ASSERT_TRUE((cpstd::is_function<decltype(user_defined_function)>::value));
+    // Test case 1: Basic function type identification
+    {
+        auto lambda = []() {}; // Lambda function
+        ASSERT_TRUE((cpstd::is_function_v<decltype(lambda)>));
+    }
+
+    // Test case 2: Non-function types
+    {
+        struct MyStruct {};
+        int x = 5;
+        ASSERT_FALSE((cpstd::is_function_v<int>));
+        ASSERT_FALSE((cpstd::is_function_v<MyStruct>));
+        ASSERT_FALSE((cpstd::is_function_v<decltype(x)>));
+    }
+
+    // Test case 3: Pointer types and references
+    {
+        void (*functionPtr)() = nullptr; // Function pointer
+        auto& ref = functionPtr; // Reference to a function pointer
+
+        ASSERT_FALSE((cpstd::is_function_v<decltype(functionPtr)>));
+        ASSERT_FALSE((cpstd::is_function_v<decltype(ref)>));
+    }
+
+    // Test case 4: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_function_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 5: Cross-verification - Compare with standard library traits
+    {
+        void myFunction() {} // Sample function
+        ASSERT_TRUE((cpstd::is_function<decltype(myFunction)>::value == std::is_function<decltype(myFunction)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsIntegral) {
