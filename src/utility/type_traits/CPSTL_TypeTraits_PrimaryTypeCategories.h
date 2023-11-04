@@ -26,6 +26,9 @@
         template <typename T>
         using is_floating_point = std::is_floating_point<T>;
 
+        template <typename T> 
+        inline constexpr bool is_floating_point_v = is_floating_point<T>::value;
+
         template <typename T>
         using is_function = std::is_function<T>;
 
@@ -84,6 +87,9 @@
                 cpstd::is_same<cpstd::remove_cv_t<T>, float>::value ||
                 cpstd::is_same<cpstd::remove_cv_t<T>, double>::value ||
                 cpstd::is_same<cpstd::remove_cv_t<T>, long double>::value>{};
+        
+        template <typename T> 
+        inline constexpr bool is_floating_point_v = is_floating_point<T>::value;
 
         // This primary template is intentionally left undefined
         template <typename>
