@@ -489,10 +489,31 @@ TEST(CPSTL_TypeTraitsTest, IsMemberFunctionPointer) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsMemberObjectPointer) {
-    int A::* pt2 = nullptr;
-    ASSERT_FALSE((cpstd::is_member_object_pointer<decltype(nullptr)>::value));
-    ASSERT_TRUE((cpstd::is_member_object_pointer<int A::*>::value));
-    ASSERT_TRUE((cpstd::is_member_object_pointer<decltype(pt2)>::value));
+    // Test case 1: Basic member object pointer identification
+    {
+        class MyClass {
+            int memberVar;
+        };
+        ASSERT_TRUE((is_member_object_pointer<decltype(&MyClass::memberVar)>::value));
+    }
+
+    // Test case 2: Non-member object pointer types
+    {
+        class MyClass {};
+        ASSERT_FALSE((is_member_object_pointer<MyClass>::value));
+        ASSERT_FALSE((is_member_object_pointer<int>::value));
+        ASSERT_FALSE((is_member_object_pointer<void>::value));
+    }
+
+    // Test case 3: Cross-verification - Compare with standard library traits
+    #if defined(CPSTL_USING_STL)
+    {
+        class StdClass {
+            int memberVar;
+        };
+        ASSERT_TRUE((is_member_object_pointer<decltype(&StdClass::memberVar)>::value == std::is_member_object_pointer<decltype(&StdClass::memberVar)>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsPointer) {
