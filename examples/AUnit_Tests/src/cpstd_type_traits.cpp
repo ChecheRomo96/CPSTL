@@ -391,9 +391,47 @@ TEST(CPSTL_TypeTraitsTest, IsFunction) {
 }
 
 TEST(CPSTL_TypeTraitsTest, IsIntegral) {
-    ASSERT_TRUE((cpstd::is_integral<int>::value));
-    ASSERT_TRUE((cpstd::is_integral<long long>::value));
-    ASSERT_FALSE((cpstd::is_integral<double>::value));
+    // Test case 1: Basic integral type identification
+    {
+        ASSERT_TRUE((cpstd::is_integral_v<int>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned int>));
+        ASSERT_TRUE((cpstd::is_integral_v<long>));
+        ASSERT_TRUE((cpstd::is_integral_v<long long>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned long long>));
+        ASSERT_TRUE((cpstd::is_integral_v<short>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned short>));
+        ASSERT_TRUE((cpstd::is_integral_v<char>));
+        ASSERT_TRUE((cpstd::is_integral_v<unsigned char>));
+        ASSERT_TRUE((cpstd::is_integral_v<bool>));
+    }
+
+    // Test case 2: Non-integral types
+    {
+        ASSERT_FALSE((cpstd::is_integral_v<float>));
+        ASSERT_FALSE((cpstd::is_integral_v<double>));
+        ASSERT_FALSE((cpstd::is_integral_v<long double>));
+    }
+
+    // Test case 3: Pointer types and references
+    {
+        int* ptr_int = nullptr;
+        double& ref_double = *ptr_int; // This should fail to compile, demonstrating it's not an integral reference
+
+        static_assert(!cpstd::is_integral_v<decltype(ptr_int)>, "Error: Pointer should not be integral");
+    }
+
+    // Test case 4: Negative scenarios - Non-conforming types
+    {
+        union MyUnion { int x; float y; };
+        ASSERT_FALSE((cpstd::is_integral_v<MyUnion>));
+    }
+
+    #if defined(CPSTL_USING_STL)
+    // Test case 5: Cross-verification - Compare with standard library traits
+    {
+        ASSERT_TRUE((cpstd::is_integral<int>::value == std::is_integral<int>::value));
+    }
+    #endif
 }
 
 TEST(CPSTL_TypeTraitsTest, IsLValueReference) {
