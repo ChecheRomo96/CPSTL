@@ -68,14 +68,11 @@
         template <typename T> 
         inline constexpr bool is_array_v = is_array<T>::value;
 
-
-
         template<typename T>
         struct is_class : cpstd::bool_constant<__is_class(T)> {};
 
         template <typename T> 
         inline constexpr bool is_class_v = is_class<T>::value;
-
 
         template<typename T>
         struct is_enum : cpstd::bool_constant<__is_enum(T)> {};
@@ -83,16 +80,11 @@
         template <typename T> 
         inline constexpr bool is_enum_v = is_enum<T>::value;
 
-
         template<typename T>
-        struct is_floating_point {
-            static constexpr bool value =
+        struct is_floating_point : cpstd::bool_constant<
                 cpstd::is_same<cpstd::remove_cv_t<T>, float>::value ||
                 cpstd::is_same<cpstd::remove_cv_t<T>, double>::value ||
-                cpstd::is_same<cpstd::remove_cv_t<T>, long double>::value;
-        };
-
-
+                cpstd::is_same<cpstd::remove_cv_t<T>, long double>::value >;
 
         // This primary template is intentionally left undefined
         template <typename>
@@ -102,11 +94,8 @@
         template <typename Ret, typename... Args>
         struct is_function<Ret(Args...)> : cpstd::true_type {};
 
-
-
         template <typename T>
-        struct is_integral {
-            static constexpr bool value =
+        struct is_integral : cpstd::bool_constant<
                 cpstd::is_same_v<T, int> ||
                 cpstd::is_same_v<T, long> ||
                 cpstd::is_same_v<T, long long> ||
@@ -118,18 +107,13 @@
                 cpstd::is_same_v<T, char> ||
                 cpstd::is_same_v<T, signed char> ||
                 cpstd::is_same_v<T, unsigned char> ||
-                cpstd::is_same_v<T, bool>;
-        };
-
-
+                cpstd::is_same_v<T, bool> >;
 
         template <typename T>
         struct is_lvalue_reference : cpstd::false_type {};
 
         template <typename T>
         struct is_lvalue_reference<T&> : cpstd::true_type {};
-
-
 
         template<typename T>
         struct is_member_function_pointer : cpstd::false_type {};
@@ -143,14 +127,11 @@
         template<typename T, typename C>
         struct is_member_object_pointer<T C::*> : cpstd::true_type {};
 
-
-
         template<typename T>
         struct is_pointer : cpstd::false_type {};
 
         template<typename T>
         struct is_pointer<T*> : cpstd::true_type {};
-
 
 
         template<typename T>
@@ -160,29 +141,12 @@
         struct is_rvalue_reference<T&&> : cpstd::true_type {};
 
 
-
-        template <typename T>
-        struct is_union {
-        private:
-            template<typename U>
-            static constexpr bool check_union(int U::* member) {
-                return true;
-            }
-
-            template<typename U>
-            static constexpr bool check_union(...) {
-                return false;
-            }
-
-        public:
-            static constexpr bool value = check_union<T>(nullptr);
-        };
+        template<typename T>
+        struct is_union : cpstd::bool_constant<__is_union(T)> {};
 
 
         template<typename T>
-        struct is_void {
-            static constexpr bool value = cpstd::is_same<void, typename cpstd::remove_cv<T>::type>::value;
-        };
+        struct is_void : cpstd::bool_constant<cpstd::is_same_v<void, typename cpstd::remove_cv<T>::type>> {};
     #endif
 
 
