@@ -632,8 +632,8 @@ TEST(CPSTL_TypeTraitsTest, IsArithmetic) {
     // Test case 2: Non-arithmetic types
     {
         ASSERT_FALSE((cpstd::is_arithmetic_v<void>));
-        ASSERT_FALSE((cpstd::is_arithmetic_v<std::string>));
-        ASSERT_FALSE((cpstd::is_arithmetic_v<std::vector<int>>));
+        ASSERT_FALSE((cpstd::is_arithmetic_v<cpstd::string>));
+        ASSERT_FALSE((cpstd::is_arithmetic_v<cpstd::vector<int>>));
     }
 
     // Test case 3: Cross-verification - Compare with standard library traits
@@ -747,8 +747,8 @@ TEST(CPSTL_TypeTraitsTest, IsObject) {
     {
         ASSERT_TRUE((cpstd::is_object_v<int>));
         ASSERT_TRUE((cpstd::is_object_v<float>));
-        ASSERT_TRUE((cpstd::is_object_v<std::string>));
-        ASSERT_TRUE((cpstd::is_object_v<std::array<int, 5>>));
+        ASSERT_TRUE((cpstd::is_object_v<cpstd::string>));
+        ASSERT_TRUE((cpstd::is_object_v<cpstd::array<int, 5>>));
         ASSERT_TRUE((cpstd::is_object_v<int*>));
         ASSERT_TRUE((cpstd::is_object_v<std::function<int()>>));
     }
@@ -765,6 +765,8 @@ TEST(CPSTL_TypeTraitsTest, IsObject) {
         ASSERT_TRUE((cpstd::is_object_v<int> == std::is_object_v<int>));
         ASSERT_TRUE((cpstd::is_object_v<float> == std::is_object_v<float>));
         ASSERT_TRUE((cpstd::is_object_v<std::string> == std::is_object_v<std::string>));
+        ASSERT_TRUE((cpstd::is_object_v<cpstd::string> == std::is_object_v<std::string>));
+        ASSERT_TRUE((cpstd::is_object_v<cpstd::string> == std::is_object_v<cpstd::string>));
         ASSERT_TRUE((cpstd::is_object_v<std::array<int, 5>> == std::is_object_v<std::array<int, 5>>));
     }
     #endif
@@ -811,8 +813,8 @@ TEST(CPSTL_TypeTraitsTest, IsScalar) {
     {
         ASSERT_FALSE((cpstd::is_scalar_v<void>));
         ASSERT_FALSE((cpstd::is_scalar_v<int&>));
-        ASSERT_FALSE((cpstd::is_scalar_v<std::string>));
-        ASSERT_FALSE((cpstd::is_scalar_v<std::vector<int>>));
+        ASSERT_FALSE((cpstd::is_scalar_v<cpstd::string>));
+        ASSERT_FALSE((cpstd::is_scalar_v<cpstd::vector<int>>));
     }
 
     // Test case 3: Cross-verification - Compare with standard library traits
