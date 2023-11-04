@@ -331,6 +331,7 @@ TEST(CPSTL_TypeTraitsTest, IsFloatingPoint) {
     {
         ASSERT_TRUE((cpstd::is_floating_point_v<float>));
         ASSERT_TRUE((cpstd::is_floating_point_v<double>));
+        ASSERT_TRUE((cpstd::is_floating_point_v<long double>));
     }
 
     // Test case 2: Non-floating-point types
@@ -341,22 +342,14 @@ TEST(CPSTL_TypeTraitsTest, IsFloatingPoint) {
         ASSERT_FALSE((cpstd::is_floating_point_v<char>));
     }
 
-    // Test case 3: Pointer types and references
-    {
-        float* ptr_float = nullptr;
-        double& ref_double = *ptr_float; // This should fail to compile, demonstrating it's not a floating-point reference
-
-        static_assert(!cpstd::is_floating_point_v<decltype(ptr_float)>, "Error: Pointer should not be floating-point");
-    }
-
-    // Test case 4: Negative scenarios - Non-conforming types
+    // Test case 3: Negative scenarios - Non-conforming types
     {
         union MyUnion { int x; float y; };
         ASSERT_FALSE((cpstd::is_floating_point_v<MyUnion>));
     }
 
     #if defined(CPSTL_USING_STL)
-    // Test case 5: Cross-verification - Compare with standard library traits
+    // Test case 4: Cross-verification - Compare with standard library traits
     {
         ASSERT_TRUE((cpstd::is_floating_point<double>::value == std::is_floating_point<double>::value));
     }
