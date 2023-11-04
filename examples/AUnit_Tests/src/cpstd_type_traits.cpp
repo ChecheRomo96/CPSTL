@@ -748,9 +748,7 @@ TEST(CPSTL_TypeTraitsTest, IsObject) {
         ASSERT_TRUE((cpstd::is_object_v<int>));
         ASSERT_TRUE((cpstd::is_object_v<float>));
         ASSERT_TRUE((cpstd::is_object_v<cpstd::string>));
-        ASSERT_TRUE((cpstd::is_object_v<cpstd::array<int, 5>>));
         ASSERT_TRUE((cpstd::is_object_v<int*>));
-        ASSERT_TRUE((cpstd::is_object_v<std::function<int()>>));
     }
 
     // Test case 2: Non-object types
@@ -762,6 +760,9 @@ TEST(CPSTL_TypeTraitsTest, IsObject) {
     // Test case 3: Cross-verification - Compare with standard library traits
     #if defined(CPSTL_USING_STL)
     {
+        ASSERT_TRUE((cpstd::is_object_v<std::array<int, 5>>));
+        ASSERT_TRUE((cpstd::is_object_v<std::function<int()>>));
+        
         ASSERT_TRUE((cpstd::is_object_v<int> == std::is_object_v<int>));
         ASSERT_TRUE((cpstd::is_object_v<float> == std::is_object_v<float>));
         ASSERT_TRUE((cpstd::is_object_v<std::string> == std::is_object_v<std::string>));
