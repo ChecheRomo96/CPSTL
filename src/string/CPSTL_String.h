@@ -499,7 +499,5 @@
                 ////////////////////////////////////////////////////////////////////////////////////////////
         };
     }
-
-    #include "Utilities/CPSTL_String_Utilities.h"
-
+    
 #endif//CPSTL_STRING_CLASS_H
