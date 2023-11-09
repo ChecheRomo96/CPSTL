@@ -29,7 +29,8 @@
 
         template <typename T>
         struct is_scalar : cpstd::integral_constant<bool,
-            cpstd::is_integral<T>::value || cpstd::is_floating_point<T>::value || cpstd::is_pointer<T>::value> {};
+            cpstd::is_arithmetic<T>::value || cpstd::is_pointer<T>::value || cpstd::is_member_pointer<T>::value ||
+            cpstd::is_enum<T>::value || cpstd::is_same<nullptr_t, typename remove_cv<T>::type>::value > {};
 
         template <typename T>
         struct is_fundamental : cpstd::integral_constant<bool,
