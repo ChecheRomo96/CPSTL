@@ -34,7 +34,6 @@
         #if defined(CPSTL_USING_STL)
             std::swap(a,b);
         #else
-            void swap (T (&a)[N], T (&b)[N]){
             for (size_t i = 0; i<N; ++i){
                 swap (a[i],b[i]);
             }
