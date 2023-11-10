@@ -6,7 +6,7 @@
     #include <CPinitializer_list.h>
     #include <CPiterator.h>
     #include <CPmemory.h>
-    #include <CPutilityhit.h>
+    #include <CPutility.h>
 
     #if defined CPSTL_USING_STL
         #include <iostream>
