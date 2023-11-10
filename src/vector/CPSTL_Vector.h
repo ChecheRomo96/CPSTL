@@ -22,7 +22,7 @@
         template <class , class>
         class vector;
 
-        template <class T, class Alloc = std::allocator<T>>
+        template <class T, class Alloc = cpstd::allocator<T>>
         void swap(cpstd::vector<T, Alloc>& lhs, cpstd::vector<T, Alloc>& rhs) {
         #if defined CPSTL_USING_STL
             std::swap(lhs,rhs);
