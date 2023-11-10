@@ -11,7 +11,7 @@
             using const_pointer = typename cpstd::allocator_traits<typename cpstd::iterator_traits<NoThrowForwardIt>::allocator_type>::const_pointer;
 
             while (first != last) {
-                ::new (cpstd::addressof(*d_first)) ValueType(cpstd::move(*first));
+                ::new (cpstd::addressof(*d_first)) value_type(cpstd::move(*first));
                 ++first;
                 ++d_first;
             }
