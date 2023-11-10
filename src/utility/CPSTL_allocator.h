@@ -59,12 +59,12 @@
 
                 pointer address(reference x) const noexcept {
                     // Get the address of the referenced object x
-                    return std::addressof(x);
+                    return cpstd::addressof(x);
                 }
 
                 const_pointer address(const_reference x) const noexcept {
                     // Get the address of the const referenced object x
-                    return std::addressof(x);
+                    return cpstd::addressof(x);
                 }
 
                 pointer allocate(size_type n, cpstd::allocator<void>::const_pointer hint = 0) {
