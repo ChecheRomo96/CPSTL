@@ -535,16 +535,16 @@
                         //! If an allocation fails and exceptions are enabled (CPSTL_VECTOR_EXCEPTIONS_ENABLED), then the method throws a cpstd::bad_allocation exception.\n
                         
                             void reserve(size_type new_cap){
-                                if (new_capacity > _Capacity) {
+                                if (new_cap > _Capacity) {
                                     // Reallocate memory if necessary
-                                    pointer new_buffer = _Alloc.allocate(new_capacity);
+                                    pointer new_buffer = _Alloc.allocate(new_cap);
                                     for (size_type i = 0; i < _Size; ++i) {
                                         _Alloc.construct(&new_buffer[i], cpstd::move(_Buffer[i]));  // Move old elements to the new memory
                                         _Alloc.destroy(&_Buffer[i]);  // Destroy the old elements
                                     }
                                     _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
                                     _Buffer = new_buffer;
-                                    _Capacity = new_capacity;
+                                    _Capacity = new_cap;
                                 }
                             }
                         //
