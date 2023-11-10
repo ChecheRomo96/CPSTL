@@ -36,7 +36,7 @@
                 using reference = value_type&;
                 using const_pointer = const value_type*;
                 using const_reference = const value_type&;
-                using size_type = size_type;
+                using size_type = cpstd::size_t;
                 using difference_type = cpstd::ptrdiff_t;
 
                 template <typename U>
