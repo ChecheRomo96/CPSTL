@@ -11,12 +11,12 @@
             return static_cast<T&&>(arg);
         }
 
-        template <typename T>
+        /*template <typename T>
         T&& forward(typename cpstd::remove_reference<T>::type&& arg) noexcept {
             static_assert(!cpstd::is_lvalue_reference<T>::value,
                           "Cannot forward an rvalue as an lvalue.");
             return static_cast<T&&>(arg);
-        }
+        }*/
 
         template <class T> 
         void swap (T& a, T& b){
