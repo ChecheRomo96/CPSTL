@@ -11,14 +11,11 @@
 ######################################################################################################
 # Append Sources and Headers
 
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Move.h")
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_reverse_iterator.h")
+    message("cpstd::reverse_iterator appended.")
 
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Iterator.h")
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_types.h")
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_allocator.h")
-
-    add_subdirectory(type_traits)
-    add_subdirectory(iterator)
+    #list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Iterator.h")
+    #message("cpstd::iterator appended.")
 
 #
 ######################################################################################################
@@ -28,19 +25,19 @@
 
         install(
             FILES ${HEADERS_LIST_LOCAL} 
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/utility 
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/utility/iterator/predefined_iterators
         )
 
         install(
             TARGETS CPSTL 
             EXPORT CPSTLExport
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility/iterator/predefined_iterators 
         )
 
         install(
             EXPORT CPSTLExport
             FILE CPSTL-config.cmake
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility/iterator/predefined_iterators 
         )
     endif()
 #

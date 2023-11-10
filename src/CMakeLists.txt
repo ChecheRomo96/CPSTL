@@ -31,6 +31,7 @@
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPexception.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPinitializer_list.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPutility.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPiterator.h")
 
 #
 ######################################################################################################
@@ -55,6 +56,9 @@
 
 	message("${CPSTL_SOURCES}")
 	add_library( CPSTL STATIC ${CPSTL_SOURCES} )
+
+
+	target_compile_definitions(CPSTL PRIVATE _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING)
 #
 ######################################################################################################
 # Add Compliler Definitions

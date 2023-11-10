@@ -72,7 +72,7 @@
                 Data[i] = i;
             }
 
-            cpstd::vector<uint8_t> myVector(Data, UINT8_MAX);
+            cpstd::vector<uint8_t> myVector(std::begin(Data), std::end(Data));
             ASSERT_EQ(myVector.size(),UINT8_MAX);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
@@ -93,7 +93,7 @@
         TEST(CPSTL_Vector_ConstructorTesting, Move) {
 
             static const uint8_t values[] = {0, 1, 2};
-            cpstd::vector<uint8_t> myVector(values, 3);
+            cpstd::vector<uint8_t> myVector(cpstd::begin(values), cpstd::end(values));
             ASSERT_EQ(myVector.size(),3);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
@@ -437,7 +437,7 @@
 
             while( !myVector.empty() ){
                 ASSERT_EQ(myVector.front(), count++);
-                myVector.erase(0);
+                myVector.erase(myVector.begin());
             }
         }
     //
@@ -664,8 +664,8 @@
 
             cpstd::vector<uint8_t> myVector = { 1,3 };
 
-            myVector.insert(0,0);
-            myVector.insert(2,2);
+            myVector.insert(myVector.begin(), 0);
+            myVector.insert(myVector.begin()+2,2);
 
             for(size_t i = 0; i < myVector.size(); i++){
                 ASSERT_EQ(myVector[i],i);
@@ -688,8 +688,8 @@
 
             cpstd::vector<testClass> myVector = { 1,3 };
 
-            myVector.insert(cpstd::move(0),0);
-            myVector.insert(cpstd::move(2),2);
+            myVector.insert(myVector.begin(), { 0 });
+            myVector.insert(myVector.begin() + 2, { 2 });
 
             for(uint8_t i = 0; i < myVector.size(); i++){
                 ASSERT_EQ(myVector[i].A(),i);
@@ -712,7 +712,7 @@
 
             cpstd::vector<char> myVector = { 'a', 'a' };
 
-            myVector.insert(1, 2, 'b');
+            myVector.insert(myVector.begin()+1, 2, 'b');
 
             ASSERT_EQ(myVector[0], 'a');
             ASSERT_EQ(myVector[1], 'b');
@@ -736,7 +736,7 @@
 
             cpstd::vector<char> myVector = { 'a', 'a' };
 
-            myVector.insert(1, {'b', 'b'});
+            myVector.insert(myVector.begin() + 1, {'b', 'b'});
 
             ASSERT_EQ(myVector[0], 'a');
             ASSERT_EQ(myVector[1], 'b');
@@ -762,7 +762,7 @@
             
             while( !myVector.empty() ){
                 ASSERT_EQ(myVector[0],counter++);
-                myVector.erase(0);
+                myVector.erase(myVector.begin());
             }
         }
     //
@@ -779,7 +779,7 @@
         TEST(CPSTL_Vector_Modifiers, erase_range) {
 
             cpstd::vector<uint8_t> myVector = { 0,1,2,3,4 };
-            myVector.erase(2,4);
+            myVector.erase(myVector.begin() + 2, myVector.begin() + 4);
             ASSERT_EQ(myVector.size(), 3);
             ASSERT_EQ(myVector[0], 0);
             ASSERT_EQ(myVector[1], 1);
@@ -844,7 +844,7 @@
             ASSERT_EQ(myVector.size(),0);
 
             for (size_t i = 1; i < 10; i++) {
-                myVector.emplace(0, cpstd::move(static_cast<uint8_t>(i)));
+                myVector.emplace(myVector.begin() , cpstd::move(static_cast<uint8_t>(i)));
                 ASSERT_EQ(myVector[0], i);
             }
         }
@@ -868,7 +868,7 @@
 
             for(size_t i = 1; i < 10; i++){
                 testClass tmp(static_cast<uint8_t>(i));
-                myVector.emplace(0, cpstd::move(tmp));
+                myVector.emplace(myVector.begin(), cpstd::move(tmp));
                 ASSERT_EQ(myVector[0].A(), i);
                 ASSERT_EQ(tmp.A(), 0);
             }
@@ -1227,4 +1227,157 @@
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
+    //! @test
+    //! This test case assesses the basic functionality of vector iterators.
+    //! The purpose of this test is to verify that vector iterators can be used to
+    //! access and modify vector elements.\n\n
+    //! The test is expected to pass if all assertions hold true, demonstrating
+    //! that vector iterators work as expected.
+
+        TEST(CPSTL_Vector_IteratorTesting, BasicFunctionality) {
+            // Create a vector and initialize its elements
+            cpstd::vector<int> myVector = {1, 2, 3, 4, 5};
+
+            // Test iterator initialization
+            auto itBegin = myVector.begin();
+            auto itEnd = myVector.end();
+
+            // Test iterator dereferencing and element modification
+            ASSERT_EQ(*itBegin, 1);
+            *itBegin = 10;
+            ASSERT_EQ(myVector[0], 10);
+
+            // Test iterator comparison
+            ASSERT_TRUE(itBegin == myVector.begin());
+            ASSERT_TRUE(itEnd == myVector.end());
+            ASSERT_TRUE(itBegin != itEnd);
+
+            // Test iterator increment and decrement
+            ++itBegin;
+            ASSERT_EQ(*itBegin, 2);
+            --itBegin;
+            ASSERT_EQ(*itBegin, 10);
+
+            // Test iterator arithmetic
+            auto itNext = itBegin + 2;
+            ASSERT_EQ(*itNext, 3);
+
+            // Test iterator advance
+            itBegin += 3;
+            ASSERT_EQ(*itBegin, 4);
+
+            // Test iterator distance
+            auto distance = cpstd::distance(myVector.begin(), itBegin);
+            ASSERT_EQ(distance, 3);
+
+            // Test iterator to pointer conversion
+            int* ptr = &(*itBegin);
+            ASSERT_EQ(*ptr, 4);
+
+            // Test pointer to iterator conversion
+            auto itFromPtr = myVector.begin() + 2;
+            itBegin = myVector.begin();
+            ASSERT_EQ(cpstd::distance(itBegin, itFromPtr), 2);
+        }
+    //
+    ////////////////////////////////////////////////////////////////////////////////
+    //! @test
+    //! This test case assesses the functionality of reverse iterators in CPVector.
+    //! The purpose of this test is to verify that reverse iterators can correctly
+    //! dereference, perform iterator arithmetic, advance, and convert from a pointer.
+    //!
+    //! The test is expected to pass if all assertions hold true, demonstrating that
+    //! reverse iterator functionality is working as expected.
+       
+        TEST(CPSTL_Vector_IteratorTesting, ReverseIterator) {
+            // Create a vector with some initial values
+            cpstd::vector<int> myVector = {1, 2, 3, 4, 5};
+
+            // Create a reverse iterator pointing to the last element
+            auto ritBegin = myVector.rbegin();
+
+            // Test dereferencing the reverse iterator
+            ASSERT_EQ(*ritBegin, 5);
+
+            // Test iterator arithmetic
+            auto ritNext = ritBegin + 2;
+            ASSERT_EQ(*ritNext, 3);
+
+            // Test iterator advance
+            ritBegin += 3;
+            ASSERT_EQ(*ritBegin, 2);
+
+            // Test pointer to iterator conversion
+            auto ritFromPtr = myVector.rbegin() + 2;
+            ritBegin = myVector.rbegin();
+            ASSERT_EQ(cpstd::distance(ritBegin, ritFromPtr), 2);
+        }
+    //
+    ////////////////////////////////////////////////////////////////////////////////
+    //! @test
+    //! This test case assesses the functionality of const iterators in CPVector.
+    //! The purpose of this test is to verify that const iterators can correctly
+    //! dereference, perform iterator arithmetic, advance, and convert from a pointer.
+    //!
+    //! The test is expected to pass if all assertions hold true, demonstrating that
+    //! const iterator functionality is working as expected.
+        
+        TEST(CPSTL_Vector_IteratorTesting, ConstIterator) {
+            // Create a vector with some initial values
+            const cpstd::vector<int> myVector = {1, 2, 3, 4, 5};
+
+            // Create a const iterator pointing to the first element
+            auto citBegin = myVector.cbegin();
+
+            // Test dereferencing the const iterator
+            ASSERT_EQ(*citBegin, 1);
+
+            // Test iterator arithmetic
+            auto citNext = citBegin + 2;
+            ASSERT_EQ(*citNext, 3);
+
+            // Test iterator advance
+            citBegin += 3;
+            ASSERT_EQ(*citBegin, 4);
+
+            // Test pointer to iterator conversion
+            auto citFromPtr = myVector.cbegin() + 2;
+            citBegin = myVector.cbegin();
+            ASSERT_EQ(cpstd::distance(citBegin, citFromPtr), 2);
+        }
+    //
+    ////////////////////////////////////////////////////////////////////////////////
+    //! @test
+    //! This test case assesses the functionality of const reverse iterators in CPVector.
+    //! The purpose of this test is to verify that const reverse iterators can correctly
+    //! dereference, perform iterator arithmetic, advance, and convert from a pointer.
+    //!
+    //! The test is expected to pass if all assertions hold true, demonstrating that
+    //! const reverse iterator functionality is working as expected.
+        
+        TEST(CPSTL_Vector_IteratorTesting, ConstReverseIterator) {
+            // Create a vector with some initial values
+            const cpstd::vector<int> myVector = {1, 2, 3, 4, 5};
+
+            // Create a const reverse iterator pointing to the last element
+            auto critBegin = myVector.crbegin();
+
+            // Test dereferencing the const reverse iterator
+            ASSERT_EQ(*critBegin, 5);
+
+            // Test iterator arithmetic
+            auto critNext = critBegin + 2;
+            ASSERT_EQ(*critNext, 3);
+
+            // Test iterator advance
+            critBegin += 3;
+            ASSERT_EQ(*critBegin, 2);
+
+            // Test pointer to iterator conversion
+            auto critFromPtr = myVector.crbegin() + 2;
+            critBegin = myVector.crbegin();
+            ASSERT_EQ(cpstd::distance(critBegin, critFromPtr), 2);
+        }
+    //
+    ////////////////////////////////////////////////////////////////////////////////
 #endif

@@ -3,6 +3,8 @@
     
     #include <CPSTL_BuildSettings.h>
 
+    #include <utility/CPSTL_types.h>
+
     #if defined(CPSTL_VECTOR_ENABLED)
 
         #include "CPinitializer_list.h"

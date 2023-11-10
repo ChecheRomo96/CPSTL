@@ -4,6 +4,7 @@
     #include <CPSTL_BuildSettings.h>
     #include <CPinitializer_list.h>
     #include <CPtype_traits.h>
+    #include <utility/CPSTL_Iterator.h>
 
     namespace cpstd {}
 

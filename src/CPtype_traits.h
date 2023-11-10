@@ -2,6 +2,7 @@
 #define CPSTL_TYPE_TRAITS_H
     
     #include <CPSTL_BuildSettings.h>
+    #include <utility/CPSTL_types.h>
     
 
     namespace cpstd{
@@ -44,11 +45,6 @@
         template <typename T> struct remove_volatile<volatile T> { typedef T type; };
     #endif
     }
-
-    namespace cpstd{
-        using nullptr_t = ::nullptr_t;
-    }
-    
     
     #include <Utility/type_traits/CPSTL_TypeTraits.h>
 
