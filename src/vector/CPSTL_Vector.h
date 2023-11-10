@@ -7,6 +7,7 @@
     #include <CPiterator.h>
     #include <CPmemory.h>
     #include <CPutility.h>
+    #include <utility/CPSTL_types.h>
 
     #if defined CPSTL_USING_STL
         #include <iostream>
