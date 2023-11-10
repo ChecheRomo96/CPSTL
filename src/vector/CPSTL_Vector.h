@@ -408,7 +408,7 @@
                             //! This operator is used to assign new contents to the container by replacing the existing contents.
                             //! @tparam source Another container of the same type.
                             
-                                vector& operator=(const vector& source){
+                                vector<value_type, allocator_type>& operator=(const vector<value_type, allocator_type>& source){
                                     if (this != &source) {
                                         resize(source.size());
                                         auto it = begin();
@@ -426,7 +426,7 @@
                             //! This operator is used to assign new contents to the container by replacing the existing contents.
                             //! @tparam source Another container of the same type.
                              
-                                vector& operator=(vector&& source) noexcept{
+                                vector<value_type, allocator_type>& operator=(vector<value_type, allocator_type>&& source) noexcept{
                                     if (this != &source) {
                                         cpstd::swap(_Buffer, source._Buffer);
                                         cpstd::swap(_Size, source._Size);
@@ -441,7 +441,7 @@
                             //! Constructs the container with an initializer list
                             //! @tparam list std::initializer list with matching template argument
                             //
-                                vector& operator=(cpstd::initializer_list<T> il) { 
+                                vector<value_type, allocator_type>& operator=(cpstd::initializer_list<T> il) { 
                                     resize(il.size());
                                     auto it = begin();
                                     for (const auto& item : il) {
@@ -930,7 +930,7 @@
                         //! The class used must implement the proper move semantics in order for this method to be able to call a move assignment operator.
                         //! @tparam index_a the value of the first element to swap.
 
-                            void swap(vector& x) noexcept {
+                            void swap(vector<value_type, allocator_type>& x) noexcept {
                                 cpstd::swap(_Buffer, x._Buffer);
                                 cpstd::swap(_Size, x._Size);
                                 cpstd::swap(_Capacity, x._Capacity);
