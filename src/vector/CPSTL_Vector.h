@@ -987,13 +987,13 @@
                                 template <class... Args>
                                 iterator emplace(const_iterator position, Args&&... args) {
                                     // Convert the const_iterator to an iterator using const_cast
-                                    auto pos = begin() + std::distance(cbegin(), position);
+                                    auto pos = begin() + cpstd::distance(cbegin(), position);
 
                                     // Construct the new element in place at the specified position
-                                    auto it = _Buffer + std::distance(begin(), insert(pos, T()));
+                                    auto it = _Buffer + cpstd::distance(begin(), insert(pos, T()));
 
                                     // Assign the value using in-place construction
-                                    _Alloc.construct(it, std::forward<Args>(args)...);
+                                    _Alloc.construct(it, cpstd::forward<Args>(args)...);
 
                                     return it;
                                 }
