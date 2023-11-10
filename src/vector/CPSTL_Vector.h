@@ -206,7 +206,7 @@
                         //! the capacity of the vector see shrink_to_fit() or clear().
                         
                             vector() {
-                                _Buffer = cpstd::nullptr;
+                                _Buffer = nullptr;
                                 _Size = 0;
                                 _Capacity = 0;
                             }   
