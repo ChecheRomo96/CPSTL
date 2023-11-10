@@ -69,7 +69,7 @@
                     return cpstd::addressof(x);
                 }
 
-                pointer allocate(size_type n, cpstd::allocator<void>::const_pointer hint = 0) {
+                pointer allocate(size_type n, const_pointer hint = 0) {
                     (void)hint;
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
                     return static_cast<pointer>(::operator new(n * sizeof(T)));
