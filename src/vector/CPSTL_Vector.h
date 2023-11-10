@@ -220,7 +220,7 @@
                         //! @tparam count New size of the conatainer
                         //! @tparam value The value to initialize the elements with
 
-                            vector(unsigned int count, const reference value = T()) : vector(){
+                            vector(unsigned int count, const_reference value = T()) : vector(){
 
                                 resize(count, value);
                             }
