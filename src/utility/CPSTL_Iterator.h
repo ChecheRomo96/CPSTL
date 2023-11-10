@@ -159,7 +159,7 @@
             return c.end();
         }
 
-        template <typename T>
+        template <typename Iterator>
         class const_iterator {
         public:
             using iterator_type = Iterator;
