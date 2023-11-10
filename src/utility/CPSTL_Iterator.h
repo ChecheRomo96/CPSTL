@@ -166,8 +166,8 @@
             using iterator_category = typename iterator_traits<iterator_type>::iterator_category;
             using value_type = typename iterator_traits<iterator_type>::value_type;
             using difference_type = typename iterator_traits<iterator_type>::difference_type;
-            using pointer = typename const iterator_traits<Iterator>::pointer;
-            using reference = typename const iterator_traits<Iterator>::reference;
+            using pointer = typename iterator_type::value_type*;
+            using reference = typename iterator_type::value_type&;
 
 
             // Constructor
