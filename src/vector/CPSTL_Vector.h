@@ -348,12 +348,12 @@
                         //! @tparam pointer location of the data to copy
                         //! @tparam len number of elements to copy
 
-                            vector(const T* pointer, unsigned int len): vector(){
+                            vector(const T* data, unsigned int len): vector(){
 
                                 resize(len);
                                 
                                 for (size_type i = 0; i < size(); ++i) {
-                                    _Alloc.construct(&_Buffer[i], other[i]);
+                                    _Alloc.construct(&_Buffer[i], data[i]);
                                 }
                             }
                         //
