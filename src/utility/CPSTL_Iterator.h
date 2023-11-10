@@ -3,6 +3,7 @@
 
     #include <CPSTL_BuildSettings.h>
     #include <CPtype_traits.h>    
+    #include <CPiterator.h>
 
     namespace cpstd {
 
@@ -152,82 +153,9 @@
             return c.end();
         }
 
-
         template <typename Iterator>
-        class const_reverse_iterator {
-        public:
-            using iterator_type = Iterator;
-            using iterator_category = typename cpstd::iterator_traits<Iterator>::iterator_category;
-            using value_type = typename cpstd::iterator_traits<Iterator>::value_type;
-            using difference_type = typename cpstd::iterator_traits<Iterator>::difference_type;
-            using pointer = typename cpstd::iterator_traits<Iterator>::pointer;
-            using reference = typename cpstd::iterator_traits<Iterator>::reference;
+        using const_reverse_iterator = cpstd::reverse_iterator<Iterator>;
 
-            const_reverse_iterator() = default;
-            explicit const_reverse_iterator(Iterator it) : current(it) {}
-
-            const value_type operator*() const {
-                Iterator tmp = current;
-                return *(--tmp);
-            }
-
-            const_reverse_iterator& operator++() {
-                --current;
-                return *this;
-            }
-
-            const_reverse_iterator operator++(int) {
-                const_reverse_iterator tmp = *this;
-                --current;
-                return tmp;
-            }
-
-            const_reverse_iterator& operator--() {
-                ++current;
-                return *this;
-            }
-
-            const_reverse_iterator operator--(int) {
-                const_reverse_iterator tmp = *this;
-                ++current;
-                return tmp;
-            }
-
-            reference operator[](difference_type n) const {
-                return current[-n - 1];
-            }
-
-            const_reverse_iterator& operator+=(difference_type n) {
-                current -= n;
-                return *this;
-            }
-
-            const_reverse_iterator operator+(difference_type n) const {
-                const_reverse_iterator tmp = *this;
-                tmp += n;
-                return tmp;
-            }
-
-            const_reverse_iterator& operator-=(difference_type n) {
-                current += n;
-                return *this;
-            }
-
-            const_reverse_iterator operator-(difference_type n) const {
-                const_reverse_iterator tmp = *this;
-                tmp -= n;
-                return tmp;
-            }
-
-            difference_type operator-(const const_reverse_iterator& other) const {
-                return other.current - current;
-            }
-
-            Iterator base() const { return current; }
-
-        private:
-            Iterator current;
-        };
 
     #endif
     }
