@@ -5,7 +5,7 @@
         #include <cstddef>
         #include <cstdint>
     #else
-        #include <cstddef.h>
+        #include <stddef.h>
         #include <stdint.h>
     #endif
 
