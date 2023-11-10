@@ -332,7 +332,7 @@
                         //! Constructs the container with the copy of the contents of other
                         //! @tparam other another container to be used as source to initialize the elements of the container with
                         
-                            vector(const vector<T>& other) : vector(){
+                            vector(const vector<value_type, allocator_type>& other) : vector(){
 
                                 resize(other.size());
 
