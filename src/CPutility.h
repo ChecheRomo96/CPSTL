@@ -23,13 +23,15 @@
         template <class T> 
         void swap (T& a, T& b){
           T c(cpstd::move(a)); 
-          a=cpstd::move(b); 
-          b=cpstd::move(c);
+          a = cpstd::move(b); 
+          b = cpstd::move(c);
         }
 
         template <class T, size_t N> 
         void swap (T (&a)[N], T (&b)[N]){
-          for (size_t i = 0; i<N; ++i) swap (a[i],b[i]);
+            for (size_t i = 0; i<N; ++i){
+                swap (a[i],b[i]);
+            }
         }
 
     }
