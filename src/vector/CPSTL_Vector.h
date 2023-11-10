@@ -47,7 +47,7 @@
                             using value_type = T;
                             using allocator_type = Alloc;
                             using reference = value_type&;
-                            using const_reference = const reference;
+                            using const_reference = const_reference;
                             using pointer = typename cpstd::allocator_traits<allocator_type>::pointer;
                             using const_pointer = typename cpstd::allocator_traits<allocator_type>::const_pointer;
                         //
@@ -376,7 +376,7 @@
                         //! @tparam new_size New size of the container.
                         //! @tparam value The value to initialize the new elements with.
                          
-                            void resize(size_type new_size, const reference value = T()){
+                            void resize(size_type new_size, const_reference value = T()){
                                 if (new_size < _Size) {
                                     // Destruct elements if resizing to a smaller size
                                     for (size_type i = new_size; i < _Size; ++i) {
@@ -494,7 +494,7 @@
                             //! Similar to the at() function, it might cause undefined behavior if the position is out of the vector's size bounds.
                             //! @param position Position of the element to fetch.
 
-                                const reference operator[](size_type position) const {
+                                const_reference operator[](size_type position) const {
                                     return _Buffer[position];
                                 }
                             //
@@ -527,7 +527,7 @@
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             //! @brief Access element
                             //!
-                            //! Returns a const reference to the element at position n in the vector.
+                            //! Returns a const_reference to the element at position n in the vector.
                             //! The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it 
                             //! is not (i.e., if n is greater than, or equal to, its size). This is in contrast with member operator[], that does not check against bounds.
                             //! @tparam position Position of an element in the container.
@@ -535,7 +535,7 @@
                             //! Notice that the first element has a position of 0 (not 1).\n
                             //! Member type size_type is an unsigned integral type.\n
 
-                                const reference at(size_type position) const {
+                                const_reference at(size_type position) const {
                                 #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
                                     if(position >= _Size){
                                         throw cpstd::out_of_range("Index requested on subscript array does not exists");
@@ -568,11 +568,11 @@
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             //! @brief Access first element 
                             //!
-                            //! Returns a const reference to the first element in the vector.\n
-                            //! Unlike member vector::begin, which returns an const_iterator to this same element, this function returns a direct const reference.\n
+                            //! Returns a const_reference to the first element in the vector.\n
+                            //! Unlike member vector::begin, which returns an const_iterator to this same element, this function returns a direct const_reference.\n
                             //! Calling this function on an empty container causes undefined behavior.
 
-                                const reference front() const {
+                                const_reference front() const {
                                     return _Buffer[0];
                                 }
                             //
@@ -595,11 +595,11 @@
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             //! @brief Access first element 
                             //!
-                            //! Returns a const reference to the last element in the vector.\n
-                            //! Unlike member vector::end, which returns an const_iterator to this same element, this function returns a direct const reference.\n
+                            //! Returns a const_reference to the last element in the vector.\n
+                            //! Unlike member vector::end, which returns an const_iterator to this same element, this function returns a direct const_reference.\n
                             //! Calling this function on an empty container causes undefined behavior.
 
-                                const reference back() const {
+                                const_reference back() const {
                                     return _Buffer[_Size-1];
                                 }
                             //
@@ -644,7 +644,7 @@
                             //! @param n   New size for the container.
                             //! @param val Value to fill the container with. Each of the 'n' elements in the container will be initialized to a copy of this value.
                                 
-                                void assign(size_type n, const reference val) {
+                                void assign(size_type n, const_reference val) {
                                     resize(n);
                                     for (size_type i = 0; i < size(); i++) {
                                         _Buffer[i] = val;
@@ -676,7 +676,7 @@
                             //!
                             //! @param value The value to be added at the end of the container.
 
-                                void push_back(const reference value){
+                                void push_back(const_reference value){
                                     resize(size() + 1);
                                     _Buffer[_Size-1] = value;
                                 }
@@ -716,7 +716,7 @@
                         // insert
 
 
-                            iterator insert(const_iterator position, const reference val) {
+                            iterator insert(const_iterator position, const_reference val) {
                                 size_type index = position - _Buffer;
                                 resize(size() + 1);
 
@@ -742,7 +742,7 @@
                                 return _Buffer + index;
                             }
 
-                            iterator insert(const_iterator position, size_type n, const reference val){
+                            iterator insert(const_iterator position, size_type n, const_reference val){
                                 size_type index = position - _Buffer;
                                 resize(_Size + n);
 
