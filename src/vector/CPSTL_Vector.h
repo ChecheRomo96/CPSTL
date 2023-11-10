@@ -6,7 +6,7 @@
     #include <CPinitializer_list.h>
     #include <CPiterator.h>
     #include <CPmemory.h>
-    #include <CPutility.h>
+    #include <CPutilityhit.h>
 
     #if defined CPSTL_USING_STL
         #include <iostream>
@@ -18,6 +18,19 @@
     
     namespace cpstd {
 
+        class vector;
+
+        template<typename T>
+        void swap(cpstd::vector<T>& lhs, cpstd::vector<T>& rhs) {
+        #if defined CPSTL_USING_STL
+            std::swap(lhs,rhs);
+        #else
+            cpstd::swap(lhs._Size, rhs._Size);
+            cpstd::swap(lhs._Capacity, rhs._Capacity);
+            cpstd::swap(lhs._Buffer, rhs._Buffer);
+            cpstd::swap(lhs._Alloc, rhs._Alloc);
+        #endif
+        }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //! @brief Cross Platform Vector class
@@ -35,7 +48,7 @@
                 template <class T, class Alloc = std::allocator<T>>
                 using vector = std::vector<T, Alloc> ;
             #else
-                template <typename T, typename Alloc = cpstd::allocator<T>>
+                template <class T, class Alloc = std::allocator<T>>
                 class  vector{
                 public:
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1163,17 +1176,7 @@
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        template<typename T>
-        void swap(cpstd::vector<T>& lhs, cpstd::vector<T>& rhs) {
-        #if defined CPSTL_USING_STL
-            std::swap(lhs,rhs);
-        #else
-            cpstd::swap(lhs._Size, rhs._Size);
-            cpstd::swap(lhs._Capacity, rhs._Capacity);
-            cpstd::swap(lhs._Buffer, rhs._Buffer);
-            cpstd::swap(lhs._Alloc, rhs._Alloc);
-        #endif
-        }
+        
     }
 
 
