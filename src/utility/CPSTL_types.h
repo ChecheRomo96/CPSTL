@@ -31,7 +31,7 @@
 
         using size_t = ::size_t;
         using ptrdiff_t = ::ptrdiff_t;
-        constexpr decltype(nullptr) nullptr = nullptr;
+        constexpr decltype(nullptr) nullptr = 0;
         using nullptr_t = decltype(nullptr);
 
         using uint8_t = ::uint8_t;
