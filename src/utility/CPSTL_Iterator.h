@@ -163,42 +163,42 @@
         class const_iterator {
         public:
             using iterator_type = Iterator;
-            using iterator_category = typename Iterator::iterator_category;
-            using value_type = typename Iterator::value_type;
-            using difference_type = typename Iterator::difference_type;
-            using pointer = const value_type*;
-            using reference = const value_type&;
+            using iterator_category = iterator_traits<Iterator>::iterator_category;
+            using value_type = iterator_traits<Iterator>::value_type;
+            using difference_type = iterator_traits<Iterator>::difference_type;
+            using pointer = iterator_traits<Iterator>::pointer;
+            using reference = iterator_traits<Iterator>::reference;
 
 
             // Constructor
-            const_iterator(pointer ptr) : ptr_(ptr) {}
+            const_iterator(iterator_type it) : current(it) {}
 
             // Dereference operator
             reference operator*() const {
-                return *ptr_;
+                return *current;
             }
 
             // Arrow operator
             pointer operator->() const {
-                return ptr_;
+                return current;
             }
 
             // Prefix increment operator (++it)
             const_iterator& operator++() {
-                ++ptr_;
+                ++current;
                 return *this;
             }
 
             // Postfix increment operator (it++)
             const_iterator operator++(int) {
                 const_iterator temp = *this;
-                ++ptr_;
+                ++current;
                 return temp;
             }
 
             // Equality operator
             bool operator==(const const_iterator& other) const {
-                return ptr_ == other.ptr_;
+                return current == other.current;
             }
 
             // Inequality operator
@@ -206,18 +206,18 @@
                 return !(*this == other);
             }
         private:
-            pointer ptr_;
+            iterator_type current;
         };
 
         template <typename Iterator>
         class reverse_iterator {
         public:
             using iterator_type = Iterator;
-            using iterator_category = typename Iterator::iterator_category;
-            using value_type = typename Iterator::value_type;
-            using difference_type = typename Iterator::difference_type;
-            using pointer = const value_type*;
-            using reference = const value_type&;
+            using iterator_category = iterator_traits<Iterator>::iterator_category;
+            using value_type = iterator_traits<Iterator>::value_type;
+            using difference_type = iterator_traits<Iterator>::difference_type;
+            using pointer = iterator_traits<Iterator>::pointer;
+            using reference = iterator_traits<Iterator>::reference;
 
             reverse_iterator() = default;
             explicit reverse_iterator(iterator_type it) : current(it) {}
@@ -318,7 +318,7 @@
         };
 
         template <typename Iterator>
-        using const_reverse_iterator = cpstd::reverse_iterator<Iterator>;
+        using const_reverse_iterator = cpstd::reverse_iterator<cpstd::const_iterator<Iterator>>;
 
 
     #endif
