@@ -364,9 +364,9 @@
                         //! @tparam len number of elements to copy
                         
                             vector(vector<T>&& source) noexcept: vector(){
-                                std::swap(_Buffer, source._Buffer);
-                                std::swap(_Size, source._Size);
-                                std::swap(_Capacity, source._Capacity);
+                                cpstd::swap(_Buffer, source._Buffer);
+                                cpstd::swap(_Size, source._Size);
+                                cpstd::swap(_Capacity, source._Capacity);
                             }
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
