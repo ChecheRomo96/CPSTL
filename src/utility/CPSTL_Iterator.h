@@ -163,11 +163,11 @@
         class const_iterator {
         public:
             using iterator_type = Iterator;
-            using iterator_category = typename iterator_traits<Iterator>::iterator_category;
-            using value_type = typename iterator_traits<Iterator>::value_type;
-            using difference_type = typename iterator_traits<Iterator>::difference_type;
-            using pointer = typename iterator_traits<Iterator>::pointer;
-            using reference = typename iterator_traits<Iterator>::reference;
+            using const_iterator::iterator_category = typename iterator_traits<Iterator>::iterator_category;
+            using const_iterator::value_type = typename iterator_traits<Iterator>::value_type;
+            using const_iterator::difference_type = typename iterator_traits<Iterator>::difference_type;
+            using const_iterator::pointer = typename iterator_traits<Iterator>::pointer;
+            using const_iterator::reference = typename iterator_traits<Iterator>::reference;
 
 
             // Constructor
@@ -213,11 +213,11 @@
         class reverse_iterator {
         public:
             using iterator_type = Iterator;
-            using iterator_category typename iterator_traits<Iterator>::iterator_category;
-            using value_type typename iterator_traits<Iterator>::value_type;
-            using difference_type typename iterator_traits<Iterator>::difference_type;
-            using pointer typename iterator_traits<Iterator>::pointer;
-            using reference typename iterator_traits<Iterator>::reference;
+            using reverse_iterator::iterator_category typename iterator_traits<Iterator>::iterator_category;
+            using reverse_iterator::value_type typename iterator_traits<Iterator>::value_type;
+            using reverse_iterator::difference_type typename iterator_traits<Iterator>::difference_type;
+            using reverse_iterator::pointer typename iterator_traits<Iterator>::pointer;
+            using reverse_iterator::reference typename iterator_traits<Iterator>::reference;
 
             reverse_iterator() = default;
             explicit reverse_iterator(iterator_type it) : current(it) {}
