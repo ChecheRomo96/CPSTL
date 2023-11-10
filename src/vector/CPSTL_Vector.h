@@ -1063,9 +1063,7 @@
                         //! @param x Vector to swap with.
                             
                             friend void swap (vector<value_type, allocator_type>& x){
-                                cpstd::swap(_Buffer, x._Buffer);
-                                cpstd::swap(_Size, x._Size);
-                                cpstd::swap(_Capacity, x._Capacity);
+                                swap(x);
                             }
                         
                         //
