@@ -13,11 +13,11 @@
         class reverse_iterator {
         public:
             using iterator_type = Iterator;
-            using iterator_category = typename std::iterator_traits<iterator_type>::iterator_category;
-            using value_type = typename std::iterator_traits<iterator_type>::value_type;
-            using difference_type = typename std::iterator_traits<iterator_type>::difference_type;
-            using pointer = typename std::iterator_traits<iterator_type>::pointer;
-            using reference = typename std::iterator_traits<iterator_type>::reference;
+            using iterator_category = typename cpstd::iterator_traits<iterator_type>::iterator_category;
+            using value_type = typename cpstd::iterator_traits<iterator_type>::value_type;
+            using difference_type = typename cpstd::iterator_traits<iterator_type>::difference_type;
+            using pointer = typename cpstd::iterator_traits<iterator_type>::pointer;
+            using reference = typename cpstd::iterator_traits<iterator_type>::reference;
 
             reverse_iterator() = default;
             explicit reverse_iterator(iterator_type it) : current(it) {}
