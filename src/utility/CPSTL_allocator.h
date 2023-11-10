@@ -99,7 +99,7 @@
                 template<typename... Args>
                 void construct(pointer ptr, Args&&... args) {
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
-                    new (ptr) T(std::forward<Args>(args)...);
+                    new (ptr) T(cpstd::forward<Args>(args)...);
                 #elif defined(CPSTL_USING_C_ALLOCATION)
                     // Using constructor directly (avoiding new)
                     ::new (static_cast<void*>(ptr)) T(cpstd::forward<Args>(args)...);
