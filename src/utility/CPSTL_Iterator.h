@@ -62,13 +62,8 @@
         }
 
         template<typename T>
-        using const_iterator = std::const_iterator<T>;
-
-        template<typename T>
         using reverse_iterator = std::reverse_iterator<T>;
 
-        template <typename Iterator>
-        using const_reverse_iterator = std::reverse_iterator<Iterator>;
 
     #else
         struct input_iterator_tag {};
@@ -160,64 +155,14 @@
         }
 
         template <typename Iterator>
-        class const_iterator {
-        public:
-            using iterator_type = Iterator;
-            using iterator_category = typename iterator_traits<iterator_type>::iterator_category;
-            using value_type = typename iterator_traits<iterator_type>::value_type;
-            using difference_type = typename iterator_traits<iterator_type>::difference_type;
-            using pointer = typename iterator_type::value_type*;
-            using reference = typename iterator_type::value_type&;
-
-
-            // Constructor
-            const_iterator(iterator_type it) : current(it) {}
-
-            // Dereference operator
-            reference operator*() const {
-                return *current;
-            }
-
-            // Arrow operator
-            pointer operator->() const {
-                return current;
-            }
-
-            // Prefix increment operator (++it)
-            const_iterator& operator++() {
-                ++current;
-                return *this;
-            }
-
-            // Postfix increment operator (it++)
-            const_iterator operator++(int) {
-                const_iterator temp = *this;
-                ++current;
-                return temp;
-            }
-
-            // Equality operator
-            bool operator==(const const_iterator& other) const {
-                return current == other.current;
-            }
-
-            // Inequality operator
-            bool operator!=(const const_iterator& other) const {
-                return !(*this == other);
-            }
-        private:
-            iterator_type current;
-        };
-
-        template <typename Iterator>
         class reverse_iterator {
         public:
             using iterator_type = Iterator;
-            using iterator_category = typename iterator_traits<Iterator>::iterator_category;
-            using value_type = typename iterator_traits<Iterator>::value_type;
-            using difference_type = typename iterator_traits<Iterator>::difference_type;
-            using pointer = typename iterator_traits<Iterator>::pointer;
-            using reference = typename iterator_traits<Iterator>::reference;
+            using iterator_category typename iterator_traits<Iterator>::iterator_category;
+            using value_type typename iterator_traits<Iterator>::value_type;
+            using difference_type typename iterator_traits<Iterator>::difference_type;
+            using pointer typename iterator_traits<Iterator>::pointer;
+            using reference typename iterator_traits<Iterator>::reference;
 
             reverse_iterator() = default;
             explicit reverse_iterator(iterator_type it) : current(it) {}
@@ -317,8 +262,6 @@
             iterator_type current;
         };
 
-        template <typename Iterator>
-        using const_reverse_iterator = cpstd::reverse_iterator<cpstd::const_iterator<Iterator>>;
 
 
     #endif
