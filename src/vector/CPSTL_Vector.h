@@ -53,8 +53,9 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Iterator Types
 
+                            using iterator = typename cpstd::allocator_traits<allocator_type>::pointer;
                             using difference_type = typename cpstd::iterator_traits<iterator>::difference_type;
-                            using size_type = typename difference_type::value_type;
+                            using size_type = typename difference_type::value_type;                        
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //
