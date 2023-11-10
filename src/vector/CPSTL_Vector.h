@@ -1033,7 +1033,7 @@
                                     }
 
                                     // Construct the new element in place at the end of the vector
-                                    _Alloc.construct(_Buffer + _Size, std::forward<Args>(args)...);
+                                    _Alloc.construct(_Buffer + _Size, cpstd::forward<Args>(args)...);
 
                                     // Increment the size
                                     ++_Size;
