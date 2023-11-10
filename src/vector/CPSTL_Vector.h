@@ -47,7 +47,7 @@
                             using value_type = T;
                             using allocator_type = Alloc;
                             using reference = value_type&;
-                            using const_reference = const_reference;
+                            using const_reference = const value_type&;
                             using pointer = typename cpstd::allocator_traits<allocator_type>::pointer;
                             using const_pointer = typename cpstd::allocator_traits<allocator_type>::const_pointer;
                         //
