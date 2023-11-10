@@ -92,13 +92,14 @@
                         ++it;
                         --n;
                     }
-                    else {
-                        while (n < 0) {
-                            --it;
-                            ++n;
-                        }
+                }
+                else {
+                    while (n < 0) {
+                        --it;
+                        ++n;
                     }
                 }
+                
             }
             else if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::forward_iterator_tag> || 
                 cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::input_iterator_tag>) {
