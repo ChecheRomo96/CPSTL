@@ -26,6 +26,9 @@
         template <typename T>
         struct is_object : cpstd::integral_constant<bool,
             !cpstd::is_function<T>::value && !cpstd::is_void<T>::value && !cpstd::is_reference<T>::value> {};
+        
+        template <typename T>
+        struct is_arithmetic : cpstd::integral_constant<bool, cpstd::is_integral<T>::value || cpstd::is_floating_point<T>::value> {};
 
         template <typename T>
         struct is_scalar : cpstd::integral_constant<bool,
@@ -40,8 +43,6 @@
         template<class T>
         struct is_compound : cpstd::integral_constant <bool, !cpstd::is_fundamental<T>::value> {};
 
-        template <typename T>
-        struct is_arithmetic : cpstd::integral_constant<bool, cpstd::is_integral<T>::value || cpstd::is_floating_point<T>::value> {};
 
     #endif
 
