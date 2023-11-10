@@ -7,7 +7,7 @@
     #include <gtest/gtest.h>
 #endif
 
-#include <CPvector>
+#include <CPvector.h>
 
 #if defined(CPSTL_VECTOR_ENABLED)
     //////////////////////////////////////////////////////////////////////////////////
