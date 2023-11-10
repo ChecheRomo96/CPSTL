@@ -1060,7 +1060,7 @@
                             //! It is important that the class T has defined == and != operators.
                             //! @tparam source Another container of the same type.
                              
-                                friend bool operator==(const cpstd::vector<T, Alloc>& lhs, const cpstd::vector<T, Alloc>& rhs){
+                                friend bool operator==(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
                                     if( lhs.size() == rhs.size() ){
                                         for(size_type i = 0; i < lhs.size(); i++){
                                             if(lhs[i] != rhs[i]){
@@ -1081,7 +1081,7 @@
                             //! It is important that the class T has defined == and != operators.
                             //! @tparam source Another container of the same type.
                             
-                                friend bool operator!=(const cpstd::vector<T, Alloc>& lhs, const cpstd::vector<T, Alloc>& rhs){
+                                friend bool operator!=(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
                                     return !(lhs == rhs);
                                 }
                             //
@@ -1091,7 +1091,7 @@
                             //! It is important that the class T has defined < operator.
                             //! @tparam source Another container of the same type.
                             
-                                friend bool operator<(const cpstd::vector<T, Alloc>& lhs, const cpstd::vector<T, Alloc>& rhs){
+                                friend bool operator<(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
                                     size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
 
                                     for(size_type i = 0; i < last; i++){
@@ -1108,7 +1108,7 @@
                             //! It is important that the class T has defined < operator.
                             //! @tparam source Another container of the same type.
                             
-                                friend bool operator<=(const cpstd::vector<T, Alloc>& lhs, const cpstd::vector<T, Alloc>& rhs){
+                                friend bool operator<=(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
                                     size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
 
                                     for (size_type i = 0; i < last; i++) {
@@ -1125,7 +1125,7 @@
                             //! It is important that the class T has defined > operator.
                             //! @tparam source Another container of the same type.
                             
-                                friend bool operator>(const cpstd::vector<T, Alloc>& lhs, const cpstd::vector<T, Alloc>& rhs){
+                                friend bool operator>(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
                                     size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
 
                                     for(size_type i = 0; i < last; i++){
@@ -1142,7 +1142,7 @@
                             //! It is important that the class T has defined > operator.
                             //! @tparam source Another container of the same type.
                             
-                                friend bool operator>=(const cpstd::vector<T, Alloc>& lhs, const cpstd::vector<T, Alloc>& rhs){
+                                friend bool operator>=(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
                                     size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
 
                                     for (size_type i = 0; i < last; i++) {
@@ -1162,7 +1162,7 @@
                         //! @tparam vector Another vector of the same type.
                         //! @param x Vector to swap with.
                             
-                            void swap (vector& x){
+                            void swap (vector<value_type, allocator_type>& x){
                                 cpstd::swap(_Buffer, x._Buffer);
                                 cpstd::swap(_Size, x._Size);
                                 cpstd::swap(_Capacity, x._Capacity);
