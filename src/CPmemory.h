@@ -8,10 +8,10 @@
 
         template <typename InputIt, typename NoThrowForwardIt>
         NoThrowForwardIt uninitialized_move(InputIt first, InputIt last, NoThrowForwardIt d_first) {
-            using ValueType = typename std::iterator_traits<NoThrowForwardIt>::value_type;
+            using ValueType = typename cpstd::iterator_traits<NoThrowForwardIt>::value_type;
 
             while (first != last) {
-                ::new (std::addressof(*d_first)) ValueType(std::move(*first));
+                ::new (cpstd::addressof(*d_first)) ValueType(cpstd::move(*first));
                 ++first;
                 ++d_first;
             }
