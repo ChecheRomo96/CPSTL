@@ -688,7 +688,7 @@
                             //! The class used must implement the proper move semantics in order for this method to be able to call a move assignment operator.
                             //! @tparam value the value of the element to append.
 
-                                void push_back(reference& Rvalue){
+                                void push_back(value_type&& Rvalue){
                                     resize(size() + 1);
                                     _Buffer[_Size-1] = cpstd::move(Rvalue);
                                 }
@@ -729,7 +729,7 @@
                                 return _Buffer + index;
                             }
 
-                            iterator insert(const_iterator position, reference& val){
+                            iterator insert(const_iterator position, value_type&& val){
                                 size_type index = position - _Buffer;
                                 resize(size() + 1);
 
@@ -1077,7 +1077,7 @@
         //!
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            
+
         template <class T, class Alloc>
         void swap(vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) {
             lhs.swap(rhs);
