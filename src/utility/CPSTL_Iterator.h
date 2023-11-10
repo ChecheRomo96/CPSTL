@@ -171,7 +171,7 @@
 
 
             // Constructor
-            ConstIterator(pointer ptr) : ptr_(ptr) {}
+            const_iterator(pointer ptr) : ptr_(ptr) {}
 
             // Dereference operator
             reference operator*() const {
@@ -184,25 +184,25 @@
             }
 
             // Prefix increment operator (++it)
-            ConstIterator& operator++() {
+            const_iterator& operator++() {
                 ++ptr_;
                 return *this;
             }
 
             // Postfix increment operator (it++)
-            ConstIterator operator++(int) {
-                ConstIterator temp = *this;
+            const_iterator operator++(int) {
+                const_iterator temp = *this;
                 ++ptr_;
                 return temp;
             }
 
             // Equality operator
-            bool operator==(const ConstIterator& other) const {
+            bool operator==(const const_iterator& other) const {
                 return ptr_ == other.ptr_;
             }
 
             // Inequality operator
-            bool operator!=(const ConstIterator& other) const {
+            bool operator!=(const const_iterator& other) const {
                 return !(*this == other);
             }
         private:
