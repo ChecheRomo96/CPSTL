@@ -13,13 +13,14 @@
 
     namespace cpstd{
         #ifdef CPSTL_USING_STL
-            template <typename T>
-            using allocator = std::allocator<T>;
 
             template <typename T>
             constexpr T* addressof(T& arg) noexcept {
                 return std::addressof(arg);
             }
+
+            template <typename T>
+            using allocator = std::allocator<T>;
 
             template <typename T>
             using allocator_traits = std::allocator_traits<T>;
@@ -118,6 +119,44 @@
                 }
             };
 
+
+            template <typename Alloc>
+            struct allocator_traits {
+                using allocator_type = Alloc;
+                using value_type = typename Alloc::value_type;
+                using pointer = typename Alloc::pointer;
+                using const_pointer = typename Alloc::const_pointer;
+                using reference = typename Alloc::reference;
+                using const_reference = typename Alloc::const_reference;
+                using size_type = typename Alloc::size_type;
+                using difference_type = typename Alloc::difference_type;
+
+                template <typename U>
+                struct rebind {
+                    using other = Alloc<U>;
+                };
+
+                static pointer allocate(allocator_type& alloc, size_type n) {
+                    return alloc.allocate(n);
+                }
+
+                static void deallocate(allocator_type& alloc, pointer p, size_type n) {
+                    alloc.deallocate(p, n);
+                }
+
+                template <typename... Args>
+                static void construct(allocator_type& alloc, pointer p, Args&&... args) {
+                    alloc.construct(p, std::forward<Args>(args)...);
+                }
+
+                static void destroy(allocator_type& alloc, pointer p) {
+                    alloc.destroy(p);
+                }
+
+                static size_type max_size(const allocator_type& alloc) noexcept {
+                    return alloc.max_size();
+                }
+            };
 
         #endif
     }
