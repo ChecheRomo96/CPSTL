@@ -50,7 +50,7 @@
                 template <class T, class Alloc = std::allocator<T>>
                 using vector = std::vector<T, Alloc> ;
             #else
-                template <class T, class Alloc = std::allocator<T>>
+                template <class T, class Alloc = cpstd::allocator<T>>
                 class  vector{
                 public:
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
