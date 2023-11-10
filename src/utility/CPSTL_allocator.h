@@ -146,7 +146,7 @@
 
                 template <typename... Args>
                 static void construct(allocator_type& alloc, pointer p, Args&&... args) {
-                    alloc.construct(p, std::forward<Args>(args)...);
+                    alloc.construct(p, cpstd::forward<Args>(args)...);
                 }
 
                 static void destroy(allocator_type& alloc, pointer p) {
