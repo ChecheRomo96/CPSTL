@@ -556,13 +556,13 @@
                          
                             void shrink_to_fit(){
                                 if (_Capacity > _Size) {
-                                    pointer newBuffer = allocator.allocate(_Size);
+                                    pointer newBuffer = _Alloc.allocate(_Size);
                                     if (newBuffer) {
                                         cpstd::uninitialized_move(_Buffer, _Buffer + _Size, newBuffer);
                                         for (size_type i = 0; i < _Size; ++i) {
                                             _Buffer[i].~T();
                                         }
-                                        allocator.deallocate(_Buffer, _Capacity);
+                                        _Alloc.deallocate(_Buffer, _Capacity);
                                         _Buffer = newBuffer;
                                         _Capacity = _Size;
                                     }
