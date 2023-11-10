@@ -4,6 +4,7 @@
     #include <CPSTL_BuildSettings.h>
     #include <CPmemory.h>
     #include <CPlimits.h>
+    #include "CPSTL_types.h"
 
     #ifdef CPSTL_USING_STL
         #include <memory>
