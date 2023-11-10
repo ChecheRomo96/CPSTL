@@ -18,6 +18,7 @@
     
     namespace cpstd {
 
+        template <class , class>
         class vector;
 
         template<typename T>
