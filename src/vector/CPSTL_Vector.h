@@ -55,7 +55,11 @@
 
                             using iterator = typename cpstd::allocator_traits<allocator_type>::pointer;
                             using difference_type = typename cpstd::iterator_traits<iterator>::difference_type;
-                            using size_type = typename difference_type::value_type;                        
+                            using size_type = typename difference_type::value_type;
+
+                            using reverse_iterator = cpstd::const_iterator<iterator>;
+                            using reverse_iterator = cpstd::reverse_iterator<iterator>;
+                            using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;                      
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //
@@ -79,85 +83,6 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // iterator class and const_iterator class implementations
 
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            // iterator 
-
-                                struct  iterator {
-                                private:
-                                    T* ptr;
-                                public:
-                                    using iterator_category = cpstd::random_access_iterator_tag;
-                                    using value_type = T;
-                                    using pointer = T*;
-                                    using reference = T&;
-                                    using difference_type = std::ptrdiff_t;
-
-                                    iterator(T* p) : ptr(p) {}
-
-                                    // Increment and decrement operators (++ and --)
-                                    iterator& operator++() {
-                                        ptr++;
-                                        return *this;
-                                    }
-
-                                    iterator& operator--() {
-                                        ptr--;
-                                        return *this;
-                                    }
-
-                                    iterator operator++(int) {
-                                        iterator temp = *this;
-                                        ++(*this);
-                                        return temp;
-                                    }
-
-                                    iterator operator--(int) {
-                                        iterator temp = *this;
-                                        --(*this);
-                                        return temp;
-                                    }
-
-                                    // Random access operations: +, -, +=, -=
-                                    iterator& operator+=(difference_type n) {
-                                        ptr += n;
-                                        return *this;
-                                    }
-
-                                    iterator& operator-=(difference_type n) {
-                                        ptr -= n;
-                                        return *this;
-                                    }
-
-                                    T& operator[](difference_type n) const {
-                                        return *(ptr + n);
-                                    }
-
-                                    // Comparison operators
-                                    bool operator==(const iterator& other) const {
-                                        return ptr == other.ptr;
-                                    }
-
-                                    bool operator!=(const iterator& other) const {
-                                        return !(*this == other);
-                                    }
-
-                                    bool operator<(const iterator& other) const {
-                                        return ptr < other.ptr;
-                                    }
-
-                                    bool operator>(const iterator& other) const {
-                                        return ptr > other.ptr;
-                                    }
-
-                                    bool operator<=(const iterator& other) const {
-                                        return ptr <= other.ptr;
-                                    }
-
-                                    bool operator>=(const iterator& other) const {
-                                        return ptr >= other.ptr;
-                                    }
-                                };
-                            //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             // const_iterator 
                             
@@ -239,8 +164,7 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Reverse Iterators aliases 
                             
-                            using reverse_iterator = cpstd::reverse_iterator<iterator>;
-                            using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;
+                           
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         //! @name Constructors, Destructor, and Assignment Operator
