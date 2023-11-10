@@ -67,9 +67,9 @@
 
                 pointer allocate(size_type n, cpstd::allocator<void>::const_pointer hint = 0) {
                     (void)hint;
-                #if CPSTL_USING_CPP_ALLOCATION
+                #if defined(CPSTL_USING_CPP_ALLOCATION)
                     return static_cast<pointer>(::operator new(n * sizeof(T)));
-                #elif CPSTL_USING_C_ALLOCATION
+                #elif defined(CPSTL_USING_C_ALLOCATION)
                     return static_cast<pointer>(calloc(n , sizeof(T)));
                 #else
                     // Unknown allocation method
@@ -78,9 +78,9 @@
                 }
 
                 void deallocate(pointer ptr, size_type n) {
-                #if CPSTL_USING_CPP_ALLOCATION
+                #if defined(CPSTL_USING_CPP_ALLOCATION)
                     ::operator delete(ptr);
-                #elif CPSTL_USING_C_ALLOCATION
+                #elif defined(CPSTL_USING_C_ALLOCATION)
                     free(ptr);
                 #else
                     // Unknown deallocation method or error handling
@@ -95,15 +95,15 @@
 
                 template<typename... Args>
                 void construct(pointer ptr, Args&&... args) {
-                    #if CPSTL_USING_CPP_ALLOCATION
-                        new (ptr) T(std::forward<Args>(args)...);
-                    #elif CPSTL_USING_C_ALLOCATION
-                        // Using constructor directly (avoiding new)
-                        ::new (static_cast<void*>(ptr)) T(std::forward<Args>(args)...);
-                    #else
-                        // Unknown construction method or error handling
-                        #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
-                    #endif
+                #if defined(CPSTL_USING_CPP_ALLOCATION)
+                    new (ptr) T(std::forward<Args>(args)...);
+                #elif defined(CPSTL_USING_C_ALLOCATION)
+                    // Using constructor directly (avoiding new)
+                    ::new (static_cast<void*>(ptr)) T(std::forward<Args>(args)...);
+                #else
+                    // Unknown construction method or error handling
+                    #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
+                #endif
                 }
 
                 static void destroy(pointer ptr) {
