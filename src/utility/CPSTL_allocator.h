@@ -133,7 +133,7 @@
 
                 template <typename U>
                 struct rebind {
-                    using other = Alloc<U>;
+                    using other = typename Alloc::template rebind<U>::other;
                 };
 
                 static pointer allocate(allocator_type& alloc, size_type n) {
