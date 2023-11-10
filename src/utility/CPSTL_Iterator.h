@@ -99,7 +99,6 @@
                         ++n;
                     }
                 }
-                
             }
             else if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::forward_iterator_tag> || 
                 cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::input_iterator_tag>) {
@@ -158,11 +157,11 @@
         class const_reverse_iterator {
         public:
             using iterator_type = Iterator;
-            using iterator_category = typename std::iterator_traits<Iterator>::iterator_category;
-            using value_type = typename std::iterator_traits<Iterator>::value_type;
-            using difference_type = typename std::iterator_traits<Iterator>::difference_type;
-            using pointer = typename std::iterator_traits<Iterator>::pointer;
-            using reference = typename std::iterator_traits<Iterator>::reference;
+            using iterator_category = typename cpstd::iterator_traits<Iterator>::iterator_category;
+            using value_type = typename cpstd::iterator_traits<Iterator>::value_type;
+            using difference_type = typename cpstd::iterator_traits<Iterator>::difference_type;
+            using pointer = typename cpstd::iterator_traits<Iterator>::pointer;
+            using reference = typename cpstd::iterator_traits<Iterator>::reference;
 
             const_reverse_iterator() = default;
             explicit const_reverse_iterator(Iterator it) : current(it) {}
