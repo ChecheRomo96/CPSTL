@@ -61,6 +61,8 @@
             return std::end(c);
         }
 
+        template<typename T>
+        using const_iterator = std::const_iterator<T>;
 
         template<typename T>
         using reverse_iterator = std::reverse_iterator<T>;
@@ -157,6 +159,55 @@
             return c.end();
         }
 
+        template <typename T>
+        class const_iterator {
+        public:
+            using iterator_type = Iterator;
+            using iterator_category = typename cpstd::iterator_traits<iterator_type>::iterator_category;
+            using value_type = typename cpstd::iterator_traits<iterator_type>::value_type;
+            using difference_type = typename cpstd::iterator_traits<iterator_type>::difference_type;
+            using pointer = typename const cpstd::iterator_traits<iterator_type>::pointer;
+            using reference = typename const cpstd::iterator_traits<iterator_type>::reference;
+
+
+            // Constructor
+            ConstIterator(pointer ptr) : ptr_(ptr) {}
+
+            // Dereference operator
+            reference operator*() const {
+                return *ptr_;
+            }
+
+            // Arrow operator
+            pointer operator->() const {
+                return ptr_;
+            }
+
+            // Prefix increment operator (++it)
+            ConstIterator& operator++() {
+                ++ptr_;
+                return *this;
+            }
+
+            // Postfix increment operator (it++)
+            ConstIterator operator++(int) {
+                ConstIterator temp = *this;
+                ++ptr_;
+                return temp;
+            }
+
+            // Equality operator
+            bool operator==(const ConstIterator& other) const {
+                return ptr_ == other.ptr_;
+            }
+
+            // Inequality operator
+            bool operator!=(const ConstIterator& other) const {
+                return !(*this == other);
+            }
+        private:
+            pointer ptr_;
+        };
 
         template <typename Iterator>
         class reverse_iterator {
