@@ -12,7 +12,14 @@
         using numeric_limits = std::numeric_limits<T>;
 
     #else
-        #undef max
+        #ifdef max
+            #undef max
+        #endif 
+
+        #ifdef min
+            #undef min
+        #endif 
+
         enum float_round_style {
             round_indeterminate       = -1,
             round_toward_zero         =  0,
