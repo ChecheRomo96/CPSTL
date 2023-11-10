@@ -364,7 +364,7 @@
                         //! @tparam pointer location of the data to copy
                         //! @tparam len number of elements to copy
                         
-                            vector(vector<T>&& source) noexcept: vector(){
+                            vector(vector<value_type, allocator_type>&& source) noexcept: vector(){
                                 cpstd::swap(_Buffer, source._Buffer);
                                 cpstd::swap(_Size, source._Size);
                                 cpstd::swap(_Capacity, source._Capacity);
