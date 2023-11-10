@@ -4,6 +4,7 @@
     #include <CPSTL_BuildSettings.h>
     #include <CPmemory.h>
     #include <CPlimits.h>
+    #include <CPutility.h>
     #include "CPSTL_types.h"
 
     #ifdef CPSTL_USING_STL
@@ -101,7 +102,7 @@
                     new (ptr) T(std::forward<Args>(args)...);
                 #elif defined(CPSTL_USING_C_ALLOCATION)
                     // Using constructor directly (avoiding new)
-                    ::new (static_cast<void*>(ptr)) T(std::forward<Args>(args)...);
+                    ::new (static_cast<void*>(ptr)) T(cpstd::forward<Args>(args)...);
                 #else
                     // Unknown construction method or error handling
                     #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
