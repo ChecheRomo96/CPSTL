@@ -29,7 +29,4 @@
         }
     }
 
-
-    #include "utility/CPSTL_allocator.h"
-
 #endif//CPSTL_MEMORY_H
