@@ -57,7 +57,7 @@
                             using difference_type = typename cpstd::iterator_traits<iterator>::difference_type;
                             using size_type = typename difference_type::value_type;
 
-                            using reverse_iterator = cpstd::const_iterator<iterator>;
+                            using const_iterator = cpstd::const_iterator<iterator>;
                             using reverse_iterator = cpstd::reverse_iterator<iterator>;
                             using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;                      
                         //
