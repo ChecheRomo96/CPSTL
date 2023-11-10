@@ -9,9 +9,7 @@
         using float_denorm_style = std::float_denorm_style;
 
         template<class T> 
-        using numeric_limits = std::numeric_limits;
-
-        using numeric_limits<bool> = std::numeric_limits<bool>;
+        using numeric_limits = std::numeric_limits<T>;
 
     #else
         enum float_round_style {
