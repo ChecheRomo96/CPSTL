@@ -22,7 +22,9 @@
 
         template <class T> 
         void swap (T& a, T& b){
-          T c(std::move(a)); a=std::move(b); b=std::move(c);
+          T c(cpstd::move(a)); 
+          a=cpstd::move(b); 
+          b=cpstd::move(c);
         }
 
         template <class T, size_t N> 
@@ -32,7 +34,7 @@
 
     }
 
-    
+
     #include <utility/CPSTL_Move.h>
     #include <utility/CPSTL_Iterator.h>
 
