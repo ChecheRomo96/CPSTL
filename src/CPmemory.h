@@ -2,7 +2,8 @@
 #define CPSTL_MEMORY_H
 
     #include <CPSTL_BuildSettings.h>
-    
+    #include <utility/CPSTL_allocator.h>
+
     namespace cpstd{
 
         template <typename InputIt, typename NoThrowForwardIt>
