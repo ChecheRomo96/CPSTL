@@ -19,21 +19,6 @@
     
     namespace cpstd {
 
-        template <class , class>
-        class vector;
-
-        template <class T, class Alloc = cpstd::allocator<T>>
-        void swap(cpstd::vector<T, Alloc>& lhs, cpstd::vector<T, Alloc>& rhs) {
-        #if defined CPSTL_USING_STL
-            std::swap(lhs,rhs);
-        #else
-            cpstd::swap(lhs._Size, rhs._Size);
-            cpstd::swap(lhs._Capacity, rhs._Capacity);
-            cpstd::swap(lhs._Buffer, rhs._Buffer);
-            cpstd::swap(lhs._Alloc, rhs._Alloc);
-        #endif
-        }
-
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //! @brief Cross Platform Vector class
         //!
@@ -845,11 +830,10 @@
                         //! @tparam index_a the value of the first element to swap.
 
                             void swap(vector<value_type, allocator_type>& x) noexcept {
-                                using cpstd::swap; // Enable ADL
-                                cpstd::swap(_Alloc, x._Alloc);
-                                cpstd::swap(_Buffer, x._Buffer);
-                                cpstd::swap(_Size, x._Size);
-                                cpstd::swap(_Capacity, x._Capacity);
+                                swap(_Size, x._Size);
+                                swap(_Capacity, x._Capacity);
+                                swap(_Buffer, x._Buffer);
+                                swap(_Alloc, x._Alloc);
                             }
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1093,7 +1077,11 @@
         //!
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+            
+        template <class T, class Alloc>
+        void swap(vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) {
+            lhs.swap(rhs);
+        }
         
     }
 
