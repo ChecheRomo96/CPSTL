@@ -489,7 +489,7 @@
                                         T* new_buffer = _Alloc.allocate(new_capacity);
                                         
                                         for (size_type i = 0; i < _Size; ++i) {
-                                            _Alloc.construct(&new_buffer[i], std::move(_Buffer[i])); // Move old elements to the new memory
+                                            _Alloc.construct(&new_buffer[i], cpstd::move(_Buffer[i])); // Move old elements to the new memory
                                             _Alloc.destroy(&_Buffer[i]);  // Destroy the old elements
                                         }
                                         _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
@@ -539,7 +539,7 @@
                                     // Reallocate memory if necessary
                                     pointer new_buffer = _Alloc.allocate(new_capacity);
                                     for (size_type i = 0; i < _Size; ++i) {
-                                        _Alloc.construct(&new_buffer[i], std::move(_Buffer[i]));  // Move old elements to the new memory
+                                        _Alloc.construct(&new_buffer[i], cpstd::move(_Buffer[i]));  // Move old elements to the new memory
                                         _Alloc.destroy(&_Buffer[i]);  // Destroy the old elements
                                     }
                                     _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
