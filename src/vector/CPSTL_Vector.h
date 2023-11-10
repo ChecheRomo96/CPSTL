@@ -53,13 +53,12 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Iterator Types
 
-                            using iterator = typename cpstd::allocator_traits<allocator_type>::pointer;
-                            using difference_type = typename cpstd::iterator_traits<iterator>::difference_type;
-                            using size_type = typename difference_type::value_type;
-
-                            using const_iterator = cpstd::const_iterator<iterator>;
-                            using reverse_iterator = cpstd::reverse_iterator<iterator>;
-                            using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;                      
+                            using iterator = T*;
+                            using const_iterator = const T*;
+                            using reverse_iterator = std::reverse_iterator<iterator>;
+                            using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+                            using difference_type = std::ptrdiff_t;
+                            using size_type = std::size_t;
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //
