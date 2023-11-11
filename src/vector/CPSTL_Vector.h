@@ -769,11 +769,11 @@
                                 resize(_Size + n);
 
                                 for (size_type i = _Size - 1; i >= index + n; --i) {
-                                    (*this)[i] = cpstd::move(_Buffer[i - n]);
+                                    _Buffer[i] = cpstd::move(_Buffer[i - n]);
                                 }
 
                                 for (size_type i = index; i < index + n; ++i) {
-                                    (*this)[i] = val;
+                                    _Buffer[i] = val;
                                 }
 
                                 return _Buffer + index;
@@ -802,7 +802,7 @@
                             }
 
                             iterator insert(const_iterator position, cpstd::initializer_list<T> il){
-                                size_type index = positionstion - _Buffer;
+                                size_type index = position - _Buffer;
                                 resize(size() + il.size());
 
                                 // Shift elements to make space for the new ones
