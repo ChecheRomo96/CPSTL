@@ -246,7 +246,7 @@
 
                             template <class InputIterator>  
                             vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
-
+                                assign(first, last);
                             }
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
