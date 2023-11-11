@@ -764,10 +764,10 @@
                                     (*this)[i] = cpstd::move(_Buffer[i-il.size()]);
                                 }
 
-                                for(size_type i = position; i < position+il.size(); i++){
-                                    (*this)[i] = *((il.begin()+(i-position)));
+                                size_type i = position;
+                                for (auto it = il.begin(); it != il.end(); ++it, ++i) {
+                                    (*this)[i] = *it;
                                 }
-                                return _Buffer + index;
                             }
                         // 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
