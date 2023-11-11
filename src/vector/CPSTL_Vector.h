@@ -663,12 +663,21 @@
                         // assign
 
 
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
+                            //!
+                            //! In the range version, the new contents are elements constructed from each of the elements in the range between first and last, in the same order.
+                            //!
+                            //! @param n   New size for the container.
+                            //! @param val Value to fill the container with. Each of the 'n' elements in the container will be initialized to a copy of this value.
+                                
                                 template <class InputIterator>  
                                 void assign (InputIterator first, InputIterator last){            
                                     clear();
                                     resize(cpstd::distance(first, last));
                                     cpstd::copy(first, last, _Buffer);
                                 }
+                            //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             //! @brief Assigns new contents to the container by initializing it with 'n' elements, each initialized to a copy of 'val'.
                             //!
@@ -747,7 +756,7 @@
                         // insert
 
 
-                            iterator insert(const_iterator position, const_reference val) {
+                            iterator insert(const_iterator position, const value_type& val) {
                                 size_type index = position - _Buffer;
                                 resize(size() + 1);
 
@@ -760,20 +769,7 @@
                                 return _Buffer + index;
                             }
 
-                            iterator insert(const_iterator position, value_type&& val){
-                                size_type index = position - _Buffer;
-                                resize(size() + 1);
-
-                                for (size_type i = _Size - 1; i > index; --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - 1]);
-                                }
-
-                                _Buffer[index] = cpstd::move(val);
-                                
-                                return _Buffer + index;
-                            }
-
-                            iterator insert(const_iterator position, size_type n, const_reference val){
+                            iterator insert(const_iterator position, size_type n, const value_type& val){
                                 size_type index = position - _Buffer;
                                 resize(_Size + n);
 
@@ -784,6 +780,28 @@
                                 for(size_type i = position; i < position+n; i++){
                                     (*this)[i] = val;
                                 }
+                                return _Buffer + index;
+                            }
+
+                            template <class InputIterator>
+                            iterator insert (const_iterator position, InputIterator first, InputIterator last){
+                                resize(std::distance(first, last));
+
+                                for (size_t i = 0; first != last; ++first, ++i) {
+                                    _Buffer[i] = *first;
+                                }
+                            }
+
+                            iterator insert(const_iterator position, value_type&& val){
+                                size_type index = position - _Buffer;
+                                resize(size() + 1);
+
+                                for (size_type i = _Size - 1; i > index; --i) {
+                                    _Buffer[i] = cpstd::move(_Buffer[i - 1]);
+                                }
+
+                                _Buffer[index] = cpstd::move(val);
+                                
                                 return _Buffer + index;
                             }
 
