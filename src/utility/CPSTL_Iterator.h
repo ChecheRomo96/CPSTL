@@ -140,7 +140,7 @@
             }
         }
 
-        // Overload for non-random access iterators
+        // Explicit specialization for non-random access iterators
         template <typename InputIt>
         typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, cpstd::input_iterator_tag) {
             typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
@@ -150,6 +150,17 @@
             }
             return count;
         }
+
+        template <typename InputIt>
+        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, cpstd::forward_iterator_tag) {
+            typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
+            while (first != last) {
+                ++first;
+                ++count;
+            }
+            return count;
+        }
+
         template <typename InputIt, typename Distance>
         InputIt next(InputIt it, Distance n) {
             advance(it, n);
