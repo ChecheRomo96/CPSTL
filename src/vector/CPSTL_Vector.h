@@ -662,6 +662,15 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // assign
 
+
+                                template <class InputIterator>  
+                                void assign (InputIterator first, InputIterator last){            
+                                    clear();
+                                    size_t count = std::distance(first, last);
+                                    _Buffer = allocate_memory(count);
+                                    cpstd::copy(first, last, _Buffer);
+                                    size_ = count;
+                                }
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             //! @brief Assigns new contents to the container by initializing it with 'n' elements, each initialized to a copy of 'val'.
                             //!
