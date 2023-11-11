@@ -72,7 +72,7 @@
                 Data[i] = i;
             }
 
-            cpstd::vector<uint8_t> myVector(std::begin(Data), std::end(Data));
+            cpstd::vector<uint8_t> myVector(Data, Data+sizeof(Data));
             ASSERT_EQ(myVector.size(),UINT8_MAX);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
