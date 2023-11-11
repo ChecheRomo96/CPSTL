@@ -290,7 +290,7 @@
             insert_iterator<Container> operator++(int) { return *this; }
         };
 
-        template <class Container, class Iterator> _UCXXEXPORT insert_iterator<Container>
+        template <class Container, class Iterator> insert_iterator<Container>
             inserter(Container& x, Iterator i) {
             return insert_iterator<Container>(x,typename Container::iterator(i));
         }
