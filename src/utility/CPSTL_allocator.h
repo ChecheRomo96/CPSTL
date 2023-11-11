@@ -103,7 +103,7 @@
                     new (ptr) T(cpstd::forward<Args>(args)...);
                 #elif defined(CPSTL_USING_C_ALLOCATION)
                     // Using constructor directly (avoiding new)
-                    ::new ((void *)ptr) T(cpstd::forward<Args>(args)...);
+                    new ((void *)ptr) T(cpstd::forward<Args>(args)...);
                 #else
                     // Unknown construction method or error handling
                     #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
