@@ -123,11 +123,11 @@
                             //!
                             //! @return reverse_iterator - A reverse iterator to the beginning of the reversed vector.
 
-                                iterator rbegin() noexcept{
+                                reverse_iterator rbegin() noexcept{
                                     return reverse_iterator(_Buffer + _Size);
                                 }
 
-                                const_iterator rbegin() const noexcept{
+                                const_reverse_iterator rbegin() const noexcept{
                                     return const_reverse_iterator(_Buffer + _Size);
                                 }                        
                             //!
@@ -177,7 +177,7 @@
                             //!
                             //! @return const_reverse_iterator - A constant reverse iterator to the beginning of the vector's elements.
 
-                                const_iterator crbegin() const noexcept{
+                                const_reverse_iterator crbegin() const noexcept{
                                     return const_reverse_iterator(_Buffer + _Size);
                                 }                        
                             //!
@@ -188,7 +188,7 @@
                             //!
                             //! @return const_reverse_iterator - A constant reverse iterator to the end of the vector's elements.
 
-                                const_iterator crend() const noexcept{
+                                const_reverse_iterator crend() const noexcept{
                                     return const_reverse_iterator(_Buffer);
                                 }                    
                             //!
