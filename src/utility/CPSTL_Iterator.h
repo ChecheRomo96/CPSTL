@@ -84,12 +84,12 @@
 
         template <class Container>  
         auto begin (Container& cont){
-            return decltype (cont.begin());
+            return (cont.begin());
         }
 
         template <class Container>  
         auto begin (const Container& cont) {
-            return decltype (cont.begin());
+            return (cont.begin());
         }
 
         template <typename InputIt, typename Distance>
