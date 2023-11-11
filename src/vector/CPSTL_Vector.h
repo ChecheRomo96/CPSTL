@@ -983,7 +983,7 @@
                             //! allocation request does not succeed).
                                 
                                 template <class... Args>
-                                reference emplace_back(Args&&... args) {
+                                void emplace_back(Args&&... args) {
                                     if (_Size == _Capacity) {
                                         // If the vector is full, reallocate the buffer to accommodate the new element
                                         reserve(_Size == 0 ? 1 : 2 * _Size);
