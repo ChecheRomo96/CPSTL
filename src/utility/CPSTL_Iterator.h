@@ -7,6 +7,9 @@
 
     namespace cpstd {
 
+        
+
+    #if defined(CPSTL_USING_STL)
         // Conceptual representation of std::iterator as a base class
         template <class Category, class T, class Distance = cpstd::ptrdiff_t,
         class Pointer = T*, class Reference = T&>
@@ -17,8 +20,7 @@
             using reference = Reference;
             using iterator_category = Category;
         };
-
-    #if defined(CPSTL_USING_STL)
+        
         using input_iterator_tag = std::input_iterator_tag;
         using output_iterator_tag = std::output_iterator_tag;
         using forward_iterator_tag = std::forward_iterator_tag;
