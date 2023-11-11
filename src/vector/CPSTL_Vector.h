@@ -768,13 +768,14 @@
                                 size_type index = position - _Buffer;
                                 resize(_Size + n);
 
-                                for(size_type i = _Size - 1; i > position; i--){
-                                    (*this)[i] = cpstd::move(_Buffer[i-n]);
+                                for (size_type i = _Size - 1; i >= index + n; --i) {
+                                    (*this)[i] = cpstd::move(_Buffer[i - n]);
                                 }
 
-                                for(size_type i = position; i < position+n; i++){
+                                for (size_type i = index; i < index + n; ++i) {
                                     (*this)[i] = val;
                                 }
+
                                 return _Buffer + index;
                             }
 
