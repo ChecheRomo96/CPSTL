@@ -213,7 +213,7 @@
                             }   
                         //!
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Resize constructor. 
+                        //! @brief Fill constructor. 
                         //!
                         //! Resizes the container to contain count elements, does nothing if count == 0.\n\n
                         //! If value parameter is not given additional default-inserted elements are appended\n 
@@ -221,9 +221,14 @@
                         //! @tparam count New size of the conatainer
                         //! @tparam value The value to initialize the elements with
 
-                            vector(unsigned int count, const_reference value = T()) : vector(){
+                            explicit vector (size_type n, const allocator_type& alloc = allocator_type()) : vector(){
 
-                                resize(count, value);
+                                resize(n);
+                            }
+
+                            vector (size_type n, const value_type& val, const allocator_type& alloc = allocator_type()) : vector(){
+
+                                resize(n, val);
                             }
                         //!
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
