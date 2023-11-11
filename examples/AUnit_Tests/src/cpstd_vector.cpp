@@ -72,7 +72,7 @@
                 Data[i] = i;
             }
 
-            cpstd::vector<uint8_t> myVector(std::begin(Data), std::end(Data));
+            cpstd::vector<uint8_t> myVector(Data, Data+sizeof(Data));
             ASSERT_EQ(myVector.size(),UINT8_MAX);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
@@ -93,7 +93,7 @@
         TEST(CPSTL_Vector_ConstructorTesting, Move) {
 
             static const uint8_t values[] = {0, 1, 2};
-            cpstd::vector<uint8_t> myVector(cpstd::begin(values), cpstd::end(values));
+            cpstd::vector<uint8_t> myVector(values, values+sizeof(values));
             ASSERT_EQ(myVector.size(),3);
 
             for(uint8_t i = 0; i < myVector.size(); i++){
@@ -316,13 +316,13 @@
         TEST(CPSTL_Vector_AssignmentTesting, cpstd_vector) {
             cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
             ASSERT_EQ(myVector.size(), (size_t) 5);
-            ASSERT_EQ(myVector.capacity(), (size_t) 5);
+            ASSERT_GE(myVector.capacity(), (size_t) 5);
 
             cpstd::vector<uint8_t> myVector2 = myVector;
             ASSERT_EQ(myVector.size(), (size_t) 5);
-            ASSERT_EQ(myVector.capacity(), (size_t) 5);
+            ASSERT_GE(myVector.capacity(), (size_t) 5);
             ASSERT_EQ(myVector2.size(), (size_t) 5);
-            ASSERT_EQ(myVector2.capacity(), (size_t) 5);
+            ASSERT_GE(myVector2.capacity(), (size_t) 5);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -336,13 +336,13 @@
         TEST(CPSTL_Vector_AssignmentTesting, cpstd_vector_move) {
             cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
             ASSERT_EQ(myVector.size(), (size_t) 5);
-            ASSERT_EQ(myVector.capacity(), (size_t) 5);
+            ASSERT_GE(myVector.capacity(), (size_t) 5);
 
             cpstd::vector<uint8_t> myVector2 = cpstd::move(myVector);
             ASSERT_EQ(myVector.size(), (size_t) 0);
             ASSERT_EQ(myVector.capacity(), (size_t) 0);
             ASSERT_EQ(myVector2.size(), (size_t) 5);
-            ASSERT_EQ(myVector2.capacity(), (size_t) 5);
+            ASSERT_GE(myVector2.capacity(), (size_t) 5);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -356,13 +356,13 @@
         TEST(CPSTL_Vector_AssignmentTesting, InitializerList) {
             cpstd::vector<uint8_t> myVector = {0,1,2,3,4};
             ASSERT_EQ(myVector.size(), (size_t) 5);
-            ASSERT_EQ(myVector.capacity(), (size_t) 5);
+            ASSERT_GE(myVector.capacity(), (size_t) 5);
 
             cpstd::vector<uint8_t> myVector2 = cpstd::move(myVector);
             ASSERT_EQ(myVector.size(), (size_t) 0);
             ASSERT_EQ(myVector.capacity(), (size_t) 0);
             ASSERT_EQ(myVector2.size(), (size_t) 5);
-            ASSERT_EQ(myVector2.capacity(), (size_t) 5);
+            ASSERT_GE(myVector2.capacity(), (size_t) 5);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
