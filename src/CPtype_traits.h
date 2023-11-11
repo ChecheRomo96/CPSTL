@@ -25,6 +25,7 @@
         template <typename T> using remove_volatile = std::remove_volatile<T>;
 
         template <bool B, typename T = void> using enable_if = std::enable_if<B , T>;
+        template <bool B, typename T = void> using enable_if_t = typename cpstd::enable_if<B,T>::type;
     #else
         template <typename T> struct remove_reference { using type = T; };
         template <typename T> struct remove_reference<T&> { using type = T; };
@@ -49,6 +50,7 @@
 
         template <bool B, typename T = void> struct enable_if {};
         template <typename T> struct enable_if<true, T> { using type = T; };
+        template <bool B, typename T = void> using enable_if_t = typename cpstd::enable_if<B,T>::type;
     #endif
     }
     
