@@ -102,7 +102,18 @@
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
                     new (ptr) value_type(cpstd::forward<Args>(args)...);
                 #elif defined(CPSTL_USING_C_ALLOCATION)
-                    new (static_cast<void*>(ptr)) T(cpstd::forward<Args>(args)...);
+                    
+                    void* rawMemory = malloc(sizeof(value_type));
+
+                    if (rawMemory != nullptr) {
+                        // Use placement new to construct the object at the specified memory location
+                        value_type* typedPtr = static_cast<value_type*>(rawMemory);
+                        new (typedPtr) value_type(cpstd::forward<Args>(args)...);
+                    } else {
+                        // Handle memory allocation failure
+                        // For example, you can print an error message or take appropriate action
+                        Serial.println("Memory allocation failed!");
+                    }
                 #else
                     // Unknown construction method or error handling
                     #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
