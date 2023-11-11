@@ -936,13 +936,19 @@
                                     // Convert the const_iterator to an iterator using const_cast
                                     auto pos = begin() + cpstd::distance(cbegin(), position);
 
+                                    // Resize the vector to accommodate the new element
+                                    size_type index = pos - _Buffer;
+                                    resize(_Size + 1);
+
+                                    // Shift elements to make space for the new one
+                                    for (size_type i = _Size - 1; i > index; --i) {
+                                        (*this)[i] = cpstd::move(_Buffer[i - 1]);
+                                    }
+
                                     // Construct the new element in place at the specified position
-                                    auto it = _Buffer + cpstd::distance(begin(), insert(pos, T()));
+                                    _Alloc.construct(_Buffer + index, cpstd::forward<Args>(args)...);
 
-                                    // Assign the value using in-place construction
-                                    _Alloc.construct(it, cpstd::forward<Args>(args)...);
-
-                                    return it;
+                                    return _Buffer + index;
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
