@@ -82,6 +82,16 @@
             using iterator_category = typename Iterator::iterator_category;
         };
 
+        // Specialization for pointers
+        template <typename T>
+        struct iterator_traits<T*> {
+            using value_type = T;
+            using difference_type = std::ptrdiff_t;
+            using pointer = T*;
+            using reference = T&;
+            using iterator_category = std::random_access_iterator_tag;
+        };
+
         template <typename InputIt, typename Distance>
         void advance(InputIt& it, Distance n) {
             if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::random_access_iterator_tag>) {
