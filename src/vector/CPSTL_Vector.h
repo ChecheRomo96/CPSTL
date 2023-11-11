@@ -672,7 +672,8 @@
                             //! @param val Value to fill the container with. Each of the 'n' elements in the container will be initialized to a copy of this value.
                                 
                                 template <class InputIterator>  
-                                void assign (InputIterator first, InputIterator last){            
+                                void assign (InputIterator first, InputIterator last){   
+                                    static_assert(cpstd::is_pointer_v<InputIt>, "InputIt must be a pointer type");
                                     clear();
                                     resize(cpstd::distance(first, last));
                                     cpstd::copy(first, last, _Buffer);
