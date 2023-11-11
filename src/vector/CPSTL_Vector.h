@@ -244,7 +244,7 @@
 
 
 
-                            template <class InputIterator>  
+                            template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
                             vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
                                 assign(first, last);
                             }
@@ -256,9 +256,7 @@
                         //! @tparam other another container to be used as source to initialize the elements of the container with
                         
                             vector(const vector<value_type, allocator_type>& other) : vector(){
-
                                 resize(other.size());
-
                                 for (size_type i = 0; i < size(); ++i) {
                                     _Alloc.construct(&_Buffer[i], other[i]);
                                 }
@@ -271,13 +269,9 @@
                         //! @tparam pointer location of the data to copy
                         //! @tparam len number of elements to copy
 
-                            vector(const T* data, unsigned int len): vector(){
-
-                                resize(len);
-                                
-                                for (size_type i = 0; i < size(); ++i) {
-                                    _Alloc.construct(&_Buffer[i], data[i]);
-                                }
+                            vector(const vector& x, const allocator_type& alloc) : vector(), allocator_type(alloc){
+                                resize(x.size());
+                                cpstd::uninitialized_copy(x._Buffer, x._Buffer + x._Size, _Buffer);
                             }
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
