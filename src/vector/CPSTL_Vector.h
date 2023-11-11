@@ -232,6 +232,24 @@
                             }
                         //!
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //! @brief range constructor.
+                        //!
+                        //! Constructs a container with as many elements as the range [first,last), with each element emplace-constructed from its corresponding element in that range, in the same order.
+                        //! Input iterators to the initial and final positions in a range. The range used is [first,last), which includes all the elements between first and last, including the element pointed by first but not the element pointed by last.
+                        //! The function template argument InputIterator shall be an input iterator type that points to elements of a type from which value_type objects can be constructed.
+                        //! @tparam InputIterator shall be an input iterator type that points to elements of a type from which value_type objects can be constructed.
+                        //! @param first Input iterators to the initial and final positions in a range.
+                        //! @param last Input iterators to the initial and final positions in a range.
+                        //! @param alloc Allocator object.
+
+
+
+                            template <class InputIterator>  
+                            vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
+
+                            }
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         //! @brief Copy constructor.
                         //!
                         //! Constructs the container with the copy of the contents of other
