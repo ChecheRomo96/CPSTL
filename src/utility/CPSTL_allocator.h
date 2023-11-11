@@ -102,7 +102,7 @@
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
                     new (ptr) value_type(cpstd::forward<Args>(args)...);
                 #elif defined(CPSTL_USING_C_ALLOCATION)
-                    new ((void*)p) value_type (val);
+                    new ((void*)ptr) value_type (args);
                 #else
                     // Unknown construction method or error handling
                     #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
