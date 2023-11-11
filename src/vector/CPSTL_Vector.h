@@ -778,7 +778,7 @@
                                 return _Buffer + index;
                             }
 
-                            template <class InputIterator>
+                            template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
                             iterator insert (const_iterator position, InputIterator first, InputIterator last){
                                 resize(cpstd::distance(first, last));
 
