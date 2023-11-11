@@ -942,7 +942,7 @@
 
                                     // Shift elements to make space for the new one
                                     for (size_type i = _Size - 1; i > index; --i) {
-                                        (*this)[i] = cpstd::move(_Buffer[i - 1]);
+                                        _Buffer[i] = cpstd::move(_Buffer[i - 1]);
                                     }
 
                                     // Construct the new element in place at the specified position
