@@ -245,7 +245,8 @@
 
 
                             template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
-                            vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
+                            vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) : vector(){
+                                _Alloc = alloc;
                                 assign(first, last);
                             }
                         //
