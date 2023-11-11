@@ -97,6 +97,10 @@
                     return cpstd::numeric_limits<size_type>::max() / sizeof(value_type);
                 }
 
+                void construct ( pointer p, const_reference val ){
+                    new ((void*)p) value_type (val);
+                }
+                
                 template<typename... Args>
                 void construct(pointer ptr, Args&&... args) {
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
@@ -109,9 +113,6 @@
                 #endif
                 }
 
-                void construct ( pointer p, const_reference val ){
-                    new ((void*)p) value_type (val);
-                }
 
                 static void destroy(pointer ptr) {
                 #if defined(CPSTL_USING_CPP_ALLOCATION) || defined(CPSTL_USING_C_ALLOCATION)
