@@ -142,7 +142,7 @@
 
         // Overload for non-random access iterators
         template <typename InputIt>
-        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, std::input_iterator_tag) {
+        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, cpstd::input_iterator_tag) {
             typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
             while (first != last) {
                 ++first;
