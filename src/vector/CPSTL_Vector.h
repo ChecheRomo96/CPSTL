@@ -807,7 +807,7 @@
 
                                 // Shift elements to make space for the new ones
                                 for (size_type i = size() - 1; i >= index + il.size(); --i) {
-                                    _Buffer[i] = std::move(_Buffer[i - il.size()]);
+                                    _Buffer[i] = cpstd::move(_Buffer[i - il.size()]);
                                 }
 
                                 // Copy elements from the initializer_list
