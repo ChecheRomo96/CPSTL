@@ -811,7 +811,7 @@
                                     auto range = cpstd::min(last, endIt) - first;
 
                                     // Move elements to fill the erased range
-                                    for (auto it = beginIt + first; it + range < endIt; ++it) {
+                                    for (auto it = first; it + range < endIt; ++it) {
                                         *it = cpstd::move(*(it + range));
                                     }
 
