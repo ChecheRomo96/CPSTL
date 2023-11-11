@@ -20,7 +20,7 @@
             using reference = Reference;
             using iterator_category = Category;
         };
-        
+
         using input_iterator_tag = std::input_iterator_tag;
         using output_iterator_tag = std::output_iterator_tag;
         using forward_iterator_tag = std::forward_iterator_tag;
@@ -69,7 +69,7 @@
 
         template<class Iterator> struct iterator_traits;
         template<class T> struct iterator_traits<T*>;
-        template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&> struct iterator;
+        template<class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&> struct iterator;
 
 
         struct input_iterator_tag {};
