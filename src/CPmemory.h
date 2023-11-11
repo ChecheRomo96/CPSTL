@@ -8,7 +8,6 @@
         template <typename InputIt, typename NoThrowForwardIt>
         NoThrowForwardIt uninitialized_move(InputIt first, InputIt last, NoThrowForwardIt d_first) {
             using value_type = typename cpstd::iterator_traits<NoThrowForwardIt>::value_type;
-            using const_pointer = typename cpstd::allocator_traits<typename cpstd::iterator_traits<NoThrowForwardIt>::allocator_type>::const_pointer;
 
             while (first != last) {
             #if defined(CPSTL_USING_CPP_ALLOCATION)
