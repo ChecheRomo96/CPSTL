@@ -82,6 +82,15 @@
             using iterator_category = typename Iterator::iterator_category;
         };
 
+        template <class Container>  
+        auto begin (Container& cont){
+            return decltype (cont.begin());
+        }
+
+        template <class Container>  
+        auto begin (const Container& cont) {
+            return decltype (cont.begin());
+        }
 
         template <typename InputIt, typename Distance>
         void advance(InputIt& it, Distance n) {
