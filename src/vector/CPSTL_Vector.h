@@ -785,7 +785,7 @@
 
                             template <class InputIterator>
                             iterator insert (const_iterator position, InputIterator first, InputIterator last){
-                                resize(std::distance(first, last));
+                                resize(cpstd::distance(first, last));
 
                                 for (size_t i = 0; first != last; ++first, ++i) {
                                     _Buffer[i] = *first;
