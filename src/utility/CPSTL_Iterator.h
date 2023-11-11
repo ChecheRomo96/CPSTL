@@ -129,7 +129,8 @@
             typedef random_access_iterator_tag iterator_category;
         };
 
-        template<class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&>
+
+        template <class Category, class T, class Distance, class Pointer, class Reference> 
         struct iterator {
             typedef T         value_type;
             typedef Distance  difference_type;
