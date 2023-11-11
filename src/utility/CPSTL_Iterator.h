@@ -143,9 +143,14 @@
             return it;
         }
 
-        template <typename Container>
-        typename Container::iterator begin(Container& c) {
-            return c.begin();
+        template <class Container>
+        typename Container::iterator begin(Container& cont) {
+            return cont.begin();
+        }
+
+        template <class Container>
+        typename Container::const_iterator begin(const Container& cont) {
+            return cont.begin();
         }
 
         template <typename Container>
