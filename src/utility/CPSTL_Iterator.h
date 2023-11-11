@@ -127,20 +127,20 @@
         }
         
         template <typename InputIt>
-        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last) {
-            if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::random_access_iterator_tag>) {
-                return last - first;
-            } else {
-                typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
-                while (first != last) {
-                    ++first;
-                    ++count;
-                }
-                return count;
-            }
+        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, cpstd::random_access_iterator_tag) {
+            return last - first;
         }
 
-        // Explicit specialization for non-random access iterators
+        template <typename InputIt>
+        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, cpstd::forward_iterator_tag) {
+            typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
+            while (first != last) {
+                ++first;
+                ++count;
+            }
+            return count;
+        }
+
         template <typename InputIt>
         typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, cpstd::input_iterator_tag) {
             typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
@@ -152,13 +152,8 @@
         }
 
         template <typename InputIt>
-        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last, cpstd::forward_iterator_tag) {
-            typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
-            while (first != last) {
-                ++first;
-                ++count;
-            }
-            return count;
+        typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last) {
+            return distance(first, last, typename cpstd::iterator_traits<InputIt>::iterator_category());
         }
 
         template <typename InputIt, typename Distance>
