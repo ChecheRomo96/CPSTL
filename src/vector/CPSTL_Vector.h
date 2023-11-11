@@ -269,10 +269,11 @@
                         //! @tparam pointer location of the data to copy
                         //! @tparam len number of elements to copy
 
-                            vector(const vector& x, const allocator_type& alloc) : allocator_type(alloc), vector(){
-                                resize(x.size());
-                                cpstd::uninitialized_copy(x._Buffer, x._Buffer + x._Size, _Buffer);
-                            }
+                            vector(const vector& x, const allocator_type& alloc)
+                            : allocator_type(alloc), vector() {
+                            resize(x.size());
+                            cpstd::uninitialized_copy(x._Buffer, x._Buffer + x._Size, _Buffer);
+}
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         //! @brief Move constructor. 
