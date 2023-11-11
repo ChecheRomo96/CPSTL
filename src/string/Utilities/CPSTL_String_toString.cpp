@@ -140,7 +140,7 @@ cpstd::string cpstd::to_string(unsigned val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("")
+    return cpstd::string("");
 }
 
 cpstd::string cpstd::to_string(unsigned long val){
@@ -148,7 +148,7 @@ cpstd::string cpstd::to_string(unsigned long val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("")
+    return cpstd::string("");
 }
 
 cpstd::string cpstd::to_string(unsigned long long val){
@@ -156,7 +156,7 @@ cpstd::string cpstd::to_string(unsigned long long val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("")
+    return cpstd::string("");
 }
 
 cpstd::string cpstd::to_string(float val){
@@ -164,7 +164,7 @@ cpstd::string cpstd::to_string(float val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("")
+    return cpstd::string("");
 }
 
 cpstd::string cpstd::to_string(double val){
@@ -172,7 +172,7 @@ cpstd::string cpstd::to_string(double val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("")
+    return cpstd::string("");
 }
 
 cpstd::string cpstd::to_string(long double val){
@@ -180,5 +180,5 @@ cpstd::string cpstd::to_string(long double val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("")
+    return cpstd::string("");
 }
