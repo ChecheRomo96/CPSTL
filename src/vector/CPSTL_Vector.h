@@ -780,7 +780,7 @@
                             }
 
                             template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
-                            iterator insert (const_iterator position, InputIterator first, InputIterator last){
+                            iterator insert(const_iterator position, InputIterator first, InputIterator last){
                                 resize(cpstd::distance(first, last));
 
                                 for (size_t i = 0; first != last; ++first, ++i) {
@@ -802,17 +802,21 @@
                             }
 
                             iterator insert(const_iterator position, cpstd::initializer_list<T> il){
-                                size_type index = position - _Buffer;
-                                resize(_Size + il.size());
+                                size_type index = positionstion - _Buffer;
+                                resize(size() + il.size());
 
-                                for(size_type i = _Size - 1; i > position; i--){
-                                    (*this)[i] = cpstd::move(_Buffer[i-il.size()]);
+                                // Shift elements to make space for the new ones
+                                for (size_type i = size() - 1; i >= index + il.size(); --i) {
+                                    _Buffer[i] = std::move(_Buffer[i - il.size()]);
                                 }
 
-                                size_type i = position;
-                                for (auto it = il.begin(); it != il.end(); ++it, ++i) {
-                                    (*this)[i] = *it;
+                                // Copy elements from the initializer_list
+                                size_type i = index;
+                                for (const auto& elem : il) {
+                                    _Buffer[i++] = elem;
                                 }
+
+                                return _Buffer + index; 
                             }
                         // 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
