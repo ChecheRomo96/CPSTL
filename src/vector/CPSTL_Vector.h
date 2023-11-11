@@ -801,13 +801,13 @@
 
                                 iterator erase(const_iterator first, const_iterator last) {
                                     auto beginIt = begin();  // iterator to the beginning of the container
-                                    auto endIt = end();  // iterator to the end of the container
+                                    auto endIt = end();      // iterator to the end of the container
 
-                                    if (first >= endIt || first >= last) {
+                                    if (first >= last) {
                                         return end();  // Return iterator to the end as an indication of an error or no change
                                     }
 
-                                    auto range = (last > endIt) ? endIt - first : last - first;
+                                    auto range = std::min(last, endIt) - first;
 
                                     // Move elements to fill the erased range
                                     for (auto it = beginIt + first; it + range < endIt; ++it) {
