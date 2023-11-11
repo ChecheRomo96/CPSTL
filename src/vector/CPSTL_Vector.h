@@ -756,7 +756,7 @@
                                 return _Buffer + index;
                             }
 
-                            iterator insert(size_type position, cpstd::initializer_list<T> il){
+                            iterator insert(const_iterator position, cpstd::initializer_list<T> il){
                                 size_type index = position - _Buffer;
                                 resize(_Size + il.size());
 
