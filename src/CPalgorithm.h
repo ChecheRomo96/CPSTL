@@ -4,8 +4,14 @@
 	namespace cpstd{
 		///////////////////////////////////////////////////////////////////////////////
 		// Non-modifying sequence operations
-		
-			template <class T> const T& min (const T& a, const T& b) {
+
+			template <class T> 
+			const T& min (const T& a, const T& b) {
+			  return !(b<a)?a:b;     // or: return !comp(b,a)?a:b; for version (2)
+			}
+
+			template <class T, class U> 
+			const T& min (const T& a, const U& b) {
 			  return !(b<a)?a:b;     // or: return !comp(b,a)?a:b; for version (2)
 			}
 	  	//
