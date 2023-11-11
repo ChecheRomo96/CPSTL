@@ -125,13 +125,12 @@
                 }
             }
         }
-
+        
         template <typename InputIt>
         typename cpstd::iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last) {
             if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::random_access_iterator_tag>) {
                 return last - first;
-            } 
-            else {
+            } else {
                 typename cpstd::iterator_traits<InputIt>::difference_type count = 0;
                 while (first != last) {
                     ++first;
