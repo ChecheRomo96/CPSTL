@@ -684,7 +684,7 @@
                             //! @param n   New size for the container.
                             //! @param val Value to fill the container with. Each of the 'n' elements in the container will be initialized to a copy of this value.
                                 
-                                void assign(size_type n, const_reference val) {
+                                void assign(size_type n, const value_type& val) {
                                     resize(n);
                                     for (size_type i = 0; i < size(); i++) {
                                         _Buffer[i] = val;
