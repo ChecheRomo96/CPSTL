@@ -98,7 +98,7 @@
                 }
 
                 void construct ( pointer p, const_reference val ){
-                    value_type* q = malloc(sizeof(cpstd::remove_const_reference<const_reference>));
+                    value_type* q = malloc(sizeof(cpstd::remove_reference<cpstd::remove_const<const_reference>>));
                     value_type *p = new (q) value_type(val);
                 }
 
