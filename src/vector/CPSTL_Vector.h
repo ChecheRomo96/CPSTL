@@ -818,7 +818,8 @@
                                     // Resize the container
                                     resize(size() - range);
 
-                                    return beginIt + first;  // Return iterator to the new location
+                                    return beginIt + static_cast<size_type>(cpstd::distance(beginIt, first));
+
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
