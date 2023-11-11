@@ -102,8 +102,7 @@
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
                     new (ptr) value_type(cpstd::forward<Args>(args)...);
                 #elif defined(CPSTL_USING_C_ALLOCATION)
-                    value_type* obj = static_cast<value_type*>(ptr);
-                    obj->value_type(cpstd::forward<Args>(args)...);
+                    new (static_cast<void*>(p)) value_type(std::forward<Args>(args)...);
                 #else
                     // Unknown construction method or error handling
                     #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
@@ -112,7 +111,7 @@
 
                 static void destroy(pointer ptr) {
                 #if defined(CPSTL_USING_CPP_ALLOCATION) || defined(CPSTL_USING_C_ALLOCATION)
-                    ptr->~T();
+                    ptr->~value_type();
                 #else
                     #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
                 #endif
