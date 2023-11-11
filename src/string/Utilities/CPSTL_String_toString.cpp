@@ -140,7 +140,32 @@ cpstd::string cpstd::to_string(unsigned val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("");
+    string result;
+
+    // Special case for 0
+    if (val == 0) {
+        result.push_back('0');
+    }
+
+    // Build the string in reverse order
+    while (val > 0) {
+        char digit = '0' + static_cast<char>(val % 10);
+        result.push_back(digit);
+        val /= 10;
+    }
+
+    // Reverse the string to get the correct order
+    size_t start = 0;
+    size_t end = result.size() - 1;
+    while (start < end) {
+        char temp = result[start];
+        result[start] = result[end];
+        result[end] = temp;
+        start++;
+        end--;
+    }
+
+    return result;
 }
 
 cpstd::string cpstd::to_string(unsigned long val){
@@ -148,7 +173,32 @@ cpstd::string cpstd::to_string(unsigned long val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("");
+    string result;
+
+    // Special case for 0
+    if (val == 0) {
+        result.push_back('0');
+    }
+
+    // Build the string in reverse order
+    while (val > 0) {
+        char digit = '0' + static_cast<char>(val % 10);
+        result.push_back(digit);
+        val /= 10;
+    }
+
+    // Reverse the string to get the correct order
+    size_t start = 0;
+    size_t end = result.size() - 1;
+    while (start < end) {
+        char temp = result[start];
+        result[start] = result[end];
+        result[end] = temp;
+        start++;
+        end--;
+    }
+
+    return result;
 }
 
 cpstd::string cpstd::to_string(unsigned long long val){
@@ -156,7 +206,32 @@ cpstd::string cpstd::to_string(unsigned long long val){
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
 #endif
-    return cpstd::string("");
+    string result;
+
+    // Special case for 0
+    if (val == 0) {
+        result.push_back('0');
+    }
+
+    // Build the string in reverse order
+    while (val > 0) {
+        char digit = '0' + static_cast<char>(val % 10);
+        result.push_back(digit);
+        val /= 10;
+    }
+
+    // Reverse the string to get the correct order
+    size_t start = 0;
+    size_t end = result.size() - 1;
+    while (start < end) {
+        char temp = result[start];
+        result[start] = result[end];
+        result[end] = temp;
+        start++;
+        end--;
+    }
+
+    return result;
 }
 
 cpstd::string cpstd::to_string(float val){
