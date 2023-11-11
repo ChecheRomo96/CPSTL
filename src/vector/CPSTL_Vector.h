@@ -671,7 +671,7 @@
                             //! @param n   New size for the container.
                             //! @param val Value to fill the container with. Each of the 'n' elements in the container will be initialized to a copy of this value.
                                 
-                                template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>>  
+                                template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
                                 void assign (InputIterator first, InputIterator last){
                                     resize(cpstd::distance(first, last));
                                     cpstd::copy(first, last, _Buffer);
