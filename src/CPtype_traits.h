@@ -23,6 +23,8 @@
         template <typename T> using remove_const = std::remove_const<T>;
 
         template <typename T> using remove_volatile = std::remove_volatile<T>;
+
+        template <bool B, typename T = void> using enable_if = std::enable_if<B , T>;
     #else
         template <typename T> struct remove_reference { using type = T; };
         template <typename T> struct remove_reference<T&> { using type = T; };
@@ -43,6 +45,10 @@
 
         template <typename T> struct remove_volatile { typedef T type; };
         template <typename T> struct remove_volatile<volatile T> { typedef T type; };
+
+
+        template <bool B, typename T = void> struct enable_if {};
+        template <typename T> struct enable_if<true, T> { using type = T; };
     #endif
     }
     
