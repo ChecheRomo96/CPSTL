@@ -673,7 +673,7 @@
                                 
                                 template <class InputIterator>  
                                 void assign (InputIterator first, InputIterator last){   
-                                    static_assert(cpstd::is_pointer_v<InputIt>, "InputIt must be a pointer type");
+                                    static_assert(cpstd::is_pointer_v<InputIterator>, "InputIt must be a pointer type");
                                     clear();
                                     resize(cpstd::distance(first, last));
                                     cpstd::copy(first, last, _Buffer);
