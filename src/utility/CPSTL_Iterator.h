@@ -297,6 +297,42 @@
             return insert_iterator<Container>(x,typename Container::iterator(i));
         }
 
+        // Container version of std::end
+        template <class Container>
+        auto end(Container& cont) -> decltype(cont.end()) {
+            return cont.end();
+        }
+
+        // Const Container version of std::end
+        template <class Container>
+        auto end(const Container& cont) -> decltype(cont.end()) {
+            return cont.end();
+        }
+
+        // Array version of std::end
+        template <class T, size_t N>
+        constexpr T* end(T (&arr)[N]) noexcept {
+            return arr + N;
+        }
+
+        // Container version of std::begin
+        template <class Container>
+        auto begin(Container& cont) -> decltype(cont.begin()) {
+            return cont.begin();
+        }
+
+        // Const Container version of std::begin
+        template <class Container>
+        auto begin(const Container& cont) -> decltype(cont.begin()) {
+            return cont.begin();
+        }
+
+        // Array version of std::begin
+        template <class T, size_t N>
+        constexpr T* begin(T (&arr)[N]) noexcept {
+            return arr;
+        }
+
     #endif
     }
 
