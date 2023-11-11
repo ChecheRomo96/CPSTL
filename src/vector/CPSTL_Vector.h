@@ -801,8 +801,8 @@
                             //! @tparam last The index of the last element to be erased.
 
                                 iterator erase(const_iterator first, const_iterator last) {
-                                    auto beginIt = begin();  // iterator to the beginning of the container
-                                    auto endIt = end();      // iterator to the end of the container
+                                    const_iterator beginIt = begin();  // iterator to the beginning of the container
+                                    const_iterator endIt = end();      // iterator to the end of the container
 
                                     if (first >= last) {
                                         return end();  // Return iterator to the end as an indication of an error or no change
