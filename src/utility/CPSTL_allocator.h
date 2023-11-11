@@ -101,17 +101,6 @@
                     new ((void*)p) value_type (val);
                 }
                 
-                template<typename... Args>
-                void construct(pointer ptr, Args&&... args) {
-                #if defined(CPSTL_USING_CPP_ALLOCATION)
-                    new (ptr) value_type(cpstd::forward<Args>(args)...);
-                #elif defined(CPSTL_USING_C_ALLOCATION)
-                    ::new (static_cast<void*>(ptr)) T(cpstd::forward<Args>(args)...);
-                #else
-                    // Unknown construction method or error handling
-                    #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
-                #endif
-                }
 
 
                 static void destroy(pointer ptr) {
