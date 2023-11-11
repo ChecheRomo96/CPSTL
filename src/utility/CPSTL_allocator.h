@@ -97,7 +97,7 @@
                     return cpstd::numeric_limits<size_type>::max() / sizeof(value_type);
                 }
 
-                void construct ( pointer p, const_reference val ){
+                void construct ( pointer p, const_reference val = value_type()){
                     value_type* q = malloc(sizeof(cpstd::remove_reference<cpstd::remove_const<const_reference>>));
                     value_type *p = new (q) value_type(val);
                 }
