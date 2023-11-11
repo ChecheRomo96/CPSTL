@@ -82,16 +82,6 @@
             using iterator_category = typename Iterator::iterator_category;
         };
 
-        template <class Container>  
-        auto begin (Container& cont){
-            return (cont.begin());
-        }
-
-        template <class Container>  
-        auto begin (const Container& cont) {
-            return (cont.begin());
-        }
-
         template <typename InputIt, typename Distance>
         void advance(InputIt& it, Distance n) {
             if constexpr (cpstd::is_same_v<typename cpstd::iterator_traits<InputIt>::iterator_category, cpstd::random_access_iterator_tag>) {
