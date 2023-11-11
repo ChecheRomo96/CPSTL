@@ -11,7 +11,11 @@
             using const_pointer = typename cpstd::allocator_traits<typename cpstd::iterator_traits<NoThrowForwardIt>::allocator_type>::const_pointer;
 
             while (first != last) {
+            #if defined(CPSTL_USING_CPP_ALLOCATION)
                 ::new (cpstd::addressof(*d_first)) value_type(cpstd::move(*first));
+            #elif defined(CPSTL_USING_C_ALLOCATION)
+                    *(cpstd::addressof(*d_first)) = cpstd::move(*first);
+            #endif
                 ++first;
                 ++d_first;
             }
