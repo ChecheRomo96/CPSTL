@@ -40,6 +40,14 @@
         #endif
         }
 
+        
+        template <typename T, typename U = T>
+        T exchange(T& obj, U&& new_value) {
+            T old_value = cpstd::move(obj);
+            obj = cpstd::forward<U>(new_value);
+            return old_value;
+        }
+
     }
 
 
