@@ -32,12 +32,14 @@
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPinitializer_list.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPutility.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPiterator.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPios.h")
 
 #
 ######################################################################################################
 # Add Subdirectories
 	
 	add_subdirectory(utility)
+	add_subdirectory(streams)
 
 	if( ${CPSTL_VECTOR_STATUS} )
 		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPvector")

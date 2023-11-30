@@ -54,6 +54,6 @@
     #endif
     }
     
-    #include <Utility/type_traits/CPSTL_TypeTraits.h>
+    #include <utility/type_traits/CPSTL_TypeTraits.h>
 
 #endif//CPSTL_TYPE_TRAITS_H

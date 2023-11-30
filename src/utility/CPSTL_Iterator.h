@@ -27,8 +27,7 @@
         using bidirectional_iterator_tag = std::bidirectional_iterator_tag;
         using random_access_iterator_tag = std::random_access_iterator_tag;
 
-        template <class Category, class T, class Distance = cpstd::ptrdiff_t,
-        class Pointer = T*, class Reference = T&>
+        //template <class Category, class T, class Distance = cpstd::ptrdiff_t,class Pointer = T*, class Reference = T&>
 
         template<typename Iterator>
         using iterator_traits = std::iterator_traits<Iterator>;
@@ -332,7 +331,6 @@
         constexpr T* begin(T (&arr)[N]) noexcept {
             return arr;
         }
-
     #endif
     }
 

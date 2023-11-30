@@ -1,9 +1,14 @@
 #include "CPSTL_String_toString.h"
 
+template<typename T>
+cpstd::string cpstd::to_string(const T& val){
+    return cpstd::to_string(val);
+}
+
 cpstd::string cpstd::to_string(int val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#else
+#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
     string result;
     bool isNegative = false;
 
@@ -48,7 +53,7 @@ cpstd::string cpstd::to_string(int val){
 cpstd::string cpstd::to_string(long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#else
+#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
     string result;
     bool isNegative = false;
 
@@ -93,7 +98,7 @@ cpstd::string cpstd::to_string(long val){
 cpstd::string cpstd::to_string(long long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#else
+#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
     string result;
     bool isNegative = false;
 
@@ -139,8 +144,14 @@ cpstd::string cpstd::to_string(unsigned val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-#endif
     string result;
+    bool isNegative = false;
+
+    // Handle the case where the value is negative
+    if (val < 0) {
+        isNegative = true;
+        val = -val;
+    }
 
     // Special case for 0
     if (val == 0) {
@@ -152,6 +163,11 @@ cpstd::string cpstd::to_string(unsigned val){
         char digit = '0' + static_cast<char>(val % 10);
         result.push_back(digit);
         val /= 10;
+    }
+
+    // Add the negative sign if necessary
+    if (isNegative) {
+        result.push_back('-');
     }
 
     // Reverse the string to get the correct order
@@ -166,13 +182,13 @@ cpstd::string cpstd::to_string(unsigned val){
     }
 
     return result;
+#endif
 }
 
 cpstd::string cpstd::to_string(unsigned long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-#endif
     string result;
 
     // Special case for 0
@@ -199,13 +215,13 @@ cpstd::string cpstd::to_string(unsigned long val){
     }
 
     return result;
+#endif
 }
 
 cpstd::string cpstd::to_string(unsigned long long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-#endif
     string result;
 
     // Special case for 0
@@ -232,6 +248,7 @@ cpstd::string cpstd::to_string(unsigned long long val){
     }
 
     return result;
+#endif
 }
 
 cpstd::string cpstd::to_string(float val){
