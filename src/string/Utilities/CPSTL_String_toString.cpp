@@ -1,10 +1,5 @@
 #include "CPSTL_String_toString.h"
 
-template<typename T>
-cpstd::string cpstd::to_string(const T& val){
-    return cpstd::to_string(val);
-}
-
 cpstd::string cpstd::to_string(int val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
