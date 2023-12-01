@@ -6,23 +6,23 @@ cpstd::string cpstd::to_string(int val){
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
     string result;
     bool isNegative = false;
+    unsigned value = (val>0)?val:-1*val;
 
     // Handle the case where the value is negative
     if (val < 0) {
         isNegative = true;
-        val = -val;
     }
 
     // Special case for 0
-    if (val == 0) {
+    if (value == 0) {
         result.push_back('0');
     }
 
     // Build the string in reverse order
-    while (val > 0) {
-        char digit = '0' + static_cast<char>(val % 10);
+    while (value > 0) {
+        char digit = '0' + static_cast<char>(value % 10);
         result.push_back(digit);
-        val /= 10;
+        value /= 10;
     }
 
     // Add the negative sign if necessary
@@ -51,23 +51,23 @@ cpstd::string cpstd::to_string(long val){
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
     string result;
     bool isNegative = false;
+    unsigned long value = (val>0)?val:-1*val;
 
     // Handle the case where the value is negative
     if (val < 0) {
         isNegative = true;
-        val = -val;
     }
 
     // Special case for 0
-    if (val == 0) {
+    if (value == 0) {
         result.push_back('0');
     }
 
     // Build the string in reverse order
-    while (val > 0) {
-        char digit = '0' + static_cast<char>(val % 10);
+    while (value > 0) {
+        char digit = '0' + static_cast<char>(value % 10);
         result.push_back(digit);
-        val /= 10;
+        value /= 10;
     }
 
     // Add the negative sign if necessary
@@ -96,23 +96,23 @@ cpstd::string cpstd::to_string(long long val){
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
     string result;
     bool isNegative = false;
+    unsigned long long value = (val>0)?val:-1*val;
 
     // Handle the case where the value is negative
     if (val < 0) {
         isNegative = true;
-        val = -val;
     }
 
     // Special case for 0
-    if (val == 0) {
+    if (value == 0) {
         result.push_back('0');
     }
 
     // Build the string in reverse order
-    while (val > 0) {
-        char digit = '0' + static_cast<char>(val % 10);
+    while (value > 0) {
+        char digit = '0' + static_cast<char>(value % 10);
         result.push_back(digit);
-        val /= 10;
+        value /= 10;
     }
 
     // Add the negative sign if necessary
