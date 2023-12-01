@@ -1930,60 +1930,114 @@
             {
                 int x = INT_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"2147483647"),0);
 
                 x = INT_MIN;
                 myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"-2147483648"),0);
             }
 
             {
                 long x = LONG_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"9223372036854775807"),0);
 
                 x = LONG_MIN;
                 myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"-9223372036854775808"),0);
             }
 
             {
                 long long x = LLONG_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"9223372036854775807"),0);
 
                 x = LLONG_MIN;
                 myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"-9223372036854775808"),0);
             }
 
             {
                 unsigned x = UINT_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"4294967295"),0);
             }
 
             {
                 unsigned long x = ULONG_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"18446744073709551615"),0);
             }
 
             {
                 unsigned long long x = ULLONG_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                std::cout<<myString<<std::endl;
                 ASSERT_EQ(strcmp(myString.c_str(),"18446744073709551615"),0);
             }
 
+            {
+                int8_t x = INT8_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(),"127"),0);
+
+                x = INT8_MIN;
+                myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(),"-128"),0);
+            }
+
+            {
+                uint8_t x = UINT8_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(),"255"),0);
+            }
+
+            {
+                int16_t x = INT16_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "32767"), 0);
+
+                x = INT16_MIN;
+                myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "-32768"), 0);
+            }
+
+            {
+                uint16_t x = UINT16_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "65535"), 0);
+            }
+
+            {
+                int32_t x = INT32_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "2147483647"), 0);
+
+                x = INT32_MIN;
+                myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "-2147483648"), 0);
+            }
+
+            {
+                uint32_t x = UINT32_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "4294967295"), 0);
+            }
+
+            {
+                int64_t x = INT64_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "9223372036854775807"), 0);
+
+                x = INT64_MIN;
+                myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "-9223372036854775808"), 0);
+            }
+
+            {
+                uint64_t x = UINT64_MAX;
+                cpstd::string myString = cpstd::to_string(x);
+                ASSERT_EQ(strcmp(myString.c_str(), "18446744073709551615"), 0);
+            }
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
