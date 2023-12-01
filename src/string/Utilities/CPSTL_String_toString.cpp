@@ -279,7 +279,7 @@ cpstd::string cpstd::to_string(float val){
 
     // Add the negative sign if necessary
     if (isNegative) {
-        result.insert(result.begin(), '-');
+        result.insert(0, '-');
     }
 
     return result;
@@ -319,7 +319,7 @@ cpstd::string cpstd::to_string(double val){
 
     // Add the negative sign if necessary
     if (isNegative) {
-        result.insert(result.begin(), '-');
+        result.insert(0, '-');
     }
 
     return result;
@@ -359,7 +359,7 @@ cpstd::string cpstd::to_string(long double val){
 
     // Add the negative sign if necessary
     if (isNegative) {
-        result.insert(result.begin(), '-');
+        result.insert(0, '-');
     }
 
     return result;
