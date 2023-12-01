@@ -344,7 +344,7 @@ cpstd::string cpstd::to_string(long double val){
 
     // Convert the integral part to string
     unsigned long long integralPart = static_cast<unsigned long long>(val);
-    result += custom_unsigned_to_string(integralPart);
+    result += to_string(integralPart);
 
     // Add decimal point
     result.push_back('.');
