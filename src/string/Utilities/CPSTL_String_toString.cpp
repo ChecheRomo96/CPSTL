@@ -293,7 +293,7 @@ cpstd::string cpstd::to_string(double val){
     if (val == 0.0)
         return "0";
 
-    std::string result;
+    cpstd::string result;
     bool isNegative = false;
 
     // Handle the case where the value is negative
@@ -304,7 +304,7 @@ cpstd::string cpstd::to_string(double val){
 
     // Convert the integral part to string
     unsigned long long integralPart = static_cast<unsigned long long>(val);
-    result += custom_unsigned_to_string(integralPart);
+    result += to_string(integralPart);
 
     // Add decimal point
     result.push_back('.');
