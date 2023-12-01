@@ -250,22 +250,118 @@ cpstd::string cpstd::to_string(float val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+    if (val == 0.0)
+        return "0";
+
+    std::string result;
+    bool isNegative = false;
+
+    // Handle the case where the value is negative
+    if (val < 0) {
+        isNegative = true;
+        val = -val;
+    }
+
+    // Convert the integral part to string
+    unsigned long long integralPart = static_cast<unsigned long long>(val);
+    result += custom_unsigned_to_string(integralPart);
+
+    // Add decimal point
+    result.push_back('.');
+
+    // Convert the fractional part to string (considering a fixed precision, e.g., 15)
+    double fractionalPart = val - static_cast<double>(integralPart);
+    for (int i = 0; i < 15; ++i) {
+        fractionalPart *= 10;
+        result += static_cast<char>('0' + static_cast<int>(fractionalPart));
+        fractionalPart -= static_cast<int>(fractionalPart);
+    }
+
+    // Add the negative sign if necessary
+    if (isNegative) {
+        result.insert(result.begin(), '-');
+    }
+
+    return result;
 #endif
-    return cpstd::string("");
 }
 
 cpstd::string cpstd::to_string(double val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+    if (val == 0.0)
+        return "0";
+
+    std::string result;
+    bool isNegative = false;
+
+    // Handle the case where the value is negative
+    if (val < 0) {
+        isNegative = true;
+        val = -val;
+    }
+
+    // Convert the integral part to string
+    unsigned long long integralPart = static_cast<unsigned long long>(val);
+    result += custom_unsigned_to_string(integralPart);
+
+    // Add decimal point
+    result.push_back('.');
+
+    // Convert the fractional part to string (considering a fixed precision, e.g., 15)
+    double fractionalPart = val - static_cast<double>(integralPart);
+    for (int i = 0; i < 15; ++i) {
+        fractionalPart *= 10;
+        result += static_cast<char>('0' + static_cast<int>(fractionalPart));
+        fractionalPart -= static_cast<int>(fractionalPart);
+    }
+
+    // Add the negative sign if necessary
+    if (isNegative) {
+        result.insert(result.begin(), '-');
+    }
+
+    return result;
 #endif
-    return cpstd::string("");
 }
 
 cpstd::string cpstd::to_string(long double val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
 #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+    if (val == 0.0)
+        return "0";
+
+    std::string result;
+    bool isNegative = false;
+
+    // Handle the case where the value is negative
+    if (val < 0) {
+        isNegative = true;
+        val = -val;
+    }
+
+    // Convert the integral part to string
+    unsigned long long integralPart = static_cast<unsigned long long>(val);
+    result += custom_unsigned_to_string(integralPart);
+
+    // Add decimal point
+    result.push_back('.');
+
+    // Convert the fractional part to string (considering a fixed precision, e.g., 15)
+    double fractionalPart = val - static_cast<double>(integralPart);
+    for (int i = 0; i < 15; ++i) {
+        fractionalPart *= 10;
+        result += static_cast<char>('0' + static_cast<int>(fractionalPart));
+        fractionalPart -= static_cast<int>(fractionalPart);
+    }
+
+    // Add the negative sign if necessary
+    if (isNegative) {
+        result.insert(result.begin(), '-');
+    }
+
+    return result;
 #endif
-    return cpstd::string("");
 }
