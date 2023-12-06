@@ -18,6 +18,7 @@
         #endif
 
         #include "vector/CPSTL_Vector.h"
+        #include "vector/CPSTL_Vector_bool.h"
     #endif
 
 #endif//CPSTL_VECTOR_H
