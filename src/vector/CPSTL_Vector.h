@@ -1169,6 +1169,10 @@
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Iterator Types
+                        // 
+                            using difference_type = cpstd::ptrdiff_t;
+                            using size_type = cpstd::size_t;
+                            
                             class iterator {
                             private:
                                 uint8_t* _Buffer;
@@ -1249,8 +1253,6 @@
                             using const_iterator = const bool*;
                             using reverse_iterator = cpstd::reverse_iterator<iterator>;
                             using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;
-                            using difference_type = cpstd::ptrdiff_t;
-                            using size_type = cpstd::size_t;
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //
