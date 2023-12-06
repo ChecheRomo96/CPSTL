@@ -1135,7 +1135,7 @@
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // cpstd::swap(vector& , vector&) Specialization
 
-            template <class T, class Alloc = std::allocator<T>>
+            template <class T, class Alloc = cpstd::allocator<T>>
             void swap(vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) noexcept{
                 lhs.swap(rhs);
             }
