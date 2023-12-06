@@ -143,7 +143,7 @@
                             size_type _Size;
                             size_type _Capacity;
                             uint8_t* _Buffer;
-                            Alloc _Alloc; // Instance of the custom allocator
+                            cpstd::allocator<uint8_t> _Alloc; // Instance of the custom allocator
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
