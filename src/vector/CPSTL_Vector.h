@@ -1152,7 +1152,7 @@
                 };
             #else
                 template <class Alloc = cpstd::allocator<uint8_t>>
-                class vector<bool, Alloc> {
+                class vector<bool, Alloc> : public vector<bool,Alloc> {
                 public:
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Typdefs and aliases
