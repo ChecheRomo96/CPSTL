@@ -83,7 +83,9 @@
                                 reference operator*() const {
                                     size_type byteIndex = _Index / 8;
                                     size_type bitIndex = _Index % 8;
-                                    return (_Buffer[byteIndex] & (1 << bitIndex)) != 0;
+                                    static bool value;  // Static variable to hold the result
+                                    value = (_Buffer[byteIndex] & (1 << bitIndex)) != 0;
+                                    return value;
                                 }
 
                                 // Increment and Decrement operators
