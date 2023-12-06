@@ -68,7 +68,6 @@
                             private:
                                 uint8_t* _Buffer;
                                 size_type _Index;
-
                             public:
                                 using iterator_category = cpstd::random_access_iterator_tag;
                                 using value_type = bool;
@@ -161,7 +160,102 @@
                                 }
                             };
 
-                            using const_iterator = const bool*;
+                            class const_iterator {
+                            private:
+                                const uint8_t* _Buffer;  // Use const pointer for const_iterator
+                                size_type _Index;
+                            public:
+                                using iterator_category = cpstd::random_access_iterator_tag;
+                                using value_type = bool;
+                                using difference_type = cpstd::ptrdiff_t;
+                                using pointer = const bool*;   // const-qualified pointer for const_iterator
+                                using reference = const bool&;  // const-qualified reference for const_iterator
+
+                                // Constructor
+                                const_iterator(const uint8_t* buffer, size_type index) : _Buffer(buffer), _Index(index) {}
+
+                                // Dereference operator
+                                reference operator*() const {
+                                    size_type byteIndex = _Index / 8;
+                                    size_type bitIndex = _Index % 8;
+                                    static bool value;  // Static variable to hold the result
+                                    value = (_Buffer[byteIndex] & (1 << bitIndex)) != 0;
+                                    return value;
+                                }
+
+                                // Increment and Decrement operators
+                                const_iterator& operator++() {
+                                    ++_Index;
+                                    return *this;
+                                }
+
+                                const_iterator operator++(int) {
+                                    const_iterator temp = *this;
+                                    ++(*this);
+                                    return temp;
+                                }
+
+                                const_iterator& operator--() {
+                                    --_Index;
+                                    return *this;
+                                }
+
+                                const_iterator operator--(int) {
+                                    const_iterator temp = *this;
+                                    --(*this);
+                                    return temp;
+                                }
+
+                                // Arithmetic operators
+                                const_iterator operator+(difference_type n) const {
+                                    return const_iterator(_Buffer, _Index + n);
+                                }
+
+                                const_iterator& operator+=(difference_type n) {
+                                    _Index += n;
+                                    return *this;
+                                }
+
+                                const_iterator operator-(difference_type n) const {
+                                    return const_iterator(_Buffer, _Index - n);
+                                }
+
+                                const_iterator& operator-=(difference_type n) {
+                                    _Index -= n;
+                                    return *this;
+                                }
+
+                                // Comparison operators
+                                bool operator==(const const_iterator& rhs) const {
+                                    return _Index == rhs._Index;
+                                }
+
+                                bool operator!=(const const_iterator& rhs) const {
+                                    return !(*this == rhs);
+                                }
+
+                                bool operator<(const const_iterator& rhs) const {
+                                    return _Index < rhs._Index;
+                                }
+
+                                bool operator<=(const const_iterator& rhs) const {
+                                    return _Index <= rhs._Index;
+                                }
+
+                                bool operator>(const const_iterator& rhs) const {
+                                    return _Index > rhs._Index;
+                                }
+
+                                bool operator>=(const const_iterator& rhs) const {
+                                    return _Index >= rhs._Index;
+                                }
+
+                                // Subscript operator
+                                reference operator[](difference_type n) const {
+                                    return *(*this + n);
+                                }
+                            };
+
                             using reverse_iterator = cpstd::reverse_iterator<iterator>;
                             using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;
                         //
