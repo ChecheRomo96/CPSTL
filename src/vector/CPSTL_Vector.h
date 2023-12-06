@@ -1187,18 +1187,6 @@
 
                                 // Constructor
                                 iterator(uint8_t* buffer, size_type index) : _Buffer(buffer), _Index(index) {}
-                                
-                                // Increment operator (pre-increment)
-                                iterator& operator++() {
-                                    ++_Index;
-                                    return *this;
-                                }
-
-                                // Decrement operator (pre-decrement)
-                                iterator& operator--() {
-                                    --_Index;
-                                    return *this;
-                                }
 
                                 // Dereference operator
                                 reference operator*() const {
