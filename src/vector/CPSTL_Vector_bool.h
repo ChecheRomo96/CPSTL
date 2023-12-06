@@ -275,6 +275,35 @@
 
                     public:
 
+
+                        void resize(size_type new_size, const_reference value = bool()){
+                            if (new_size < _Size) {
+                                // Destruct elements if resizing to a smaller size
+                                for (size_type i = new_size; i < _Size; ++i) {
+                                    _Alloc.destroy(&_Buffer[i]);
+                                }
+                            } else if (new_size > _Size) {
+                                if (new_size > _Capacity) {
+                                    // Reallocate memory if necessary
+                                    size_type new_capacity = new_size * 2;  // Or any suitable strategy
+                                    T* new_buffer = _Alloc.allocate(new_capacity);
+                                    
+                                    for (size_type i = 0; i < _Size; ++i) {
+                                        _Alloc.construct(&new_buffer[i], cpstd::move(_Buffer[i])); // Move old elements to the new memory
+                                        _Alloc.destroy(&_Buffer[i]);  // Destroy the old elements
+                                    }
+                                    _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
+                                    _Buffer = new_buffer;
+                                    _Capacity = new_capacity;
+                                }
+                                // Initialize new elements if resizing to a larger size
+                                for (size_type i = _Size; i < new_size; ++i) {
+                                    _Alloc.construct(&_Buffer[i]);
+                                }
+                            }
+                            _Size = new_size;
+                        }
+
                         bool operator[](size_type index) const {
                             return (_Buffer[index / 8] & (1 << index % 8)) != 0;
                         }
