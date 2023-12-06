@@ -1151,7 +1151,7 @@
                     // You can add additional functionality or overrides here if needed
                 };
             #else
-                template <class Alloc = cpstd::allocator<uint8_t>>
+                template <class Alloc>
                 class vector<bool, Alloc>{
                 public:
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
