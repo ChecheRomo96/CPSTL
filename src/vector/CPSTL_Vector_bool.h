@@ -42,8 +42,8 @@
                     // You can add additional functionality or overrides here if needed
                 };
             #else
-                template <class Alloc>
-                class vector<bool, Alloc>{
+                template <>
+                class vector<bool, cpstd::allocator<uint8_t>>{
                 public:
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Typdefs and aliases
