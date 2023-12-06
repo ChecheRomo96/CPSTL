@@ -1155,7 +1155,6 @@
                 class vector<bool, Alloc> {
                 public:
                 };
-    };
             #endif    
 
 
