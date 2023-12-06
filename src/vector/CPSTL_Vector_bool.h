@@ -52,7 +52,7 @@
                         // Value Types
 
                             using value_type = bool;
-                            using allocator_type = Alloc;
+                            using allocator_type = cpstd::allocator<uint8_t>;
                             using reference = value_type&;
                             using const_reference = const value_type&;
                             using pointer = typename cpstd::allocator_traits<allocator_type>::pointer;
