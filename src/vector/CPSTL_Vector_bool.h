@@ -129,6 +129,36 @@
                                     _Index -= n;
                                     return *this;
                                 }
+
+                                // Comparison operators
+                                bool operator==(const iterator& rhs) const {
+                                    return _Index == rhs._Index;
+                                }
+
+                                bool operator!=(const iterator& rhs) const {
+                                    return !(*this == rhs);
+                                }
+
+                                bool operator<(const iterator& rhs) const {
+                                    return _Index < rhs._Index;
+                                }
+
+                                bool operator<=(const iterator& rhs) const {
+                                    return _Index <= rhs._Index;
+                                }
+
+                                bool operator>(const iterator& rhs) const {
+                                    return _Index > rhs._Index;
+                                }
+
+                                bool operator>=(const iterator& rhs) const {
+                                    return _Index >= rhs._Index;
+                                }
+
+                                // Subscript operator
+                                reference operator[](difference_type n) const {
+                                    return *(*this + n);
+                                }
                             };
 
                             using const_iterator = const bool*;
