@@ -34,7 +34,13 @@
 
             #ifdef CPSTL_USING_STL
                 template <class T, class Alloc = std::allocator<T>>
-                using vector = std::vector<T, Alloc> ;
+                struct vector_helper {
+                    using type = std::vector<T, Alloc>;
+                };
+
+                // Convenience alias
+                template <class T, class Alloc = std::allocator<T>>
+                using vector = typename vector_helper<T, Alloc>::type;
             #else
                 template <class T, class Alloc = cpstd::allocator<T>>
                 class  vector{
@@ -1129,13 +1135,30 @@
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // cpstd::swap(vector& , vector&) Specialization
 
-            template <class T, class Alloc>
+            template <class T, class Alloc = std::allocator<T>>
             void swap(vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) noexcept{
                 lhs.swap(rhs);
             }
         //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
+
+            #ifdef CPSTL_USING_STL
+                // Partial specialization for when T is bool
+                template <class Alloc>
+                struct vector_helper<bool, Alloc> {
+                    using type = std::vector<bool, Alloc>;
+                    // You can add additional functionality or overrides here if needed
+                };
+            #else
+                template <class Alloc>
+                class vector<bool, Alloc> {
+                public:
+                };
+    };
+            #endif    
+
+
     }   
 
 

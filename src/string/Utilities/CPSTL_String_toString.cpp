@@ -311,7 +311,7 @@ cpstd::string cpstd::to_string(double val){
 
     // Convert the fractional part to string (considering a fixed precision, e.g., 15)
     double fractionalPart = val - static_cast<double>(integralPart);
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 6; ++i) {
         fractionalPart *= 10;
         result += static_cast<char>('0' + static_cast<int>(fractionalPart));
         fractionalPart -= static_cast<int>(fractionalPart);
