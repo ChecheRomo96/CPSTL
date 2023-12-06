@@ -1151,9 +1151,126 @@
                     // You can add additional functionality or overrides here if needed
                 };
             #else
-                template <class Alloc>
+                template <class Alloc = cpstd::allocator<uint8_t>>
                 class vector<bool, Alloc> {
                 public:
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Typdefs and aliases
+
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // Value Types
+
+                            using value_type = bool;
+                            using allocator_type = Alloc;
+                            using reference = value_type&;
+                            using const_reference = const value_type&;
+                            using pointer = typename cpstd::allocator_traits<allocator_type>::pointer;
+                            using const_pointer = typename cpstd::allocator_traits<allocator_type>::const_pointer;
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // Iterator Types
+                            class iterator {
+                            private:
+                                uint8_t* _Buffer;
+                                size_type _Index;
+
+                            public:
+                                using iterator_category = std::random_access_iterator_tag;
+                                using value_type = bool;
+                                using difference_type = std::ptrdiff_t;
+                                using pointer = bool*;
+                                using reference = bool&;
+
+                                // Constructor
+                                iterator(uint8_t* buffer, size_type index) : _Buffer(buffer), _Index(index) {}
+                                
+                                // Increment operator (pre-increment)
+                                iterator& operator++() {
+                                    ++_Index;
+                                    return *this;
+                                }
+
+                                // Decrement operator (pre-decrement)
+                                iterator& operator--() {
+                                    --_Index;
+                                    return *this;
+                                }
+
+                                // Dereference operator
+                                reference operator*() const {
+                                    size_type byteIndex = _Index / 8;
+                                    size_type bitIndex = _Index % 8;
+                                    return (_Buffer[byteIndex] & (1 << bitIndex)) != 0;
+                                }
+
+                                // Increment and Decrement operators
+                                iterator& operator++() {
+                                    ++_Index;
+                                    return *this;
+                                }
+
+                                iterator operator++(int) {
+                                    iterator temp = *this;
+                                    ++(*this);
+                                    return temp;
+                                }
+
+                                iterator& operator--() {
+                                    --_Index;
+                                    return *this;
+                                }
+
+                                iterator operator--(int) {
+                                    iterator temp = *this;
+                                    --(*this);
+                                    return temp;
+                                }
+
+                                // Arithmetic operators
+                                iterator operator+(difference_type n) const {
+                                    return iterator(_Buffer, _Index + n);
+                                }
+
+                                iterator& operator+=(difference_type n) {
+                                    _Index += n;
+                                    return *this;
+                                }
+
+                                iterator operator-(difference_type n) const {
+                                    return iterator(_Buffer, _Index - n);
+                                }
+
+                                iterator& operator-=(difference_type n) {
+                                    _Index -= n;
+                                    return *this;
+                                }
+                            };
+
+                            using const_iterator = const bool*;
+                            using reverse_iterator = cpstd::reverse_iterator<iterator>;
+                            using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;
+                            using difference_type = cpstd::ptrdiff_t;
+                            using size_type = cpstd::size_t;
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    protected:
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // Instance Variables
+
+                            size_type _Size;
+                            size_type _Capacity;
+                            uint8_t* _Buffer;
+                            Alloc _Alloc; // Instance of the custom allocator
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    public:
+
+                        bool operator[](size_type index) const {
+                            return (_Buffer[index / 8] & (1 << index % 8)) != 0;
+                        }
                 };
             #endif    
 
