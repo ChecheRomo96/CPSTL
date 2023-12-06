@@ -1172,16 +1172,16 @@
                         // 
                             using difference_type = cpstd::ptrdiff_t;
                             using size_type = cpstd::size_t;
-                            
+
                             class iterator {
                             private:
                                 uint8_t* _Buffer;
                                 size_type _Index;
 
                             public:
-                                using iterator_category = std::random_access_iterator_tag;
+                                using iterator_category = cpstd::random_access_iterator_tag;
                                 using value_type = bool;
-                                using difference_type = std::ptrdiff_t;
+                                using difference_type = cpstd::ptrdiff_t;
                                 using pointer = bool*;
                                 using reference = bool&;
 
