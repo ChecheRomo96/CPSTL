@@ -371,7 +371,7 @@
                             //! @return const_reverse_iterator - A constant reverse iterator to the beginning of the vector's elements.
 
                                 const_reverse_iterator crbegin() const noexcept{
-                                    return const_reverse_iterator(_Buffer, _Size);
+                                    return const_reverse_iterator(const_iterator(_Buffer, _Size));
                                 }                        
                             //!
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -382,7 +382,7 @@
                             //! @return const_reverse_iterator - A constant reverse iterator to the end of the vector's elements.
 
                                 const_reverse_iterator crend() const noexcept{
-                                    return const_reverse_iterator(_Buffer, 0);
+                                    return const_reverse_iterator(const_iterator(_Buffer, 0));
                                 }                    
                             //!
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
