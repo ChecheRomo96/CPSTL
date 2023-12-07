@@ -72,8 +72,8 @@
                                 using iterator_category = cpstd::random_access_iterator_tag;
                                 using value_type = bool;
                                 using difference_type = cpstd::ptrdiff_t;
-                                using pointer = void;
-                                using reference = bool;
+                                using pointer = bool*;
+                                using reference = bool&;
 
                                 // Constructor
                                 iterator(uint8_t* buffer, size_type index) : _Buffer(buffer), _Index(index) {}
