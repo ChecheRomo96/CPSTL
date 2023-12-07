@@ -702,40 +702,6 @@
                     //! @}
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    void resize(size_type new_size, const_reference value = bool()) {
-                        size_type new_byte_size = (new_size + 7) / 8;
-
-                        if (new_size < _Size) {
-                            // Destruct elements if resizing to a smaller size
-                            for (size_type i = new_size; i < _Size; ++i) {
-                                // Clear the corresponding bit in the byte
-                                _Buffer[i / 8] &= ~(1 << (i % 8));
-                            }
-                        } else if (new_size > _Size) {
-                            if (new_byte_size > capacity()) {
-                                // Reallocate memory if necessary
-                                uint8_t* new_buffer = _Alloc.allocate(new_byte_size);
-
-                                // Copy old bytes to the new memory
-                                for (size_type i = 0; i < (_Size + 7) / 8; ++i) {
-                                    new_buffer[i] = _Buffer[i];
-                                }
-
-                                _Alloc.deallocate(_Buffer, (_Size + 7) / 8);  // Deallocate the old memory
-                                _Buffer = new_buffer;
-                            }
-
-                            // Initialize new bits if resizing to a larger size
-                            for (size_type i = _Size; i < new_size; ++i) {
-                                // Set the corresponding bit in the byte
-                                if (value) {
-                                    _Buffer[i / 8] |= (1 << (i % 8));
-                                }
-                            }
-                        }
-
-                        _Size = new_size;
-                    }
 
                     bool operator[](size_type index) const {
                         return (_Buffer[index / 8] & (1 << index % 8)) != 0;
