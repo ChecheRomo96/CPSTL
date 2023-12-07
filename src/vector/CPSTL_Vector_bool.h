@@ -1006,16 +1006,24 @@
                             }
 
                             iterator insert(const_iterator position, value_type&& val){
-                                size_type index = position - _Buffer;
+                                size_type index = cpstd::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
+                                size_type offset = cpstd::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
+
                                 resize(size() + 1);
 
+                                // Shift elements to make space for the new one
                                 for (size_type i = _Size - 1; i > index; --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - 1]);
+                                    _Buffer[i] = _Buffer[i - 1];
                                 }
 
-                                _Buffer[index] = cpstd::move(val);
-                                
-                                return _Buffer + index;
+                                // Insert the new element at the specified position
+                                if (val) {
+                                    _Buffer[index] |= (1 << offset);
+                                } else {
+                                    _Buffer[index] &= ~(1 << offset);
+                                }
+
+                                return begin() + cpstd::distance(cbegin(), position);
                             }
 
                             iterator insert(const_iterator position, cpstd::initializer_list<value_type> il){
