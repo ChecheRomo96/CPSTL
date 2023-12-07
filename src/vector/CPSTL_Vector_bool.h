@@ -1092,7 +1092,7 @@
                                     auto range = cpstd::distance(first, last);
 
                                     // Move elements to fill the erased range
-                                    for (iterator it = const_cast<iterator>(first); it + range < endIt; ++it) {
+                                    for (iterator it = first; it + range < endIt; ++it) {
                                         *it = cpstd::move(*(it + range));
                                     }
 
