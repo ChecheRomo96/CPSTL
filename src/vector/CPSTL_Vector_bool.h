@@ -67,7 +67,7 @@
                             class iterator {
                             private:
                                 cpstd::vector<bool>& _vector;
-                                size_t _index;
+                                size_type _index;
 
                                 class BoolReferenceProxy {
                                 private:
@@ -103,7 +103,7 @@
                                 using reference = bool&;
 
                                 // Constructor
-                                iterator(uint8_t* buffer, size_type index) : _Buffer(buffer), _Index(index) {}
+                                iterator(cpstd::vector<bool>& vector, size_type index) : _vector(vector), _Index(index) {}
 
                                 // Dereference operator
                                 reference operator*() const {
