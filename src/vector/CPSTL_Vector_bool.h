@@ -71,7 +71,7 @@
 
                                 class BoolReferenceProxy {
                                 private:
-                                    std::vector<bool>& _vector;
+                                    cpstd::vector<bool>& _vector;
                                     size_t _Index;
 
                                 public:
