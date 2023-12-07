@@ -68,6 +68,33 @@
                             private:
                                 uint8_t* _Buffer;
                                 size_type _Index;
+
+                                class BoolReferenceProxy {
+                                private:
+                                    std::vector<bool>& _vector;
+                                    size_t _Index;
+
+                                public:
+                                    BoolReferenceProxy(cpstd::vector<bool>& vector, size_t index)
+                                        : _vector(vector), _Index(index) {}
+
+                                    // Conversion operator to bool
+                                    operator bool() const {
+                                        // Retrieve the bit at the specified index
+                                        return (_vector[_Index / 8] & (1 << (_Index % 8))) != 0;
+                                    }
+
+                                    // Assignment operator
+                                    BoolReferenceProxy& operator=(bool value) {
+                                        // Modify the bit at the specified index
+                                        if (value)
+                                            _vector[_Index / 8] |= (1 << (_Index % 8));
+                                        else
+                                            _vector[_Index / 8] &= ~(1 << (_Index % 8));
+                                        return *this;
+                                    }
+                                };
+
                             public:
                                 using iterator_category = cpstd::random_access_iterator_tag;
                                 using value_type = bool;
@@ -80,9 +107,7 @@
 
                                 // Dereference operator
                                 reference operator*() const {
-                                    size_type byteIndex = _Index / 8;
-                                    size_type bitIndex = _Index % 8;
-                                    return (_Buffer[byteIndex] & (1 << bitIndex)) != 0;
+                                    return BoolReferenceProxy(_vector, _index);
                                 }
 
                                 // Increment and Decrement operators
