@@ -487,7 +487,7 @@
                         //! @tparam list std::initializer list with matching template argument
                         //
                             vector(cpstd::initializer_list<value_type> list): vector(){
-                                resize(list.size());
+                                reserve(list.size());
                                 auto it = begin();
                                 for (const auto& item : list) {
                                     push_back(item);
@@ -519,11 +519,10 @@
                             
                                 vector<value_type, allocator_type>& operator=(const vector<value_type, allocator_type>& source){
                                     if (this != &source) {
-                                        resize(source.size());
+                                        reserve(source.size());
                                         auto it = begin();
                                         for (const auto& item : source) {
-                                            *it = item;
-                                            ++it;
+                                            push_back(item);
                                         }
                                     }
                                     return *this;
@@ -551,11 +550,10 @@
                             //! @tparam list std::initializer list with matching template argument
                             //
                                 vector<value_type, allocator_type>& operator=(cpstd::initializer_list<value_type> il) { 
-                                    resize(il.size());
+                                    reserve(il.size());
                                     auto it = begin();
                                     for (const auto& item : il) {
-                                        *it = item;
-                                        ++it;
+                                        push_back(item);
                                     }
                                     return *this;
                                 }
