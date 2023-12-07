@@ -1027,21 +1027,29 @@
                             }
 
                             iterator insert(const_iterator position, cpstd::initializer_list<value_type> il){
-                                size_type index = position - _Buffer;
-                                resize(size() + il.size());
+                                size_type index = cpstd::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
+                                size_type offset = cpstd::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
+
+                                size_type newSize = size() + il.size();
+                                resize(newSize);
 
                                 // Shift elements to make space for the new ones
-                                for (size_type i = size() - 1; i >= index + il.size(); --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - il.size()]);
+                                for (size_type i = newSize - 1; i >= index + il.size(); --i) {
+                                    _Buffer[i] = _Buffer[i - il.size()];
                                 }
 
                                 // Copy elements from the initializer_list
-                                size_type i = index;
-                                for (const auto& elem : il) {
-                                    _Buffer[i++] = elem;
+                                auto ilIter = il.begin();
+                                for (size_type i = index; i < index + il.size(); ++i) {
+                                    bool value = *ilIter++;
+                                    if (value) {
+                                        _Buffer[i / 8] |= (1 << (i % 8));
+                                    } else {
+                                        _Buffer[i / 8] &= ~(1 << (i % 8));
+                                    }
                                 }
 
-                                return _Buffer + index; 
+                                return begin() + cpstd::distance(cbegin(), position);
                             }
                         // 
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
