@@ -266,8 +266,6 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Instance Variables
 
-                            size_type _Size;
-                            size_type _Capacity;
                             uint8_t* _Buffer;
                             cpstd::allocator<uint8_t> _Alloc; // Instance of the custom allocator
                         //
