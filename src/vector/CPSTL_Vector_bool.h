@@ -38,7 +38,7 @@
                 // Partial specialization for when T is bool
                 template <class Alloc>
                 struct vector_helper<bool, Alloc> {
-                    using type = std::vector<bool, Alloc>;
+                    using type = cpstd::vector<bool, Alloc>;
                     // You can add additional functionality or overrides here if needed
                 };
             #else
@@ -484,7 +484,7 @@
                         //! @brief cpstd::initializer list constructor. 
                         //!
                         //! Constructs the container with an initializer list
-                        //! @tparam list std::initializer list with matching template argument
+                        //! @tparam list cpstd::initializer list with matching template argument
                         //
                             vector(cpstd::initializer_list<value_type> list): vector(){
                                 reserve(list.size());
@@ -547,7 +547,7 @@
                             //! @brief cpstd::initializer list constructor
                             //!
                             //! Constructs the container with an initializer list
-                            //! @tparam list std::initializer list with matching template argument
+                            //! @tparam list cpstd::initializer list with matching template argument
                             //
                                 vector<value_type, allocator_type>& operator=(cpstd::initializer_list<value_type> il) { 
                                     reserve(il.size());
@@ -953,8 +953,8 @@
 
 
                             iterator insert(const_iterator position, const value_type& val) {
-                                size_type index = std::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
-                                size_type offset = std::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
+                                size_type index = cpstd::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
+                                size_type offset = cpstd::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
 
                                 resize(size() + 1);
 
@@ -970,7 +970,7 @@
                                     _Buffer[index] &= ~(1 << offset);
                                 }
 
-                                return begin() + std::distance(cbegin(), position);
+                                return begin() + cpstd::distance(cbegin(), position);
                             }
 
                             iterator insert(const_iterator position, size_type n, const value_type& val){
@@ -1084,7 +1084,7 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         //! @brief Swaps the elements at index_a and index_b
                         //!
-                        //! The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at a location provided by the container. However, if the required location has been occupied by an existing element, the inserted element is constructed at another location at first, and then move assigned into the required location.
+                        //! The element is constructed through cpstd::allocator_traits::construct, which typically uses placement-new to construct the element in-place at a location provided by the container. However, if the required location has been occupied by an existing element, the inserted element is constructed at another location at first, and then move assigned into the required location.
                         //! The class used must implement the proper move semantics in order for this method to be able to call a move assignment operator.
                         //! @tparam index_a the value of the first element to swap.
 
