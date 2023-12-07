@@ -974,18 +974,26 @@
                             }
 
                             iterator insert(const_iterator position, size_type n, const value_type& val){
-                                size_type index = position - _Buffer;
-                                resize(_Size + n);
+                                size_type index = std::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
+                                size_type offset = std::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
 
-                                for (size_type i = _Size - 1; i >= index + n; --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - n]);
+                                resize(size() + n);
+
+                                // Shift elements to make space for the new ones
+                                for (size_type i = _Size - n; i > index; --i) {
+                                    _Buffer[i + n - 1] = _Buffer[i - 1];
                                 }
 
-                                for (size_type i = index; i < index + n; ++i) {
-                                    _Buffer[i] = val;
+                                // Insert the new elements at the specified position
+                                for (size_type i = 0; i < n; ++i) {
+                                    if (val) {
+                                        _Buffer[index + i] |= (1 << offset);
+                                    } else {
+                                        _Buffer[index + i] &= ~(1 << offset);
+                                    }
                                 }
 
-                                return _Buffer + index;
+                                return begin() + std::distance(cbegin(), position);
                             }
 
                             template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
