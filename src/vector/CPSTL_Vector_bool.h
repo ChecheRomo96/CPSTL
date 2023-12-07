@@ -680,11 +680,6 @@
                                         // Move the old elements to the new memory
                                         cpstd::uninitialized_move(_Buffer, _Buffer + _Size, new_buffer);
 
-                                        // Destroy the old elements
-                                        for (size_type i = 0; i < _Size; ++i) {
-                                            _Buffer[i].~T();
-                                        }
-
                                         // Deallocate the old memory
                                         _Alloc.deallocate(_Buffer, _Capacity);
 
