@@ -43,7 +43,7 @@
                 };
             #else
                 template <>
-                class vector<bool, cpstd::allocator<uint8_t>>{
+                class vector<bool, cpstd::allocator<uint8_t>> : public vector<bool, cpstd::allocator<uint8_t>>{
                 public:
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // Typdefs and aliases
@@ -266,6 +266,8 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Instance Variables
 
+                            size_type _Size;
+                            size_type _Capacity;
                             uint8_t* _Buffer;
                             cpstd::allocator<uint8_t> _Alloc; // Instance of the custom allocator
                         //
