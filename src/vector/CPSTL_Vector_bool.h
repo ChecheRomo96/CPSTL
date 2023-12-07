@@ -1093,7 +1093,7 @@
 
                                     // Move elements to fill the erased range
                                     for (auto it = first; it + range < endIt; ++it) {
-                                        *const_cast<T*>(it) = cpstd::move(*(it + range));
+                                        *const_cast<value_type*>(it) = cpstd::move(*(it + range));
                                     }
 
                                     // Resize the container
