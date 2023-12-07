@@ -1089,17 +1089,17 @@
                                         return end();  // Return iterator to the end as an indication of an error or no change
                                     }
 
-                                    auto range = std::distance(first, last);
+                                    auto range = cpstd::distance(first, last);
 
                                     // Move elements to fill the erased range
                                     for (iterator it = const_cast<iterator>(first); it + range < endIt; ++it) {
-                                        *it = std::move(*(it + range));
+                                        *it = cpstd::move(*(it + range));
                                     }
 
                                     // Resize the container
                                     resize(size() - range);
 
-                                    return beginIt + static_cast<size_type>(std::distance(beginIt, first));
+                                    return beginIt + static_cast<size_type>(cpstd::distance(beginIt, first));
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
