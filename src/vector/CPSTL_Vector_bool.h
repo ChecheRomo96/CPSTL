@@ -276,34 +276,41 @@
                     public:
 
 
-                        void resize(size_type new_size, const_reference value = bool()){
+                        void resize(size_type new_size, const_reference value = bool()) {
+                            size_type new_byte_size = (new_size + 7) / 8;
+
                             if (new_size < _Size) {
                                 // Destruct elements if resizing to a smaller size
                                 for (size_type i = new_size; i < _Size; ++i) {
-                                    _Alloc.destroy(&_Buffer[i]);
+                                    // Clear the corresponding bit in the byte
+                                    _Buffer[i / 8] &= ~(1 << (i % 8));
                                 }
                             } else if (new_size > _Size) {
-                                if (new_size > _Capacity) {
+                                if (new_byte_size > capacity()) {
                                     // Reallocate memory if necessary
-                                    size_type new_capacity = new_size * 2;  // Or any suitable strategy
-                                    T* new_buffer = _Alloc.allocate(new_capacity);
-                                    
-                                    for (size_type i = 0; i < _Size; ++i) {
-                                        _Alloc.construct(&new_buffer[i], cpstd::move(_Buffer[i])); // Move old elements to the new memory
-                                        _Alloc.destroy(&_Buffer[i]);  // Destroy the old elements
+                                    uint8_t* new_buffer = _Alloc.allocate(new_byte_size);
+
+                                    // Copy old bytes to the new memory
+                                    for (size_type i = 0; i < (_Size + 7) / 8; ++i) {
+                                        new_buffer[i] = _Buffer[i];
                                     }
-                                    _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
+
+                                    _Alloc.deallocate(_Buffer, (_Size + 7) / 8);  // Deallocate the old memory
                                     _Buffer = new_buffer;
-                                    _Capacity = new_capacity;
                                 }
-                                // Initialize new elements if resizing to a larger size
+
+                                // Initialize new bits if resizing to a larger size
                                 for (size_type i = _Size; i < new_size; ++i) {
-                                    _Alloc.construct(&_Buffer[i]);
+                                    // Set the corresponding bit in the byte
+                                    if (value) {
+                                        _Buffer[i / 8] |= (1 << (i % 8));
+                                    }
                                 }
                             }
+
                             _Size = new_size;
                         }
-
+                        
                         bool operator[](size_type index) const {
                             return (_Buffer[index / 8] & (1 << index % 8)) != 0;
                         }
