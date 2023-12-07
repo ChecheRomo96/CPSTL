@@ -153,7 +153,7 @@
                                 }
 
                                 // Subscript operator
-                                reference operator[](difference_type n) const {
+                                value_type operator[](difference_type n) const {
                                     return *(*this + n);
                                 }
                             };
@@ -173,7 +173,7 @@
                                 const_iterator(const uint8_t* buffer, size_type index) : _Buffer(buffer), _Index(index) {}
 
                                 // Dereference operator
-                                reference operator*() const {
+                                value_type operator*() const {
                                     size_type byteIndex = _Index / 8;
                                     size_type bitIndex = _Index % 8;
                                     return (_Buffer[byteIndex] & (1 << bitIndex)) != 0;
@@ -247,7 +247,7 @@
                                 }
 
                                 // Subscript operator
-                                reference operator[](difference_type n) const {
+                                value_type operator[](difference_type n) const {
                                     return *(*this + n);
                                 }
                             };
