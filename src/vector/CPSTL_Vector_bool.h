@@ -1089,17 +1089,17 @@
                                         return end();
                                     }
 
-                                    auto range = std::distance(first, last);
+                                    auto range = cpstd::distance(first, last);
 
                                     // Move elements to fill the erased range
-                                    for (iterator it = std::next(beginIt, std::distance(cbegin(), first)); it + range < endIt; ++it) {
-                                        *it = std::move(*(it + range));
+                                    for (iterator it = cpstd::next(beginIt, cpstd::distance(cbegin(), first)); it + range < endIt; ++it) {
+                                        *it = cpstd::move(*(it + range));
                                     }
 
                                     // Resize the container
                                     resize(size() - range);
 
-                                    return beginIt + static_cast<size_type>(std::distance(beginIt, first));
+                                    return beginIt + static_cast<size_type>(cpstd::distance(beginIt, first));
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
