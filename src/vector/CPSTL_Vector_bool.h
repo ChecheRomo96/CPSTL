@@ -490,8 +490,7 @@
                                 resize(list.size());
                                 auto it = begin();
                                 for (const auto& item : list) {
-                                    *it = item;
-                                    ++it;
+                                    push_back(item);
                                 }
                             }
                         //
