@@ -103,7 +103,7 @@
                                 using reference = bool&;
 
                                 // Constructor
-                                iterator(cpstd::vector<bool>& vector, size_type index) : _vector(vector), _Index(index) {}
+                                iterator(cpstd::vector<bool>& vector, size_type index) : _vector(vector), _index(index) {}
 
                                 // Dereference operator
                                 reference operator*() const {
