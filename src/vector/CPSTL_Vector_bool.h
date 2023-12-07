@@ -321,7 +321,7 @@
                                 }
 
                                 const_reverse_iterator rbegin() const noexcept{
-                                    return const_reverse_iterator(iterator(_Buffer, _Size));
+                                    return const_reverse_iterator(const_iterator(_Buffer, _Size));
                                 }                        
                             //!
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
