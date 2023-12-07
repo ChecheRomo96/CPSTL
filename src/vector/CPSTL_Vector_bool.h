@@ -693,6 +693,166 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //! @}
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //! @name Element Access
+                    //! @{
+                    
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // Subscript Array Operators
+                        
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Non-const subscript array operator. This operator references the element at the specified position.
+                            //!
+                            //! Similar to the at() function, it might cause undefined behavior if the position is out of the vector's size bounds.
+                            //! @param position Position of the element to fetch.
+                            
+                                value_type operator[](size_type position) {
+                                    return _Buffer[position / 8] & (1 << (position % 8));
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Const subscript array operator. This operator references the element at the specified position, providing read-only access.
+                            //!
+                            //! Similar to the at() function, it might cause undefined behavior if the position is out of the vector's size bounds.
+                            //! @param position Position of the element to fetch.
+
+                                const value_type operator[](size_type position) const {
+                                    return _Buffer[position / 8] & (1 << (position % 8));
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // at
+                        
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Access element
+                            //!
+                            //! Returns a reference to the element at position n in the vector.
+                            //! The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it 
+                            //! is not (i.e., if n is greater than, or equal to, its size). This is in contrast with member operator[], that does not check against bounds.
+                            //! @tparam position Position of an element in the container.
+                            //! If this is greater than, or equal to, the vector size, an exception of type out_of_range is thrown.\n
+                            //! Notice that the first element has a position of 0 (not 1).\n
+                            //! Member type size_type is an unsigned integral type.\n
+                            
+                                value_type at(size_type position) {
+                                #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
+                                    if(position >= _Size){
+                                        throw cpstd::out_of_range("Index requested on subscript array does not exists");
+                                    }
+                                #endif
+                                    
+                                    return _Buffer[position / 8] & (1 << (position % 8));
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Access element
+                            //!
+                            //! Returns a const_reference to the element at position n in the vector.
+                            //! The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it 
+                            //! is not (i.e., if n is greater than, or equal to, its size). This is in contrast with member operator[], that does not check against bounds.
+                            //! @tparam position Position of an element in the container.
+                            //! If this is greater than, or equal to, the vector size, an exception of type out_of_range is thrown.\n
+                            //! Notice that the first element has a position of 0 (not 1).\n
+                            //! Member type size_type is an unsigned integral type.\n
+
+                                const value_type at(size_type position) const {
+                                #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
+                                    if(position >= _Size){
+                                        throw cpstd::out_of_range("Index requested on subscript array does not exists");
+                                    }
+                                #endif
+
+                                #if defined(CPSTL_VECTOR_USING_C_ALLOCATION) | defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
+                                     return _Buffer[position];
+                                #elif defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
+                                    return _Vector.at();
+                                #endif
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // front
+                        
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Access first element 
+                            //!
+                            //! Returns a reference to the first element in the vector.\n
+                            //! Unlike member vector::begin, which returns an iterator to this same element, this function returns a direct reference.\n
+                            //! Calling this function on an empty container causes undefined behavior.
+                            
+                                value_type front() {
+                                    return _Buffer[0];
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Access first element 
+                            //!
+                            //! Returns a const_reference to the first element in the vector.\n
+                            //! Unlike member vector::begin, which returns an const_iterator to this same element, this function returns a direct const_reference.\n
+                            //! Calling this function on an empty container causes undefined behavior.
+
+                                const value_type front() const {
+                                    return _Buffer[0];
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // back
+                        
+                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Access first element 
+                            //!
+                            //! Returns a reference to the last element in the vector.\n
+                            //! Unlike member vector::end, which returns an iterator to this same element, this function returns a direct reference.\n
+                            //! Calling this function on an empty container causes undefined behavior.
+                            
+                                value_type back() {
+                                    return _Buffer[_Size-1];
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Access first element 
+                            //!
+                            //! Returns a const_reference to the last element in the vector.\n
+                            //! Unlike member vector::end, which returns an const_iterator to this same element, this function returns a direct const_reference.\n
+                            //! Calling this function on an empty container causes undefined behavior.
+
+                                const value_type back() const {
+                                    return _Buffer[_Size-1];
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // data
+                        
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                            //! @brief Access data
+                            //!
+                            //! Returns a direct pointer to the memory array used internally by the vector to store its owned elements if the function is non-const.
+                            //! For the const version, returns a direct const_pointer to the memory array.
+                            //!
+                            //! Because elements in the vector are guaranteed to be stored in contiguous storage locations in the same 
+                            //! order as represented by the vector, the pointer retrieved can be offset to access any element in the array.
+                            //!
+                            //! @return For the non-const version, returns a pointer to the memory array. For the const version, returns a const_pointer.
+                            
+                                pointer data() noexcept{
+                                    return _Buffer;
+                                }
+
+                                const_pointer data() const noexcept{
+                                    return _Buffer;
+                                }
+                            //
+                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //! @}
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
                     bool operator[](size_type index) const {
