@@ -1082,25 +1082,24 @@
                             //! @tparam last The index of the last element to be erased.
 
                                 iterator erase(const_iterator first, const_iterator last) {
-                                    const_iterator beginIt = cbegin();  // iterator to the beginning of the container
-                                    const_iterator endIt = cend();      // iterator to the end of the container
+                                    const_iterator beginIt = cbegin();  // Use cbegin() to get a const_iterator
+                                    const_iterator endIt = cend();      // Use cend() to get a const_iterator
 
                                     if (first >= last) {
                                         return end();  // Return iterator to the end as an indication of an error or no change
                                     }
 
-                                    auto range = cpstd::min(last, endIt) - first;
+                                    auto range = std::distance(first, last);
 
                                     // Move elements to fill the erased range
                                     for (auto it = first; it + range < endIt; ++it) {
-                                        *const_cast<value_type*>(it) = cpstd::move(*(it + range));
+                                        *const_cast<T*>(it) = std::move(*(it + range));
                                     }
 
                                     // Resize the container
                                     resize(size() - range);
 
-                                    return beginIt + static_cast<size_type>(cpstd::distance(beginIt, first));
-
+                                    return beginIt + static_cast<size_type>(std::distance(beginIt, first));
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
