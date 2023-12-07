@@ -974,8 +974,8 @@
                             }
 
                             iterator insert(const_iterator position, size_type n, const value_type& val){
-                                size_type index = std::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
-                                size_type offset = std::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
+                                size_type index = cpstd::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
+                                size_type offset = cpstd::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
 
                                 resize(size() + n);
 
@@ -993,10 +993,10 @@
                                     }
                                 }
 
-                                return begin() + std::distance(cbegin(), position);
+                                return begin() + cpstd::distance(cbegin(), position);
                             }
 
-                            template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
+                            template <class InputIterator, cpcpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
                             iterator insert(const_iterator position, InputIterator first, InputIterator last){
                                 resize(cpstd::distance(first, last));
 
