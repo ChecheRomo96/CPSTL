@@ -892,7 +892,7 @@
                             //!
                             //! @param il Another container of the same type used to assign the new contents to this container.
                              
-                                void assign(cpstd::initializer_list<T> il) {
+                                void assign(cpstd::initializer_list<value_type> il) {
                                     resize(il.size());
                                     size_type i = 0;
                                     for (const auto& elem : il) {
@@ -1002,7 +1002,7 @@
                                 return _Buffer + index;
                             }
 
-                            iterator insert(const_iterator position, cpstd::initializer_list<T> il){
+                            iterator insert(const_iterator position, cpstd::initializer_list<value_type> il){
                                 size_type index = position - _Buffer;
                                 resize(size() + il.size());
 
