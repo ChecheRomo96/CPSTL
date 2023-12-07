@@ -953,16 +953,24 @@
 
 
                             iterator insert(const_iterator position, const value_type& val) {
-                                size_type index = position - _Buffer;
+                                size_type index = std::distance(cbegin(), position) / 8;  // Find the index of the uint8_t
+                                size_type offset = std::distance(cbegin(), position) % 8; // Find the bit offset within the uint8_t
+
                                 resize(size() + 1);
 
+                                // Shift elements to make space for the new one
                                 for (size_type i = _Size - 1; i > index; --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - 1]);
+                                    _Buffer[i] = _Buffer[i - 1];
                                 }
 
-                                _Buffer[index] = val;
+                                // Insert the new element at the specified position
+                                if (val) {
+                                    _Buffer[index] |= (1 << offset);
+                                } else {
+                                    _Buffer[index] &= ~(1 << offset);
+                                }
 
-                                return _Buffer + index;
+                                return begin() + std::distance(cbegin(), position);
                             }
 
                             iterator insert(const_iterator position, size_type n, const value_type& val){
