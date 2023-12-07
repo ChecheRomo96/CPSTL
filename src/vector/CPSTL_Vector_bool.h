@@ -286,7 +286,7 @@
                                     _Buffer[i / 8] &= ~(1 << (i % 8));
                                 }
                             } else if (new_size > _Size) {
-                                if (new_byte_size > capacity()) {
+                                if (new_byte_size > this->capacity()) {
                                     // Reallocate memory if necessary
                                     uint8_t* new_buffer = _Alloc.allocate(new_byte_size);
 
@@ -310,7 +310,7 @@
 
                             _Size = new_size;
                         }
-                        
+
                         bool operator[](size_type index) const {
                             return (_Buffer[index / 8] & (1 << index % 8)) != 0;
                         }
