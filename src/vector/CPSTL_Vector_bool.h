@@ -66,8 +66,8 @@
 
                             class iterator {
                             private:
-                                uint8_t* _Buffer;
-                                size_type _Index;
+                                cpstd::vector<bool>& _vector;
+                                size_t _index;
 
                                 class BoolReferenceProxy {
                                 private:
