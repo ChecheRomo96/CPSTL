@@ -416,7 +416,7 @@
                                         }
                                         _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
                                         _Buffer = new_buffer;
-                                        _Capacity = new_capacity;
+                                        _Capacity = new_size;
                                     }
                                     // Initialize new elements if resizing to a larger size
                                     for (size_type i = _Size; i < new_size; ++i) {
