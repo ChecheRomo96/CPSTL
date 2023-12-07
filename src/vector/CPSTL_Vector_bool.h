@@ -1082,8 +1082,8 @@
                             //! @tparam last The index of the last element to be erased.
 
                                 iterator erase(const_iterator first, const_iterator last) {
-                                    const_iterator beginIt = begin();  // iterator to the beginning of the container
-                                    const_iterator endIt = end();      // iterator to the end of the container
+                                    const_iterator beginIt = cbegin();  // iterator to the beginning of the container
+                                    const_iterator endIt = cend();      // iterator to the end of the container
 
                                     if (first >= last) {
                                         return end();  // Return iterator to the end as an indication of an error or no change
@@ -1093,7 +1093,7 @@
 
                                     // Move elements to fill the erased range
                                     for (auto it = first; it + range < endIt; ++it) {
-                                        *const_cast<T*>(it) = cpstd::move(*(it + range));
+                                        *const_cast<value_type*>(it) = cpstd::move(*(it + range));
                                     }
 
                                     // Resize the container
