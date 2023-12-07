@@ -25,7 +25,7 @@
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //! @brief Cross Platform Vector class
         //!
-        //! cpstd::Vector<T> is a dynamic-size sequence container that stores elements contiguously. It
+        //! cpstd::Vector<value_type> is a dynamic-size sequence container that stores elements contiguously. It
         //! automatically expands as needed and can minimize reallocations with the reserve() function.
         //! The elements are stored contiguously, meaning you can access them through iterators or regular
         //! pointers. This allows passing pointers to vector elements to functions expecting array pointers.
@@ -486,7 +486,7 @@
                         //! Constructs the container with an initializer list
                         //! @tparam list std::initializer list with matching template argument
                         //
-                            vector(cpstd::initializer_list<T> list): vector(){
+                            vector(cpstd::initializer_list<value_type> list): vector(){
                                 resize(list.size());
                                 auto it = begin();
                                 for (const auto& item : list) {
@@ -551,7 +551,7 @@
                             //! Constructs the container with an initializer list
                             //! @tparam list std::initializer list with matching template argument
                             //
-                                vector<value_type, allocator_type>& operator=(cpstd::initializer_list<T> il) { 
+                                vector<value_type, allocator_type>& operator=(cpstd::initializer_list<value_type> il) { 
                                     resize(il.size());
                                     auto it = begin();
                                     for (const auto& item : il) {
