@@ -317,11 +317,11 @@
                             //! @return reverse_iterator - A reverse iterator to the beginning of the reversed vector.
 
                                 reverse_iterator rbegin() noexcept{
-                                    return reverse_iterator(_Buffer, _Size);
+                                    return reverse_iterator(iterator(_Buffer, _Size));
                                 }
 
                                 const_reverse_iterator rbegin() const noexcept{
-                                    return const_reverse_iterator(_Buffer, _Size);
+                                    return const_reverse_iterator(iterator(_Buffer, _Size));
                                 }                        
                             //!
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
