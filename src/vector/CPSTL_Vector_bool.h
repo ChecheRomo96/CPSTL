@@ -1062,11 +1062,11 @@
                             //! @tparam index The index of the element to be erased.
 
                                 iterator erase(const_iterator position){
-                                    auto index = position - begin();
+                                    size_type index = cpstd::distance(cbegin(), position);
 
                                     if (index < _Size) {
-                                        for (unsigned int i = index; i < _Size - 1; i++) {
-                                            _Buffer[i] = cpstd::move(_Buffer[i + 1]);
+                                        for (size_type i = index; i < _Size - 1; ++i) {
+                                            _Buffer[i] = _Buffer[i + 1];
                                         }
                                         resize(size() - 1);
                                     }
