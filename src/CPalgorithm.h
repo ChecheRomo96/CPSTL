@@ -40,6 +40,11 @@
 	  	// Sorting
 
 
+            #ifdef CPSTL_USING_STL
+                template<typename T>
+                using sort = std::sort<T>;
+            #else
+            #endif
 
 	  	//
 	  	///////////////////////////////////////////////////////////////////////////////
