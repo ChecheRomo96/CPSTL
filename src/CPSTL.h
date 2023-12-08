@@ -5,6 +5,7 @@
     #include <CPinitializer_list.h>
     #include <CPtype_traits.h>
     #include <utility/CPSTL_Iterator.h>
+    #include <CPalgorithm.h>
 
     namespace cpstd {}
 
