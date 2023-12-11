@@ -1,6 +1,9 @@
 #ifndef CROSS_PLATFORM_ALGORITHM_H
 #define CROSS_PLATFORM_ALGORITHM_H
 	
+	#include <CPSTL_BuildSettings.h>
+	#include <CPutility.h>
+
 	namespace cpstd{
 
 			#ifdef min
