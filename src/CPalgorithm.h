@@ -87,6 +87,16 @@
 			    qsort(low, high, comp);
 			}
 
+			namespace {
+			    // Using a lambda function as the binary predicate
+			    auto lessThan = [](int a, int b) { return a < b; };
+			}
+
+			template  <typename RandomAccessIterator>
+			void sort(RandomAccessIterator low, RandomAccessIterator high) {
+			    qsort(low, high, lessThan);
+			}
+
             #endif
 
 	  	//
