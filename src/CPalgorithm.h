@@ -29,6 +29,21 @@
 
 			    return result; // Return the iterator pointing to the end of the destination range
 			}
+
+
+            #ifdef CPSTL_USING_STL
+ 	            template<class ForwardIt1, class ForwardIt2>
+ 	            using iter_swap = std::iter_swap<ForwardIt1, ForwardIt2>;
+
+            #else
+ 	            template<class ForwardIt1, class ForwardIt2>
+				constexpr void iter_swap(ForwardIt1 a, ForwardIt2 b) // constexpr since C++20
+				{
+				    using cpstd::swap;
+				    swap(*a, *b);
+				}
+            #endif
+				
 			
 		///////////////////////////////////////////////////////////////////////////////
 		// Non-modifying sequence operations
