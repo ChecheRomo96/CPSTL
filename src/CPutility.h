@@ -4,6 +4,8 @@
     #include <CPSTL_BuildSettings.h>
     #include <CPinitializer_list.h>
 
+    #include <utility/CPSTL_Move.h>
+
     namespace cpstd{
 
         template <typename T>
@@ -45,7 +47,6 @@
     }
 
 
-    #include <utility/CPSTL_Move.h>
     #include <utility/CPSTL_Iterator.h>
 
 #endif//CPSTL_UTILITY_H
