@@ -82,7 +82,7 @@
 				    for (auto j = low; j < high - 1; ++j) {
 				        if (comp(*j, pivot)) {
 				            i++;
-				            std::iter_swap(i, j);
+				            cpstd::iter_swap(i, j);
 				        }
 				    }
 
