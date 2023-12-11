@@ -31,13 +31,7 @@
 
         template <class T, size_t N>
         void swap (T (&a)[N], T (&b)[N]){
-        #if defined(CPSTL_USING_STL)
-            std::swap(a,b);
-        #else
-            for (size_t i = 0; i<N; ++i){
-                swap (a[i],b[i]);
-            }
-        #endif
+            cpstd::swap(a,b);
         }
 
 
