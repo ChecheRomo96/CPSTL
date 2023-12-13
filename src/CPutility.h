@@ -7,13 +7,13 @@
     #include <utility/CPSTL_Move.h>
 
     namespace cpstd{
-
+        /*
         template <typename T>
         T&& forward(typename cpstd::remove_reference<T>::type& arg) noexcept {
             return static_cast<T&&>(arg);
         }
 
-        /*template <typename T>
+        template <typename T>
         T&& forward(typename cpstd::remove_reference<T>::type&& arg) noexcept {
             static_assert(!cpstd::is_lvalue_reference<T>::value,
                           "Cannot forward an rvalue as an lvalue.");
