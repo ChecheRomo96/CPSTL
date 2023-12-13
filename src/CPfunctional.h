@@ -56,7 +56,7 @@
                             return func(std::forward<Args>(args)...);
                         }
 
-                        std::unique_ptr<Concept> clone() const override {
+                        cpstd::unique_ptr<Concept> clone() const override {
                             return std::make_unique<Model>(func);
                         }
 
