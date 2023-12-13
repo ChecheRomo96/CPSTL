@@ -3,6 +3,7 @@
     
     #include <CPSTL_BuildSettings.h>
     #include <CPinitializer_list.h>
+    #include <CPfunctional.h>
 
     #include <utility/CPSTL_Move.h>
 
