@@ -6,6 +6,7 @@
     #include <CPtype_traits.h>
     #include <utility/CPSTL_Iterator.h>
     #include <CPalgorithm.h>
+    #include <CPfunctional.h>
 
     namespace cpstd {}
 
