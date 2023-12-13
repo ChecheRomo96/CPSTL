@@ -7,24 +7,7 @@
     
     namespace cpstd {
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // forward 
-            #if defined CPSTL_USING_STL
-                template <typename T>
-                using forward = std::forward<T>;
-            #else
-                template <typename T>
-                constexpr T&& forward(typename cpstd::remove_reference<T>::type& arg) noexcept {
-                    return static_cast<T&&>(arg);
-                }
-
-                template <typename T>
-                constexpr T&& forward(typename cpstd::remove_reference<T>::type&& arg) noexcept {
-                    static_assert(!cpstd::is_lvalue_reference<T>::value, "Can't forward an rvalue as an lvalue.");
-                    return static_cast<T&&>(arg);
-                }
-            #endif
-        //
+        
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // function
         
