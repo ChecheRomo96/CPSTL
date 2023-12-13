@@ -4,7 +4,8 @@
     #include <CPSTL_BuildSettings.h>
     #include <utility/CPSTL_allocator.h>
 
-    namespace cpstd{
+    namespace cpstd {
+
         template <typename InputIt, typename NoThrowForwardIt>
         NoThrowForwardIt uninitialized_move(InputIt first, InputIt last, NoThrowForwardIt d_first) {
             using value_type = typename cpstd::iterator_traits<NoThrowForwardIt>::value_type;
