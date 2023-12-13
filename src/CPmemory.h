@@ -125,6 +125,18 @@
                 unique_ptr& operator=(const unique_ptr&) = delete;
             };
         #endif
+
+
+        #if defined(CPSTL_USING_STL)
+            template <typename T, typename Deleter = std::default_delete<T>>
+            using make_unique = std::unique_ptr<T, std::default_delete<T>>(new T(std::declval<Args>()...));
+        #else
+            template <typename T, typename... Args>
+            cpstd::unique_ptr<T> make_unique(Args&&... args) {
+                return cpstd::unique_ptr<T>(new T(cpstd::forward<Args>(args)...));
+            }
+        #endif
+            
     }
 
 #endif//CPSTL_MEMORY_H
