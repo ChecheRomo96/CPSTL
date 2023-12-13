@@ -127,6 +127,8 @@
         #endif
 
 
+        #include <CPfunctional.h>
+
         #if defined(CPSTL_USING_STL)
             template <typename T, typename Deleter = std::default_delete<T>>
             using make_unique = std::unique_ptr<T, std::default_delete<T>>(new T(std::declval<Args>()...));
