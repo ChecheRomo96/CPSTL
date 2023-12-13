@@ -96,7 +96,7 @@
 
                 private:
                     // Pointer to the concept base class
-                    std::unique_ptr<Concept> target;
+                    cpstd::unique_ptr<Concept> target;
                 };
             #endif
         //
