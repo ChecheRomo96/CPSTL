@@ -3,6 +3,7 @@
 
     #include <CPSTL_BuildSettings.h>
     #include <CPutility.h>
+    #include <CPmemory.h>
     
     namespace cpstd {
 
