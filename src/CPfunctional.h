@@ -66,13 +66,13 @@
                 public:
                     // Constructor for function wrapper
                     template <typename F>
-                    function(F&& func) : target(new Model<F>(std::forward<F>(func))) {}
+                    function(F&& func) : target(new Model<F>(cpstd::forward<F>(func))) {}
 
                     // Copy constructor
                     function(const function& other) : target(other.target->clone()) {}
 
                     // Move constructor
-                    function(function&& other) noexcept : target(std::move(other.target)) {}
+                    function(function&& other) noexcept : target(cpstd::move(other.target)) {}
 
                     // Assignment operator
                     function& operator=(const function& other) {
@@ -90,7 +90,7 @@
 
                     // Function call operator
                     ReturnType operator()(Args... args) const {
-                        return target->invoke(std::forward<Args>(args)...);
+                        return target->invoke(cpstd::forward<Args>(args)...);
                     }
 
                 private:
