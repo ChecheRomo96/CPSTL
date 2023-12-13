@@ -41,6 +41,89 @@
               typename iterator_traits<ForwardIterator>::value_type(*first);
           return result;
         }
+
+        #if defined(CPSTL_USING_STL)
+            template <typename T>
+            using default_delete = std::default_delete<T>;
+        #else
+            template <typename T>
+            struct default_delete {
+                void operator()(T* p) const {
+                    delete p;
+                }
+            };
+        #endif
+
+
+
+        #if defined(CPSTL_USING_STL)
+            template <typename T, typename Deleter = std::default_delete<T>>
+            using unique_ptr = std::unique_ptr<T, Deleter>;
+        #else
+            template <typename T, typename Deleter = cpstd::default_delete<T>>
+            class unique_ptr {
+            private:
+                T* ptr;
+                Deleter deleter;
+
+            public:
+                // Constructors
+                explicit unique_ptr(T* p = nullptr) noexcept : ptr(p) {}
+
+                // Move constructor
+                unique_ptr(unique_ptr&& other) noexcept : ptr(other.release()) {}
+
+                // Move assignment
+                unique_ptr& operator=(unique_ptr&& other) noexcept {
+                    if (this != &other) {
+                        reset(other.release());
+                    }
+                    return *this;
+                }
+
+                // Destructor
+                ~unique_ptr() noexcept {
+                    reset();
+                }
+
+                // Release ownership
+                T* release() noexcept {
+                    T* released = ptr;
+                    ptr = nullptr;
+                    return released;
+                }
+
+                // Reset pointer
+                void reset(T* p = nullptr) noexcept {
+                    if (ptr != p) {
+                        deleter(ptr);
+                        ptr = p;
+                    }
+                }
+
+                // Accessors
+                T* get() const noexcept {
+                    return ptr;
+                }
+
+                T& operator*() const noexcept {
+                    return *ptr;
+                }
+
+                T* operator->() const noexcept {
+                    return ptr;
+                }
+
+                // Conversion to bool
+                explicit operator bool() const noexcept {
+                    return ptr != nullptr;
+                }
+
+                // Disable copy operations
+                unique_ptr(const unique_ptr&) = delete;
+                unique_ptr& operator=(const unique_ptr&) = delete;
+            };
+        #endif
     }
 
 #endif//CPSTL_MEMORY_H
