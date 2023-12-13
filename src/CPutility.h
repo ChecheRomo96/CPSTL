@@ -6,21 +6,27 @@
 
     #include <utility/CPSTL_Move.h>
 
-    #include <CPfunctional.h>
     namespace cpstd{
-        /*
-        template <typename T>
-        T&& forward(typename cpstd::remove_reference<T>::type& arg) noexcept {
-            return static_cast<T&&>(arg);
-        }
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // forward 
+            #if defined CPSTL_USING_STL
+                template <typename T>
+                using forward = std::forward<T>;
+            #else
+                template <typename T>
+                constexpr T&& forward(typename cpstd::remove_reference<T>::type& arg) noexcept {
+                    return static_cast<T&&>(arg);
+                }
 
-        template <typename T>
-        T&& forward(typename cpstd::remove_reference<T>::type&& arg) noexcept {
-            static_assert(!cpstd::is_lvalue_reference<T>::value,
-                          "Cannot forward an rvalue as an lvalue.");
-            return static_cast<T&&>(arg);
-        }*/
-
+                template <typename T>
+                constexpr T&& forward(typename cpstd::remove_reference<T>::type&& arg) noexcept {
+                    static_assert(!cpstd::is_lvalue_reference<T>::value, "Can't forward an rvalue as an lvalue.");
+                    return static_cast<T&&>(arg);
+                }
+            #endif
+        //
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         template <class T> 
         void swap (T& a, T& b){
         #if defined(CPSTL_USING_STL)
