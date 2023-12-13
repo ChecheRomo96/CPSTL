@@ -50,14 +50,14 @@
                     template <typename F>
                     class Model final : public Concept {
                     public:
-                        Model(F&& f) : func(std::forward<F>(f)) {}
+                        Model(F&& f) : func(cpstd::forward<F>(f)) {}
 
                         ReturnType invoke(Args&&... args) const override {
-                            return func(std::forward<Args>(args)...);
+                            return func(cpstd::forward<Args>(args)...);
                         }
 
                         cpstd::unique_ptr<Concept> clone() const override {
-                            return std::make_unique<Model>(func);
+                            return cpstd::make_unique<Model>(func);
                         }
 
                     private:
