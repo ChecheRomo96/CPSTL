@@ -42,7 +42,7 @@
                     public:
                         virtual ~Concept() = default;
                         virtual ReturnType invoke(Args&&...) const = 0;
-                        virtual std::unique_ptr<Concept> clone() const = 0;
+                        virtual cpstd::unique_ptr<Concept> clone() const = 0;
                     };
 
                     // Model template to store and invoke callable objects
