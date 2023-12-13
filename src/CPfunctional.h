@@ -85,7 +85,7 @@
 
                     // Move assignment operator
                     function& operator=(function&& other) noexcept {
-                        target = std::move(other.target);
+                        target = cpstd::move(other.target);
                         return *this;
                     }
 
