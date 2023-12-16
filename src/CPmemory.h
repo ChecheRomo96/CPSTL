@@ -2,6 +2,16 @@
 #define CPSTL_MEMORY_H
 
     #include <CPSTL_BuildSettings.h>
+
+    namespace cpstd {
+    
+        template <typename T>
+        struct default_delete;
+
+        template <typename T, typename Deleter = cpstd::default_delete<T>>
+        class unique_ptr;
+    }
+
     #include <utility/CPSTL_allocator.h>
 
     namespace cpstd {
