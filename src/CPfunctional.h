@@ -2,6 +2,15 @@
 #define CPSTL_FUNCTIONAL_H
 
     #include <CPSTL_BuildSettings.h>
+
+    namespace cpstd {
+        template <typename Signature>
+        class function;
+
+        template <typename ReturnType, typename... Args>
+        class function<ReturnType(Args...)>;
+    }
+
     #include <CPutility.h>
     #include <CPmemory.h>
     
