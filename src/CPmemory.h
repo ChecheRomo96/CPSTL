@@ -10,6 +10,9 @@
 
         template <typename T, typename Deleter = cpstd::default_delete<T>>
         class unique_ptr;
+
+        template <typename T, typename... Args>
+        cpstd::unique_ptr<T> make_unique(Args&&... args);
     }
 
     #include <utility/CPSTL_allocator.h>
