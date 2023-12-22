@@ -2,25 +2,17 @@
 #define CPSTL_FUNCTIONAL_H
 
     #include <CPSTL_BuildSettings.h>
-
-    namespace cpstd {
-        template <typename Signature>
-        class function;
-
-        template <typename ReturnType, typename... Args>
-        class function<ReturnType(Args...)>;
-    }
-
-    #include <CPutility.h>
-    #include <CPmemory.h>
     
-    namespace cpstd {
+    #ifdef CPSTL_USING_STL
+        #include <functional>
+    #endif
 
-        
+    namespace cpstd {
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // function
         
             #if defined CPSTL_USING_STL
+
                 template <typename ReturnType, typename... Args>
                 using function = std::function<ReturnType(Args...)>;
             #else
@@ -93,8 +85,11 @@
             #endif
         //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-
     }
+
+    #include <CPutility.h>
+    #include <CPmemory.h>
+
     
 
 #endif//CPSTL_FUNCTIONAL_H

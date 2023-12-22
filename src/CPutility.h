@@ -6,13 +6,16 @@
 
     #include <utility/CPSTL_Move.h>
 
+    #if defined CPSTL_USING_STL
+    #include <utility>
+    #endif
+
     namespace cpstd{
         
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // forward 
             #if defined CPSTL_USING_STL
-                template <typename T>
-                using forward = std::forward<T>;
+                using std::forward;
             #else
                 template <typename T>
                 constexpr T&& forward(typename cpstd::remove_reference<T>::type& arg) noexcept {

@@ -4,6 +4,11 @@
 	#include <CPSTL_BuildSettings.h>
 	#include <CPutility.h>
 
+	#ifdef CPSTL_USING_STL
+	#include <algorithm>
+	using std::sort;
+	#endif
+
 	namespace cpstd{
 
 			#ifdef min
@@ -36,7 +41,9 @@
 
             #ifdef CPSTL_USING_STL
  	            template<class ForwardIt1, class ForwardIt2>
- 	            using iter_swap = std::iter_swap<ForwardIt1, ForwardIt2>;
+				void iter_swap(ForwardIt1 it1, ForwardIt2 it2) {
+					using std::iter_swap = std::iter_swap<ForwardIt1, ForwardIt2>;
+				}
 
             #else
  	            template<class ForwardIt1, class ForwardIt2>
@@ -63,7 +70,6 @@
 
             #ifdef CPSTL_USING_STL
 
-            	using std::sort;  // Alias the first function
 
 			    template <class RandomAccessIterator, class Compare>
 			    void sort(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
