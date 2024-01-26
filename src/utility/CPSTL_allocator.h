@@ -2,7 +2,7 @@
 #define CPSTL_ALLOCATOR_CLASS_H
 
     #include <CPSTL_BuildSettings.h>
-    #include <CPmemory.h>
+    //#include <CPmemory.h>
     #include <CPlimits.h>
     #include <CPutility.h>
     #include <CPfunctional.h>
