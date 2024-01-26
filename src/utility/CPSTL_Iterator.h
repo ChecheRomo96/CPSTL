@@ -40,7 +40,7 @@
         }
 
         template <typename InputIt>
-        auto distance(InputIt first, InputIt last) {
+        typename iterator_traits<InputIt>::difference_type distance(InputIt first, InputIt last) {
             return std::distance(first, last);
         }
 
