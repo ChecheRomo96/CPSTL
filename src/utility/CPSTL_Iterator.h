@@ -5,10 +5,12 @@
     #include <CPtype_traits.h>    
     #include <CPiterator.h>
 
+    
+    #if defined(CPSTL_USING_STL)
+        #include <iterator>
+    #endif
+
     namespace cpstd {
-
-        
-
     #if defined(CPSTL_USING_STL)
         // Conceptual representation of std::iterator as a base class
         template <class Category, class T, class Distance = cpstd::ptrdiff_t,
