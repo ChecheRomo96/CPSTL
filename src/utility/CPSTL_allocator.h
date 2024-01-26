@@ -5,7 +5,7 @@
     //#include <CPmemory.h>
     #include <CPlimits.h>
     #include <CPutility.h>
-    #include <CPfunctional.h>
+    //#include <CPfunctional.h>
     #include "CPSTL_types.h"
 
     #ifdef CPSTL_USING_STL
