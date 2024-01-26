@@ -2,6 +2,7 @@
 #define CPSTL_FUNCTIONAL_H
 
     #include <CPSTL_BuildSettings.h>
+    #include <CPmemory.h>
     
     #ifdef CPSTL_USING_STL
         #include <functional>
