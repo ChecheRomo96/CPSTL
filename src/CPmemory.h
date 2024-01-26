@@ -3,6 +3,10 @@
 
     #include <CPSTL_BuildSettings.h>
 
+    #if defined(CPSTL_USING_STL)
+        #include <memory>
+    #endif
+
     namespace cpstd {
     
     #if defined(CPSTL_USING_STL)
