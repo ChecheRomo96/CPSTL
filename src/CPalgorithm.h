@@ -42,7 +42,8 @@
             #ifdef CPSTL_USING_STL
  	            template<class ForwardIt1, class ForwardIt2>
 				void iter_swap(ForwardIt1 it1, ForwardIt2 it2) {
-					using std::iter_swap = std::iter_swap<ForwardIt1, ForwardIt2>;
+					using std::iter_swap;
+					iter_swap<ForwardIt1, ForwardIt2>;
 				}
 
             #else
