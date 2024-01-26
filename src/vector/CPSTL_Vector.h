@@ -12,6 +12,7 @@
 
     #if defined CPSTL_USING_STL
         #include <iostream>
+        #include <vector>
     #endif
 
     #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
