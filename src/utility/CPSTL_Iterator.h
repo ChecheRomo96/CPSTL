@@ -55,12 +55,12 @@
         }
 
         template <typename Container>
-        auto begin(Container& c) {
+        typename Container::iterator begin(Container& c) {
             return std::begin(c);
         }
 
         template <typename Container>
-        auto end(Container& c) {
+        typename Container::iterator end(Container& c) {
             return std::end(c);
         }
 
