@@ -11,6 +11,39 @@
     #endif
 
     namespace cpstd {
+
+
+    // Array version of std::end
+    template <class T, size_t N>
+    constexpr T* end(T (&arr)[N]) noexcept {
+        return arr + N;
+    }
+
+    // Pointer version of begin
+    template <class T>
+    T* begin(T* ptr) noexcept {
+        return ptr;
+    }
+
+    // Const Pointer version of begin
+    template <class T>
+    const T* begin(const T* ptr) noexcept {
+        return ptr;
+    }
+
+    // Pointer version of end
+    template <class T>
+    T* end(T* ptr) noexcept {
+        return ptr;
+    }
+
+    // Const Pointer version of end
+    template <class T>
+    const T* end(const T* ptr) noexcept {
+        return ptr;
+    }
+
+
     #if defined(CPSTL_USING_STL)
         // Conceptual representation of std::iterator as a base class
         template <class Category, class T, class Distance = cpstd::ptrdiff_t,
@@ -52,16 +85,6 @@
         template <typename BidirIt, typename Distance>
         BidirIt prev(BidirIt it, Distance n) {
             return std::prev(it, n);
-        }
-
-        template <typename Container>
-        typename Container::iterator begin(Container& c) {
-            return std::begin(c);
-        }
-
-        template <typename Container>
-        typename Container::iterator end(Container& c) {
-            return std::end(c);
         }
 
         template<typename T>
@@ -298,41 +321,6 @@
             return insert_iterator<Container>(x,typename Container::iterator(i));
         }
 
-        // Container version of std::end
-        template <class Container>
-        auto end(Container& cont) -> decltype(cont.end()) {
-            return cont.end();
-        }
-
-        // Const Container version of std::end
-        template <class Container>
-        auto end(const Container& cont) -> decltype(cont.end()) {
-            return cont.end();
-        }
-
-        // Array version of std::end
-        template <class T, size_t N>
-        constexpr T* end(T (&arr)[N]) noexcept {
-            return arr + N;
-        }
-
-        // Container version of std::begin
-        template <class Container>
-        auto begin(Container& cont) -> decltype(cont.begin()) {
-            return cont.begin();
-        }
-
-        // Const Container version of std::begin
-        template <class Container>
-        auto begin(const Container& cont) -> decltype(cont.begin()) {
-            return cont.begin();
-        }
-
-        // Array version of std::begin
-        template <class T, size_t N>
-        constexpr T* begin(T (&arr)[N]) noexcept {
-            return arr;
-        }
     #endif
     }
 
