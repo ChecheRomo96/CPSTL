@@ -16,6 +16,8 @@
 
     #if defined(ESP32)
         
+        #define CPSTL_USING_STL
+
         #define CPSTL_USING_C_ALLOCATION
         #define CPSTL_USING_C_ALLOCATION
 
