@@ -12,6 +12,17 @@
 
     namespace cpstd {
 
+    // Container version of std::end
+    template <class Container>
+    auto end(Container& cont) -> decltype(cont.end()) {
+        return cont.end();
+    }
+
+    // Const Container version of std::end
+    template <class Container>
+    auto end(const Container& cont) -> decltype(cont.end()) {
+        return cont.end();
+    }
 
     // Array version of std::end
     template <class T, size_t N>
@@ -19,28 +30,22 @@
         return arr + N;
     }
 
-    // Pointer version of begin
-    template <class T>
-    T* begin(T* ptr) noexcept {
-        return ptr;
+    // Container version of std::begin
+    template <class Container>
+    auto begin(Container& cont) -> decltype(cont.begin()) {
+        return cont.begin();
     }
 
-    // Const Pointer version of begin
-    template <class T>
-    const T* begin(const T* ptr) noexcept {
-        return ptr;
+    // Const Container version of std::begin
+    template <class Container>
+    auto begin(const Container& cont) -> decltype(cont.begin()) {
+        return cont.begin();
     }
 
-    // Pointer version of end
-    template <class T>
-    T* end(T* ptr) noexcept {
-        return ptr;
-    }
-
-    // Const Pointer version of end
-    template <class T>
-    const T* end(const T* ptr) noexcept {
-        return ptr;
+    // Array version of std::begin
+    template <class T, size_t N>
+    constexpr T* begin(T (&arr)[N]) noexcept {
+        return arr;
     }
 
 
