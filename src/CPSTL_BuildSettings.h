@@ -39,7 +39,7 @@
                 #endif
 
                 #if defined(CPVECTOR_USING_STD_ALLOCATION)
-                    #undef CPVECTOR_USING_STD_ALLOCATION
+                    #undef CPSTL_VECTOR_USING_STD_ALLOCATION
                 #endif
             #endif
 
@@ -71,15 +71,33 @@
 
             #include <cstdarg>
 
-            #if !defined(CPSTRING_USING_STD_STRING) && !defined(CPSTRING_USING_C_STRING) && !defined(CPSTRING_USING_CPP_STRING)
-                #define CPSTL_STRING_USING_STD_STRING
+            #if defined(CPSTL_VECTOR_ENABLED)
+                #if !defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
+                    #define CPVECTOR_USING_STD_ALLOCATION
+                #endif
+
+                #if defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
+                    #undef CPSTL_VECTOR_USING_CPP_ALLOCATION
+                #endif
+
+                #if defined(CPVECTOR_USING_C_ALLOCATION)
+                    #undef CPSTL_VECTOR_USING_C_ALLOCATION
+                #endif
             #endif
 
-            #if defined(CPSTRING_USING_STD_STRING)
-                #include <vector>
-            #elif defined(CPSTRING_USING_C_STRING)
-                #include <cstring> 
-            #elif defined(CPSTRING_USING_ARDUINO_STRING)
+            #if defined(CPSTL_STRING_ENABLED)
+
+                #if !defined(CPSTL_STRING_USING_STD_ALLOCATION)
+                    #define CPSTRING_USING_STD_ALLOCATION
+                #endif
+
+                #if defined(CPSTL_STRING_USING_CPP_ALLOCATION)
+                    #undef CPSTL_STRING_USING_CPP_ALLOCATION
+                #endif
+
+                #if defined(CPSTL_STRING_USING_C_ALLOCATION)
+                    #undef CPSTL_STRING_USING_C_ALLOCATION
+                #endif
             #endif
 
         #endif
