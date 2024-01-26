@@ -86,15 +86,6 @@
             };
     #endif
 
-    #if defined(CPSTL_USING_STL)
-        template <typename T, typename... Args>
-        using make_unique = std::unique_ptr<T, std::default_delete<T>>;
-    #else
-        template <typename T, typename... Args>
-        cpstd::unique_ptr<T> make_unique(Args&&... args) {
-            return cpstd::unique_ptr<T>(new T(cpstd::forward<Args>(args)...));
-        }
-    #endif
     }
 
     #include <utility/CPSTL_allocator.h>
@@ -136,4 +127,18 @@
           return result;
         }
     }
+
+
+    namespace cpstd{
+    #if defined(CPSTL_USING_STL)
+        template <typename T, typename... Args>
+        using make_unique = std::unique_ptr<T, std::default_delete<T>>;
+    #else
+        template <typename T, typename... Args>
+        cpstd::unique_ptr<T> make_unique(Args&&... args) {
+            return cpstd::unique_ptr<T>(new T(cpstd::forward<Args>(args)...));
+        }
+    #endif
+    }
+
 #endif
