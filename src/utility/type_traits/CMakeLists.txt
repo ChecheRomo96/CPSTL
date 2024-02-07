@@ -15,6 +15,7 @@
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_HelperClasses.h")
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_PrimaryTypeCategories.h")
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_CompositeTypeCategories.h")
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_TypeProperties.h")
 #
 ######################################################################################################
 # CPSTL Vector Installation
