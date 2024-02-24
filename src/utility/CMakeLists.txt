@@ -18,7 +18,6 @@
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_allocator.h")
 
     add_subdirectory(type_traits)
-    add_subdirectory(iterator)
 
 #
 ######################################################################################################
