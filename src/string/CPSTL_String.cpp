@@ -706,7 +706,7 @@
 
                     if (str.size() >= subpos) {
                         size_t offset = _size;
-                        size_t end = (str.size() < subpos + sublen) ? str.size() : subpos + sublen;
+             
                         size_t len = (str.size() < subpos + sublen) ? str.size() - subpos : sublen;
 
                         resize(_size + len);

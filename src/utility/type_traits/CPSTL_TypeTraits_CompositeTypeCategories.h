@@ -46,12 +46,12 @@
 
     #endif
 
-        template <typename T> inline constexpr bool is_arithmetic_v = cpstd::is_arithmetic<T>::value;
-        template <typename T> inline constexpr bool is_fundamental_v = cpstd::is_fundamental<T>::value;
-        template <typename T> inline constexpr bool is_member_pointer_v = cpstd::is_member_pointer<T>::value;
-        template <typename T> inline constexpr bool is_object_v = cpstd::is_object<T>::value;
-        template <typename T> inline constexpr bool is_reference_v = cpstd::is_reference<T>::value;
-        template <typename T> inline constexpr bool is_scalar_v = cpstd::is_scalar<T>::value;
+        template <typename T> INLINE_MACRO constexpr bool is_arithmetic_v = cpstd::is_arithmetic<T>::value;
+        template <typename T> INLINE_MACRO constexpr bool is_fundamental_v = cpstd::is_fundamental<T>::value;
+        template <typename T> INLINE_MACRO constexpr bool is_member_pointer_v = cpstd::is_member_pointer<T>::value;
+        template <typename T> INLINE_MACRO constexpr bool is_object_v = cpstd::is_object<T>::value;
+        template <typename T> INLINE_MACRO constexpr bool is_reference_v = cpstd::is_reference<T>::value;
+        template <typename T> INLINE_MACRO constexpr bool is_scalar_v = cpstd::is_scalar<T>::value;
 
     }
 

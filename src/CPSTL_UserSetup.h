@@ -2,7 +2,7 @@
 #define CPSTL_USER_SETUP_H
 
 
-    #if defined(__AVR__) || defined(__avr__)
+    #if defined(__AVR__) || defined(__avr__) || defined(PSOC_CREATOR)
         
         #define CPSTL_USING_C_ALLOCATION
 

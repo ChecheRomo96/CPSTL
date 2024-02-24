@@ -29,7 +29,11 @@
         
         template<typename T>
         struct is_unsigned {
-            static constexpr bool value = __is_unsigned(T);
+            #if defined(__is_unsigned)
+                static constexpr bool value = __is_unsigned(T);
+            #else
+                static constexpr bool value = ( T(0) < T(-1) );
+            #endif
         };
 
 

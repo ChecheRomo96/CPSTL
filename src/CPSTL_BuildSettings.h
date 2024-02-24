@@ -3,7 +3,7 @@
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // CPString Version
-
+        
         #ifndef CPSTL_VERSION
             #define CPSTL_VERSION "1.0.0"
         #endif
@@ -14,6 +14,14 @@
 
         #if defined(ARDUINO)
             #include <Arduino.h>
+            #include "CPSTL_UserSetup.h"
+        #endif
+
+    //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // PSoC Creator
+
+        #if defined(PSOC_CREATOR)
             #include "CPSTL_UserSetup.h"
         #endif
     //
@@ -113,6 +121,12 @@
             #if !defined(CPSTRING_USING_STD_STRING) && !defined(CPSTRING_USING_C_STRING) && !defined(CPSTRING_USING_ARDUINO_STRING)
                 #define CPSTRING_USING_C_STRING
             #endif
+            
+            #define INLINE_MACRO
+        #else
+            #ifndef INLINE_MACRO
+                #define INLINE_MACRO 
+            #endif
         #endif
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,16 +171,5 @@
         #endif
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    #if defined(__has_include) && __has_include(<vector>)
-        #if !defined(CPSTL_USING_STL)
-            #define CPSTL_USING_STL
-        #endif
-    #else
-        #if defined(CPSTL_USING_STL)
-            #undef CPSTL_USING_STL
-        #endif
-    #endif
 
 #endif//CPSTL_BUILD_SETTINGS_H
