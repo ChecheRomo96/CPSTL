@@ -329,6 +329,4 @@
     #endif
     }
 
-    #include "iterator/CPSTL_prefefined_iterators.h"
-
 #endif//CPSTL_ITERATOR_CLASS_H
