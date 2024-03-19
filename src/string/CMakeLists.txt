@@ -1,9 +1,4 @@
 ######################################################################################################
-# Store this directory as a variable called MCC_SRC_DIRECTORY to reference in deeper directories
-
-    set( CPSTL_VECTOR_SRC_DIRECTORY  ${CMAKE_CURRENT_LIST_DIR})
-#
-######################################################################################################
 # Initialize a list for all the header files in this directory
 
     set( HEADERS_LIST_LOCAL "" )
@@ -11,8 +6,11 @@
 ######################################################################################################
 # Append Sources and Headers
 
-    list( APPEND CPSTL_SOURCES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.cpp")
+    list( APPEND CPSTL_SOURCES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_cstring.cpp")
+
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.h" )
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.tpp")
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_char_traits.h" )
 #
 ######################################################################################################
 # Add Subdirectories

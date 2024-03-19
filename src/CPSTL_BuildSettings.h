@@ -2,10 +2,40 @@
 #define CPSTL_BUILD_SETTINGS_H
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // CPString Version
+    // CPSTL Version
         
         #ifndef CPSTL_VERSION
             #define CPSTL_VERSION "1.0.0"
+        #endif
+
+    //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    
+        #if defined CPSTL_USING_STL_ALLOCATION
+            #if !defined(CPSTL_STRING_USING_STL_ALLOCATION) && !defined(CPSTL_STRING_USING_C_ALLOCATION) && !defined(CPSTL_STRING_USING_CPP_ALLOCATION)
+                #define CPSTL_STRING_USING_STL_ALLOCATION
+            #endif
+
+            #if !defined(CPSTL_VECTOR_USING_STL_ALLOCATION) && !defined(CPSTL_VECTOR_USING_C_ALLOCATION) && !defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
+                #define CPSTL_VECTOR_USING_STL_ALLOCATION
+            #endif
+        #elif defined CPSTL_USING_CPP_ALLOCATION
+            #if !defined(CPSTL_STRING_USING_STL_ALLOCATION) && !defined(CPSTL_STRING_USING_C_ALLOCATION) && !defined(CPSTL_STRING_USING_CPP_ALLOCATION)
+                #define CPSTL_STRING_USING_CPP_ALLOCATION
+            #endif
+
+            #if !defined(CPSTL_VECTOR_USING_STL_ALLOCATION) && !defined(CPSTL_VECTOR_USING_C_ALLOCATION) && !defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
+                #define CPSTL_VECTOR_USING_CPP_ALLOCATION
+            #endif
+        #elif defined CPSTL_USING_C_ALLOCATION
+            #if !defined(CPSTL_STRING_USING_STL_ALLOCATION) && !defined(CPSTL_STRING_USING_C_ALLOCATION) && !defined(CPSTL_STRING_USING_CPP_ALLOCATION)
+                #define CPSTL_STRING_USING_C_ALLOCATION
+            #endif
+
+            #if !defined(CPSTL_VECTOR_USING_STL_ALLOCATION) && !defined(CPSTL_VECTOR_USING_C_ALLOCATION) && !defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
+                #define CPSTL_VECTOR_USING_C_ALLOCATION
+            #endif
         #endif
 
     //

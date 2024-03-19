@@ -1,0 +1,6 @@
+#ifndef CPSTL_IOiosER
+#define CPSTL_IOS_HEADER
+    
+    #include <CPios.h>
+
+#endif//CPSTL_IOS_HEADER

@@ -54,9 +54,12 @@
             return old_value;
         }
 
+
+
     }
 
 
     #include <utility/CPSTL_Iterator.h>
+    #include <utility/CPSTL_Move.h>
 
 #endif//CPSTL_UTILITY_H

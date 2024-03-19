@@ -1,9 +1,4 @@
 ######################################################################################################
-# Store this directory as a variable called MCC_SRC_DIRECTORY to reference in deeper directories
-
-    set( CPSTL_VECTOR_SRC_DIRECTORY  ${CMAKE_CURRENT_LIST_DIR})
-#
-######################################################################################################
 # Initialize MCC_SOURCES and HEADER_LIST as an empty string list
 
     set( HEADERS_LIST_LOCAL "" )
@@ -12,6 +7,12 @@
 # Append Sources and Headers
 
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Vector.h")
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Vector.tpp")
+#
+######################################################################################################
+# Refresh Sources List and Header List at PARENT_SCOPE
+
+    #set( CPSTL_SOURCES "${CPSTL_SOURCES}" PARENT_SCOPE)
 #
 ######################################################################################################
 # CPSTL Vector Installation

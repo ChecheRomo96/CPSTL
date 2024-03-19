@@ -1,9 +1,4 @@
 ######################################################################################################
-# Store this directory as a variable called MCC_SRC_DIRECTORY to reference in deeper directories
-
-    set( CPSTL_VECTOR_SRC_DIRECTORY  ${CMAKE_CURRENT_LIST_DIR})
-#
-######################################################################################################
 # Initialize MCC_SOURCES and HEADER_LIST as an empty string list
 
     set( HEADERS_LIST_LOCAL "" )

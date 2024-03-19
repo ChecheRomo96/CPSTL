@@ -35,8 +35,14 @@
 
 	set(CPSTL_EXCEPTIONS FALSE CACHE BOOL "") # Enables the compilation of the Exceptions module
 
+	set(CPSTL_USE_STL FALSE CACHE BOOL "") # Enables the compilation of the Exceptions module
+
 	set(CPSTL_EXAMPLES FALSE CACHE BOOL "") # Enables Building Examples
 	set(CPSTL_TESTING FALSE CACHE BOOL "") # Enabled Unit Testing
+
+	set(CPSTL_ALLOCATION_METHOD "dummy" CACHE STRING "CPVector allocation method")
+	set_property(CACHE CPSTL_ALLOCATION_METHOD PROPERTY STRINGS  "dummy" "STL" "CPP" "C")
+
 
 	##################################################################################################
 	# Vector configuration

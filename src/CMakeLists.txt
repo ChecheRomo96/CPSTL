@@ -32,7 +32,12 @@
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPinitializer_list.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPutility.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPiterator.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPlocale.h")
+
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPios.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPistream.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPstreambuf.h")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPostrean.h")
 
 #
 ######################################################################################################
@@ -68,6 +73,24 @@
 	if( ${CPSTL_EXCEPTIONS} )
 		message("CPSTL exceptions enabled")
 		target_compile_definitions(CPSTL PUBLIC CPSTL_EXCEPTIONS_ENABLED)
+	endif()
+
+	if( ${CPSTL_USE_STL} )
+		message("CPSTL exceptions enabled")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_STL)
+	endif()
+
+	if( ${CPSTL_ALLOCATION_METHOD} STREQUAL "dummy" )
+		message("No allocation method selected")
+	elseif( ${CPSTL_ALLOCATION_METHOD} STREQUAL "STL" )
+		message("Using std::vector for allocation")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_STL_ALLOCATION)
+	elseif( ${CPSTL_ALLOCATION_METHOD} STREQUAL "CPP" )
+		message("Using C++ allocators (new, new[], delete, delete[]")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_CPP_ALLOCATION)
+	elseif( ${CPSTL_ALLOCATION_METHOD} STREQUAL "C" )
+		message("Using C allocators (malloc, calloc, free)")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_C_ALLOCATION)
 	endif()
 
 	if( ${CPSTL_VECTOR_STATUS} )

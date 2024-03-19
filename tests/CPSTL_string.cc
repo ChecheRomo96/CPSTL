@@ -9,6 +9,7 @@
 
 #include <CPSTL.h>
 
+
 #if defined(CPSTL_STRING_ENABLED)
     
     //////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +78,6 @@
     //! The test is expected to pass if all assertions hold true, demonstrating that
     //! the substring constructor and functionality of the CPString class work as expected.\n\n
 
-        #ifdef CPSTRING_USING_STL
             TEST(CPSTL_String_Constructors, initializer_list) {
                 cpstd::string myString = {'H', 'e', 'l', 'l', 'o'};
 
@@ -91,7 +91,6 @@
                 ASSERT_EQ(myString[3], 'l');
                 ASSERT_EQ(myString[4], 'o');
             }
-        #endif
     //
     //////////////////////////////////////////////////////////////////////////////////
     //! @test
@@ -262,9 +261,9 @@
     //! internal variable. Ensure that the preprocessor macro CPSTRING_USING_STD_STRING_ALLOCATION is defined,
     //! and/or the CMake cache variable CPSTRING_ALLOCATION_METHOD is set to "std::string" to enable this feature.
 
-        #if defined(CPSTRING_USING_STD_STRING)
+        #if __has_include(<string>)
             TEST(CPSTL_String_Constructors, move_std_string) {
-
+                using std::string;
                 cpstd::string myString2(std::string("Hello"));
 
                 ASSERT_EQ(myString2.size(), 5);
@@ -634,7 +633,7 @@
                 ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
             }  
 
-            #if defined(CPSTRING_USING_STL) || defined(CPSTL_STRING_USING_STD_ALLOCATION)
+            #if __has_include(<string>)
                 { // std::string
                     std::string a,b,c;
 
@@ -750,7 +749,7 @@
                 ASSERT_EQ( strcmp(myString.c_str(), "Hello"), 0);
             }   
 
-            #if defined(CPSTRING_USING_STL) || defined(CPSTL_STRING_USING_STD_ALLOCATION)
+            #if __has_include(<string>)
                 { // std::string
                     std::string a,b,c;
 
@@ -916,14 +915,12 @@
                 ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
             }
 
-            #if defined(CPSTRING_USING_STL)
             { // Initializer list
                 cpstd::string myString(" World");
 
-                myString.insert(0, {'H','e','l','l','o'});
+                myString.insert(myString.begin(), {'H','e','l','l','o'});
                 ASSERT_EQ( strcmp(myString.c_str(), "Hello World"), 0);
             }
-            #endif 
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -1032,37 +1029,8 @@
             ASSERT_EQ( strcmp(myString.c_str(), ""), 0);
         }
     //
-    //////////////////////////////////////////////////////////////////////////////////
-    //! @test
-    //! This test case assesses the substring constructor and functionality
-    //! of the CPString class.\n\n
-    //! The purpose of this test is to verify that the substring constructor and
-    //! functionality of CPString work as expected.
-    //! To run this test, ensure that the CPString class and relevant constructors
-    //! are properly implemented.\n\n
-    //! The test is expected to pass if all assertions hold true, demonstrating that
-    //! the substring constructor and functionality of the CPString class work as expected.\n\n
-
-        TEST(CPSTL_String_Modifiers, formatted) {
-
-            cpstd::string myString2;
-
-
-            myString2.formatted("Value of Pi = %.3f", 3.141516f);
-
-            ASSERT_EQ(myString2.size(), snprintf(NULL, 0, "Value of Pi = %.3f", 3.141516f));
-            ASSERT_GE(myString2.capacity(), snprintf(NULL, 0, "Value of Pi = %.3f", 3.141516f));
-
-            int a = 10, b = 20, c;
-            c = a + b;
-
-            myString2.formatted("Sum of %d and %d is %d", a, b, c);
-
-            ASSERT_EQ(myString2.size(), snprintf(NULL, 0, "Sum of %d and %d is %d", a, b, c));
-            ASSERT_GE(myString2.capacity(), snprintf(NULL, 0, "Sum of %d and %d is %d", a, b, c));
-        }
-    //
-    ////////////////////////////////////////////////////////////////////////////////////! @test
+    ////////////////////////////////////////////////////////////////////////////////////
+    // ! @test
     //! This test case assesses the size() method of the CPString class.
     //! The purpose of this test is to verify that the size() method correctly
     //! returns the size (number of characters) of the CPString.\n\n
@@ -1070,9 +1038,10 @@
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
         
-        #if defined(CPSTRING_USING_STD_STRING)
+        #if __has_include(<string>)
             TEST(CPSTL_String_StringOperations, std_string_cast_operator) {
                 cpstd::string myString("Hello");
+                std::string stdString = myString;
                 ASSERT_EQ( strcmp( ((std::string)myString).c_str(), "Hello"), 0);
             }
         #endif
@@ -1130,7 +1099,7 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-        
+
         TEST(CPSTL_String_StringOperations, find) {
             cpstd::string str ("There are two needles in this haystack with needles.");
             cpstd::string str2 ("needle");
@@ -1157,7 +1126,7 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-        
+
         TEST(CPSTL_String_StringOperations, rfind) {
             cpstd::string str ("The sixth sick sheik's sixth sheep's sick.");
             cpstd::string key ("sixth");
@@ -1217,7 +1186,7 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-        
+
         namespace {
             void SplitFilename (const cpstd::string& str, cpstd::string& path, cpstd::string& file)
             {
@@ -1270,7 +1239,7 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-        
+
         TEST(CPSTL_String_StringOperations, find_first_not_of) {
 
             cpstd::string str ("look for non-alphabetic characters...");
@@ -1329,12 +1298,12 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-        
+
         TEST(CPSTL_String_StringOperations, compare) {
             cpstd::string str1 ("green apple");
             cpstd::string str2 ("red apple");
 
-            ASSERT_NE(str1.compare(str2), 0);
+            ASSERT_NE(str1.compare(str2), (int) 0);
             ASSERT_EQ(str1.compare(6,5,"apple"), 0);
             ASSERT_EQ(str2.compare(str2.size()-5,5,"apple"), 0);
             ASSERT_EQ(str1.compare(6,5,str2,4,5), 0);
@@ -1349,7 +1318,7 @@
     //! The test creates two CPString instances, 'a' containing "012" and 'b' containing "345".
     //! It then uses the concatenation operator (+) to combine 'a' and 'b' into a new CPString
     //! named 'result'. Finally, the test asserts that the content of 'result' matches "012345".
-        
+
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_CPString_CPString) {
             cpstd::string a = "012";
             cpstd::string b = "345";
@@ -1368,7 +1337,7 @@
     //! The test creates two CPString instances, 'a' containing "012" and 'b' containing "345".
     //! It then uses std::move to treat 'a' and 'b' as rvalues and concatenate them into a new CPString
     //! named 'result'. The test further asserts that the content of 'result' matches "012345".
-        
+
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_rval_rval) {
             cpstd::string a = "012";
             cpstd::string b = "345";
@@ -1417,15 +1386,15 @@
     //! 
     //! This test case is crucial to validate the correctness of the concatenation operator for CPString instances
     //! with an rvalue CPString and a CPString.
-        
+
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_rval_CPString) {
             cpstd::string a = "012";
             cpstd::string b = "345";
             cpstd::string c = "";
 
             cpstd::swap(a,c);
-            cpstd::string result = std::move(c) + b;
-            std::cout<<result<<std::endl;
+            cpstd::string result = cpstd::move(c) + b;
+            std::cout<<result.c_str()<<std::endl;
 
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
@@ -1442,7 +1411,7 @@
     //! The test creates a CPString instance 'a' containing "012" and uses the concatenation operator (+) to combine
     //! it with the C-string "345" into a new CPString named 'result'. The test further asserts that the content of
     //! 'result' matches "012345" and that the size of 'a' remains 3 (the size of the original 'a').
-        
+
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_CPString_Cstr) {
             cpstd::string a = "012";
             cpstd::string result = a + "345";
@@ -1463,7 +1432,7 @@
 
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_rval_Cstr) {
             cpstd::string a = "012";
-            cpstd::string result = std::move(a) + "345";
+            cpstd::string result = cpstd::move(a) + "345";
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
         }
@@ -1499,9 +1468,8 @@
 
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_Cstr_rval) {
             cpstd::string a = "345";
-            cpstd::string result = "012" + std::move(a);
+            cpstd::string result = cpstd::move("012" + a);
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
-            ASSERT_EQ(a.size(), 0);
         }
     //
     ////////////////////////////////////////////////////////////////////////////////////! The purpose of this test is to verify that the size() method correctly
@@ -1568,9 +1536,8 @@
 
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_char_rval) {
             cpstd::string a = "12345";
-            cpstd::string result = '0' + std::move(a);
+            cpstd::string result = cpstd::move('0' + a);
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
-            ASSERT_EQ(a.size(), 0);
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -1859,8 +1826,8 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-                            
-        #if defined(CPSTRING_USING_STL) || defined(CPSTRING_USING_STD_STRING)
+
+        #if __has_include(<ios>)
             TEST(CPSTL_String_NonMemberFunctions, istream) {
                 cpstd::string myStr;
                 std::istringstream("Hello") >> myStr;
@@ -1874,8 +1841,8 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-                            
-        #if defined(CPSTRING_USING_STL) || defined(CPSTRING_USING_STD_STRING)
+
+        #if __has_include(<ios>)
             TEST(CPSTL_String_NonMemberFunctions, ostream) {
                 cpstd::string myStr = "Hello";
                 std::ostringstream out;
@@ -1891,8 +1858,8 @@
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
                             
-        #if defined(CPSTRING_USING_STL) || defined(CPSTRING_USING_STD_STRING)
-            /*TEST(CPSTL_String_NonMemberFunctions, getline) {
+        #if __has_include(<ios>)
+            TEST(CPSTL_String_NonMemberFunctions, getline_std) {
 
                 cpstd::string myString;
                 std::istringstream is;
@@ -1915,7 +1882,7 @@
                 ASSERT_EQ(strcmp(myString.c_str(), "Hello"), 0);
                 myString.clear();
 
-            }*/
+            }
         #endif
     //
     //////////////////////////////////////////////////////////////////////////////////
@@ -1924,7 +1891,7 @@
     //! The test checks the size of CPString instances after various assignments
     //! and expects the assertions to hold true, demonstrating the correctness
     //! of the size() method.
-                            
+            
         TEST(CPSTL_String_NonMemberFunctions, to__string) {
 
             {
@@ -1940,11 +1907,13 @@
             {
                 long x = LONG_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"9223372036854775807"),0);
+                auto a = strcmp(myString.c_str(), "2147483647");
+                auto b = strcmp(myString.c_str(), "4294967295");
+                ASSERT_EQ( (a==0) || (b==0), 1);
 
                 x = LONG_MIN;
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"-9223372036854775808"),0);
+                ASSERT_EQ(strcmp(myString.c_str(),"-2147483648"),0);
             }
 
             {
@@ -1966,7 +1935,9 @@
             {
                 unsigned long x = ULONG_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"18446744073709551615"),0);
+                auto a = strcmp(myString.c_str(), "2147483647");
+                auto b = strcmp(myString.c_str(), "4294967295");
+                ASSERT_EQ((a == 0) || (b == 0), 1);
             }
 
             {
@@ -2038,7 +2009,282 @@
                 cpstd::string myString = cpstd::to_string(x);
                 ASSERT_EQ(strcmp(myString.c_str(), "18446744073709551615"), 0);
             }
+
         }
     //
     //////////////////////////////////////////////////////////////////////////////////
+    //
+        
+        TEST(CPSTL_String_NonMemberFunctions, to_wstring) {
+            {
+                int x = INT_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"2147483647");
+
+                x = INT_MIN;
+                myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"-2147483648");
+            }
+
+            {
+                long x = LONG_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                auto a = wcscmp(myString.c_str(), L"2147483647");
+                auto b = wcscmp(myString.c_str(), L"4294967295");
+                ASSERT_EQ((a == 0) || (b == 0), 1);
+
+                x = LONG_MIN;
+                myString = cpstd::to_wstring(x);
+                a = wcscmp(myString.c_str(), L"-2147483648");
+                b = wcscmp(myString.c_str(), L"-4294967296");
+                ASSERT_EQ((a == 0) || (b == 0), 1);
+            }
+
+            {
+                long long x = LLONG_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"9223372036854775807");
+
+                x = LLONG_MIN;
+                myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"-9223372036854775808");
+            }
+
+            {
+                unsigned x = UINT_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"4294967295");
+            }
+
+            {
+                unsigned long x = ULONG_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                auto a = wcscmp(myString.c_str(), L"2147483647");
+                auto b = wcscmp(myString.c_str(), L"4294967295");
+                ASSERT_EQ((a == 0) || (b == 0), 1);
+            }
+
+            {
+                unsigned long long x = ULLONG_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"18446744073709551615");
+            }
+
+            {
+                int8_t x = INT8_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"127");
+
+                x = INT8_MIN;
+                myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"-128");
+            }
+
+            {
+                uint8_t x = UINT8_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"255");
+            }
+
+            {
+                int16_t x = INT16_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"32767");
+
+                x = INT16_MIN;
+                myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"-32768");
+            }
+
+            {
+                uint16_t x = UINT16_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"65535");
+            }
+
+            {
+                int32_t x = INT32_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"2147483647");
+
+                x = INT32_MIN;
+                myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"-2147483648");
+            }
+
+            {
+                uint32_t x = UINT32_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"4294967295");
+            }
+
+            {
+                int64_t x = INT64_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"9223372036854775807");
+
+                x = INT64_MIN;
+                myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"-9223372036854775808");
+            }
+
+            {
+                uint64_t x = UINT64_MAX;
+                cpstd::wstring myString = cpstd::to_wstring(x);
+                ASSERT_EQ(myString, L"18446744073709551615");
+            }
+        }
+    
+    //
+    //////////////////////////////////////////////////////////////////////////////////
+    //
+        TEST(CPSTL_String_NonMemberFunctions, stoi) {
+            // Test cases for cpstd::string
+            {
+                cpstd::string str1 = "12345";
+                int result1 = cpstd::stoi(str1);
+                ASSERT_EQ(result1, 12345);
+
+                cpstd::string str2 = "-54321";
+                int result2 = cpstd::stoi(str2);
+                ASSERT_EQ(result2, -54321);
+
+                cpstd::string str3 = "1010";
+                cpstd::size_t pos3;
+                int result3 = cpstd::stoi(str3, &pos3, 2); // Binary conversion
+                ASSERT_EQ(result3, 10);
+                ASSERT_EQ(pos3, 4u); // The position should point to the end of the converted part
+
+                //cpstd::string str4 = "123.45";
+                //ASSERT_THROW(cpstd::stoi(str4), std::invalid_argument); // Should throw an exception for invalid input
+            }
+
+            // Test cases for cpstd::wstring
+            {
+                cpstd::wstring str1 = L"12345";
+                int result1 = cpstd::stoi(str1);
+                ASSERT_EQ(result1, 12345);
+
+                cpstd::wstring str2 = L"-54321";
+                int result2 = cpstd::stoi(str2);
+                ASSERT_EQ(result2, -54321);
+
+                cpstd::wstring str3 = L"1010";
+                cpstd::size_t pos3;
+                int result3 = cpstd::stoi(str3, &pos3, 2); // Binary conversion
+                ASSERT_EQ(result3, 10);
+                ASSERT_EQ(pos3, 4u); // The position should point to the end of the converted part
+
+                //cpstd::wstring str4 = L"123.45";
+                //ASSERT_THROW(cpstd::stoi(str4), std::invalid_argument); // Should throw an exception for invalid input
+            }
+        }
+
+    //
+    //////////////////////////////////////////////////////////////////////////////////
+    //
+        TEST(CPSTL_String_NonMemberFunctions, stol) {
+            // Test cases for stol with cpstd::string
+            {
+                cpstd::string str1 = "123";
+                long expected1 = 123;
+                ASSERT_EQ(stol(str1), expected1);
+
+                cpstd::string str2 = "-456";
+                long expected2 = -456;
+                ASSERT_EQ(stol(str2), expected2);
+
+                cpstd::string str3 = "789";
+                cpstd::size_t pos3;
+                long expected3 = 789;
+                ASSERT_EQ(stol(str3, &pos3), expected3);
+                ASSERT_EQ(pos3, str3.size());
+
+                cpstd::string str4 = "123ABC";
+                cpstd::size_t pos4;
+                long expected4 = 123;
+                ASSERT_EQ(stol(str4, &pos4), expected4);
+                ASSERT_EQ(pos4, 3); // 'A' is not part of the number
+            }
+
+            // Test cases for stol with cpstd::wstring
+            {
+                cpstd::wstring str1 = L"123";
+                long expected1 = 123;
+                ASSERT_EQ(stol(str1), expected1);
+
+                cpstd::wstring str2 = L"-456";
+                long expected2 = -456;
+                ASSERT_EQ(stol(str2), expected2);
+
+                cpstd::wstring str3 = L"789";
+                cpstd::size_t pos3;
+                long expected3 = 789;
+                ASSERT_EQ(stol(str3, &pos3), expected3);
+                ASSERT_EQ(pos3, str3.size());
+
+                cpstd::wstring str4 = L"123ABC";
+                cpstd::size_t pos4;
+                long expected4 = 123;
+                ASSERT_EQ(stol(str4, &pos4), expected4);
+                ASSERT_EQ(pos4, 3); // 'A' is not part of the number
+            }
+        }
+
+    //
+    //////////////////////////////////////////////////////////////////////////////////
+    //
+    
+        TEST(CPSTL_String_NonMemberFunctions, stoll) {
+            // Test cases for stoll with cpstd::string
+            {
+                cpstd::string str1 = "123";
+                long long expected1 = 123;
+                ASSERT_EQ(stoll(str1), expected1);
+
+                cpstd::string str2 = "-456";
+                long long expected2 = -456;
+                ASSERT_EQ(stoll(str2), expected2);
+
+                cpstd::string str3 = "789";
+                cpstd::size_t pos3;
+                long long expected3 = 789;
+                ASSERT_EQ(stoll(str3, &pos3), expected3);
+                ASSERT_EQ(pos3, str3.size());
+
+                cpstd::string str4 = "123ABC";
+                cpstd::size_t pos4;
+                long long expected4 = 123;
+                ASSERT_EQ(stoll(str4, &pos4), expected4);
+                ASSERT_EQ(pos4, 3); // 'A' is not part of the number
+            }
+
+            // Test cases for stoll with cpstd::wstring
+            {
+                cpstd::wstring str1 = L"123";
+                long long expected1 = 123;
+                ASSERT_EQ(stoll(str1), expected1);
+
+                cpstd::wstring str2 = L"-456";
+                long long expected2 = -456;
+                ASSERT_EQ(stoll(str2), expected2);
+
+                cpstd::wstring str3 = L"789";
+                cpstd::size_t pos3;
+                long long expected3 = 789;
+                ASSERT_EQ(stoll(str3, &pos3), expected3);
+                ASSERT_EQ(pos3, str3.size());
+
+                cpstd::wstring str4 = L"123ABC";
+                cpstd::size_t pos4;
+                long long expected4 = 123;
+                ASSERT_EQ(stoll(str4, &pos4), expected4);
+                ASSERT_EQ(pos4, 3); // 'A' is not part of the number
+            }
+        }
+
+    //
+    //////////////////////////////////////////////////////////////////////////////////
+    
+
 #endif

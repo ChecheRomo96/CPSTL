@@ -8,6 +8,7 @@
     #include <CPalgorithm.h>
     #include <CPfunctional.h>
 
+
     namespace cpstd {}
 
     #ifdef ARDUINO
@@ -22,4 +23,6 @@
         #include <CPstring.h>
     #endif
 
+    #include <CPios.h>
+    
 #endif//CPSTL_H

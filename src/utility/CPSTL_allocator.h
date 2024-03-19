@@ -13,7 +13,7 @@
     #endif
 
     namespace cpstd{
-        #ifdef CPSTL_USING_STL
+        #ifdef CPSTL_USING_STL_ALLOCATION
 
             template <typename T>
             constexpr T* addressof(T& arg) noexcept {
