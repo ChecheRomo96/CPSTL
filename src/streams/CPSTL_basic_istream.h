@@ -12,7 +12,7 @@
     namespace cpstd{
     #if __has_include(<istream>)
         
-        template <class charT, class Traits = char_traits<charT> >
+        template <class charT, class Traits = std::char_traits<charT> >
         using basic_istream = std::basic_istream<charT, Traits>;
     #else
 

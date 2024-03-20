@@ -11,7 +11,7 @@
 
     namespace cpstd{
 
-        #ifdef CPSTL_USING_STL
+        #if __has_include(<streambuf>)
             template<typename CharT, typename Traits = std::char_traits<CharT>>
             using basic_streambuf = std::basic_streambuf<CharT, Traits>;
 
@@ -60,21 +60,10 @@
                 ////////////////////////////////////////////////////////////////////////////////
                 // Buffer management and positioning:
 
-                    basic_streambuf* pubsetbuf(char_type* s, streamsize n){
-                        return setbuf(s,n);
-                    }
-
-                    pos_type pubseekoff(off_type off, ios_base::seekdir way, ios_base::openmode which = ios_base::in | ios_base::out){
-                        return seekoff(off, way, which);
-                    }
-
-                    pos_type pubseekpos(pos_type pos, ios_base::openmode which = ios_base::in | ios_base::out){
-                        return seekpos(pos, which);
-                    }
-
-                    int pubsync(){
-                        return sync();
-                    }
+                    basic_streambuf* pubsetbuf(char_type* s, streamsize n);
+                    pos_type pubseekoff(off_type off, ios_base::seekdir way, ios_base::openmode which = ios_base::in | ios_base::out);
+                    pos_type pubseekpos(pos_type pos, ios_base::openmode which = ios_base::in | ios_base::out);
+                    int pubsync();
                 //
                 ////////////////////////////////////////////////////////////////////////////////
                 // Input functions (get):

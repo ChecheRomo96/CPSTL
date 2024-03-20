@@ -13,8 +13,6 @@
 TEST(IOSTest, streambuff) {
 
 
-    cpstd::streambuf x();
-
 }
 
 

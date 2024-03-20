@@ -1,6 +1,4 @@
-#include <CPostream.h>
-#include <CPistream.h>
-#include <CPstreambuf.h>
+#include <CPiostream.h>
 
 int main() {
 
@@ -19,6 +17,8 @@ int main() {
     #endif
     */
 
+    cpstd::cout << "Hello";
+    //cpstd::cout << cpstd::endl;
     return 0;
 
 }

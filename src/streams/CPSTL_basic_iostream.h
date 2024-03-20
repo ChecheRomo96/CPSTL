@@ -1,5 +1,5 @@
-#ifndef CPSTL_IOSTREAM_H
-#define CPSTL_IOSTREAM_H
+#ifndef CPSTL_BASIC_IOSTREAM_H
+#define CPSTL_BASIC_IOSTREAM_H
 
     #include <CPSTL_BuildSettings.h>
     #include <CPstring.h>
@@ -39,4 +39,4 @@
     #endif
     }
 
-#endif
+#endif//CPSTL_BASIC_IOSTREAM_H
