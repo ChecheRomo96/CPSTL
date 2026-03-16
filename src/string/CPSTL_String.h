@@ -7,8 +7,15 @@
     
 
     #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
-        #include <CPexception.h>
-    #endif
+        #include <CPexception.h>           
+    #endif  
+
+
+    #ifdef CPSTL_USING_STL
+        #include <string>
+        #include <stdexcept>
+        #include <cstdarg>              
+    #endif  
 
     namespace cpstd{  
 

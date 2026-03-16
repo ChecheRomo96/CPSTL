@@ -17,7 +17,7 @@ int main(){
     std::cout << std::endl;
 #endif
     long x = LONG_MAX;
-    std::cout<< cpstd::to_string(x) <<std::endl;
+    std::cout<< cpstd::to_string(x).c_str() <<std::endl;
     
 
     return 0;

@@ -121,7 +121,7 @@
     //! the copy constructor effectively creates a new vector with content identical
     //! to the specified data range.
 
-        #if defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
+        #if defined(CPSTL_USING_STL)
             TEST(CPSTL_Vector_ConstructorTesting, Move2) {
 
                 std::vector<uint8_t> myVector = {0, 1, 2};
@@ -146,20 +146,19 @@
     //! The test is expected to pass if all assertions hold true, demonstrating that
     //! the copy constructor effectively creates a new vector with content identical
     //! to the specified data range.
-        #if defined(CPSTL_USING_STL) || defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
-            TEST(CPSTL_Vector_ConstructorTesting, InitializerList) {
+    
+        TEST(CPSTL_Vector_ConstructorTesting, InitializerList) {
 
-                cpstd::vector<uint8_t> myVector = {0, 1, 2};
+            cpstd::vector<uint8_t> myVector = {0, 1, 2};
 
-                ASSERT_EQ(myVector.size(), 3);
-                ASSERT_EQ(myVector.capacity(), 3);
+            ASSERT_EQ(myVector.size(), 3);
+            ASSERT_EQ(myVector.capacity(), 3);
 
-                for (uint8_t i = 0; i < myVector.size(); i++){
-                    ASSERT_EQ(myVector[i], i);
-                }
-
+            for (uint8_t i = 0; i < myVector.size(); i++){
+                ASSERT_EQ(myVector[i], i);
             }
-        #endif
+
+        }
     //
     //////////////////////////////////////////////////////////////////////////////////
     //! @test

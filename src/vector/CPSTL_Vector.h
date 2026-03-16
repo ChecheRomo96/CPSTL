@@ -62,8 +62,8 @@
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         // Iterator Types
 
-                            using iterator = T*;
-                            using const_iterator = const T*;
+                            using iterator = pointer;
+                            using const_iterator = const_pointer;
                             using reverse_iterator = cpstd::reverse_iterator<iterator>;
                             using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;
                             using difference_type = cpstd::ptrdiff_t;
@@ -78,7 +78,7 @@
 
                         size_type _Size;
                         size_type _Capacity;
-                        T* _Buffer;
+                        pointer _Buffer;
                         Alloc _Alloc; // Instance of the custom allocator
                     //
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,8 +263,12 @@
                         
                             vector(const vector<value_type, allocator_type>& other) : vector(){
                                 resize(other.size());
-                                for (size_type i = 0; i < size(); ++i) {
-                                    _Alloc.construct(&_Buffer[i], other[i]);
+                                for (size_type i = 0; i < size(); ++i){
+                                    cpstd::allocator_traits<allocator_type>::construct(
+                                        _Alloc,
+                                        _Buffer + i,
+                                        other[i]
+                                    );
                                 }
                             }
                         //
@@ -315,11 +319,19 @@
                         //! Destroys all the elements amd changes the size and capacity to 0. (Releases the used memory)
                         
                             ~vector(){
-                                if (_Buffer) {
-                                    for (size_type i = 0; i < _Size; ++i) {
-                                        _Alloc.destroy(&_Buffer[i]);  // Call the destructor for each element
+                                if (_Buffer){
+                                    for (size_type i = 0; i < _Size; ++i){
+                                        cpstd::allocator_traits<allocator_type>::destroy(
+                                            _Alloc,
+                                            _Buffer + i
+                                        );
                                     }
-                                    _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the memory
+
+                                    cpstd::allocator_traits<allocator_type>::deallocate(
+                                        _Alloc,
+                                        _Buffer,
+                                        _Capacity
+                                    );
                                 }
                             }
                         //
@@ -400,33 +412,93 @@
                         //! If the current size is less than count and value parameter is used, then additional copies of value are appended.
                         //! @tparam new_size New size of the container.
                         //! @tparam value The value to initialize the new elements with.
-                         
-                            void resize(size_type new_size, const_reference value = T()){
-                                if (new_size < _Size) {
-                                    // Destruct elements if resizing to a smaller size
-                                    for (size_type i = new_size; i < _Size; ++i) {
-                                        _Alloc.destroy(&_Buffer[i]);
+                           
+                           void resize(size_type new_size, const_reference value = T()){
+                                if (new_size < _Size){
+                                    // Destroy elements if resizing to a smaller size
+                                    for (size_type i = new_size; i < _Size; ++i){
+                                        cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
                                     }
-                                } else if (new_size > _Size) {
-                                    if (new_size > _Capacity) {
-                                        // Reallocate memory if necessary
-                                        size_type new_capacity = new_size * 2;  // Or any suitable strategy
-                                        T* new_buffer = _Alloc.allocate(new_capacity);
-                                        
-                                        for (size_type i = 0; i < _Size; ++i) {
-                                            _Alloc.construct(&new_buffer[i], cpstd::move(_Buffer[i])); // Move old elements to the new memory
-                                            _Alloc.destroy(&_Buffer[i]);  // Destroy the old elements
-                                        }
-                                        _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
-                                        _Buffer = new_buffer;
-                                        _Capacity = new_capacity;
-                                    }
-                                    // Initialize new elements if resizing to a larger size
-                                    for (size_type i = _Size; i < new_size; ++i) {
-                                        _Alloc.construct(&_Buffer[i]);
-                                    }
+
+                                    _Size = new_size;
+                                    return;
                                 }
-                                _Size = new_size;
+
+                                if (new_size == _Size){
+                                    return;
+                                }
+
+                                // new_size > _Size
+                                if (new_size > _Capacity){
+                                    size_type new_capacity = new_size;
+                                    pointer new_buffer = cpstd::allocator_traits<allocator_type>::allocate(_Alloc, new_capacity);
+
+                                    size_type constructed = 0;
+
+                                    try{
+                                        // Move old elements into new storage
+                                        for (; constructed < _Size; ++constructed){
+                                            cpstd::allocator_traits<allocator_type>::construct(
+                                                _Alloc,
+                                                new_buffer + constructed,
+                                                cpstd::move(_Buffer[constructed])
+                                            );
+                                        }
+
+                                        // Construct new elements with the provided value
+                                        for (; constructed < new_size; ++constructed){
+                                            cpstd::allocator_traits<allocator_type>::construct(
+                                                _Alloc,
+                                                new_buffer + constructed,
+                                                value
+                                            );
+                                        }
+                                    }
+                                    catch (...){
+                                        // Destroy only the elements successfully constructed in new_buffer
+                                        for (size_type i = 0; i < constructed; ++i){
+                                            cpstd::allocator_traits<allocator_type>::destroy(_Alloc, new_buffer + i);
+                                        }
+
+                                        cpstd::allocator_traits<allocator_type>::deallocate(_Alloc, new_buffer, new_capacity);
+                                        throw;
+                                    }
+
+                                    // Destroy old elements
+                                    for (size_type i = 0; i < _Size; ++i){
+                                        cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
+                                    }
+
+                                    // Deallocate old storage
+                                    if (_Buffer != nullptr){
+                                        cpstd::allocator_traits<allocator_type>::deallocate(_Alloc, _Buffer, _Capacity);
+                                    }
+
+                                    _Buffer = new_buffer;
+                                    _Capacity = new_capacity;
+                                    _Size = new_size;
+                                }
+                                else{
+                                    size_type constructed = _Size;
+
+                                    try{
+                                        for (; constructed < new_size; ++constructed){
+                                            cpstd::allocator_traits<allocator_type>::construct(
+                                                _Alloc,
+                                                _Buffer + constructed,
+                                                value
+                                            );
+                                        }
+                                    }
+                                    catch (...)
+                                    {
+                                        for (size_type i = _Size; i < constructed; ++i){
+                                            cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
+                                        }
+                                        throw;
+                                    }
+                                    _Size = new_size;
+                                }
                             }
                         //
                         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -464,8 +536,16 @@
                                     // Reallocate memory if necessary
                                     pointer new_buffer = _Alloc.allocate(new_cap);
                                     for (size_type i = 0; i < _Size; ++i) {
-                                        _Alloc.construct(&new_buffer[i], cpstd::move(_Buffer[i]));  // Move old elements to the new memory
-                                        _Alloc.destroy(&_Buffer[i]);  // Destroy the old elements
+                                        cpstd::allocator_traits<allocator_type>::construct(
+                                            _Alloc,
+                                            &new_buffer[i],
+                                            cpstd::move(_Buffer[i])
+                                        );
+
+                                        cpstd::allocator_traits<allocator_type>::destroy(
+                                            _Alloc,
+                                            &_Buffer[i]
+                                        );
                                     }
                                     _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
                                     _Buffer = new_buffer;
@@ -560,18 +640,14 @@
                             //! Notice that the first element has a position of 0 (not 1).\n
                             //! Member type size_type is an unsigned integral type.\n
 
-                                const_reference at(size_type position) const {
-                                #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
-                                    if(position >= _Size){
-                                        throw cpstd::out_of_range("Index requested on subscript array does not exists");
-                                    }
-                                #endif
+                                const_reference at(size_type position) const{
+                                    #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
+                                        if (position >= _Size){
+                                            throw cpstd::out_of_range("Index requested on subscript array does not exist");
+                                        }
+                                    #endif
 
-                                #if defined(CPSTL_VECTOR_USING_C_ALLOCATION) | defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
-                                     return _Buffer[position];
-                                #elif defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
-                                    return _Vector.at();
-                                #endif
+                                    return _Buffer[position];
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -834,10 +910,10 @@
                             //! @tparam index The index of the element to be erased.
 
                                 iterator erase(const_iterator position){
-                                    auto index = position - begin();
+                                    size_type index = position - begin();
 
                                     if (index < _Size) {
-                                        for (unsigned int i = index; i < _Size - 1; i++) {
+                                        for (size_type i = index; i < _Size - 1; i++) {
                                             _Buffer[i] = cpstd::move(_Buffer[i + 1]);
                                         }
                                         resize(size() - 1);
@@ -853,26 +929,26 @@
                             //! @tparam first The index of the first element to be erased.
                             //! @tparam last The index of the last element to be erased.
 
-                                iterator erase(const_iterator first, const_iterator last) {
-                                    const_iterator beginIt = begin();  // iterator to the beginning of the container
-                                    const_iterator endIt = end();      // iterator to the end of the container
+                                iterator erase(const_iterator first, const_iterator last){
+                                    const_iterator cbeginIt = begin();
+                                    const_iterator cendIt = end();
 
-                                    if (first >= last) {
-                                        return end();  // Return iterator to the end as an indication of an error or no change
+                                    if (first >= last){
+                                        return begin() + static_cast<size_type>(cpstd::distance(cbeginIt, first));
                                     }
 
-                                    auto range = cpstd::min(last, endIt) - first;
+                                    last = cpstd::min(last, cendIt);
 
-                                    // Move elements to fill the erased range
-                                    for (auto it = first; it + range < endIt; ++it) {
-                                        *const_cast<T*>(it) = cpstd::move(*(it + range));
+                                    size_type start_index = static_cast<size_type>(cpstd::distance(cbeginIt, first));
+                                    size_type range = static_cast<size_type>(cpstd::distance(first, last));
+
+                                    for (size_type i = start_index; i + range < _Size; ++i){
+                                        _Buffer[i] = cpstd::move(_Buffer[i + range]);
                                     }
 
-                                    // Resize the container
-                                    resize(size() - range);
+                                    resize(_Size - range);
 
-                                    return beginIt + static_cast<size_type>(cpstd::distance(beginIt, first));
-
+                                    return begin() + start_index;
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -898,7 +974,7 @@
                          
                             void clear() noexcept{
                                 for (size_type i = 0; i < _Size; ++i) {
-                                    _Alloc.destroy(_Buffer + i);
+                                    cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
                                 }
                                 _Size = 0;
                             } 
@@ -955,7 +1031,11 @@
                                     }
 
                                     // Construct the new element in place at the specified position
-                                    _Alloc.construct(_Buffer + index, cpstd::forward<Args>(args)...);
+                                    cpstd::allocator_traits<allocator_type>::construct(
+                                        _Alloc,
+                                        _Buffer + index,
+                                        cpstd::forward<Args>(args)...
+                                    );
 
                                     return _Buffer + index;
                                 }
@@ -995,13 +1075,14 @@
                                     }
 
                                     // Construct the new element in place at the end of the vector
-                                    _Alloc.construct(_Buffer + _Size, cpstd::forward<Args>(args)...);
+                                    cpstd::allocator_traits<allocator_type>::construct(
+                                        _Alloc,
+                                        _Buffer + _Size,
+                                        cpstd::forward<Args>(args)...
+                                    );
 
                                     // Increment the size
                                     ++_Size;
-
-                                    // Return a reference to the newly constructed element
-                                    return _Buffer[_Size - 1];
                                 }
                             //
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

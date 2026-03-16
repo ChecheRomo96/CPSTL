@@ -93,23 +93,6 @@
 		message("CPSTL::vector enabled")
 		target_compile_definitions(CPSTL PUBLIC CPSTL_VECTOR_ENABLED)
 		
-		if( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "Parent" )
-			message("Using parent allocation method")
-			set(CPSTL_VECTOR_ALLOCATION_METHOD ${CPSTL_ALLOCATION_METHOD})
-		endif()
-
-		if( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "dummy" )
-			message("No allocation method selected")
-		elseif( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "std" )
-			message("Using std::vector for allocation")
-			target_compile_definitions(CPSTL PUBLIC CPSTL_VECTOR_USING_STD_ALLOCATION)
-		elseif( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "CPP" )
-			message("Using C++ allocators (new, new[], delete, delete[]")
-			target_compile_definitions(CPSTL PUBLIC CPSTL_VECTOR_USING_CPP_ALLOCATION)
-		elseif( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "C" )
-			message("Using C allocators (malloc, calloc, free)")
-			target_compile_definitions(CPSTL PUBLIC CPSTL_VECTOR_USING_C_ALLOCATION)
-		endif()
 	endif()
 
 

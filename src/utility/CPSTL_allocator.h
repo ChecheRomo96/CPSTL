@@ -8,12 +8,13 @@
     //#include <CPfunctional.h>
     #include "CPSTL_types.h"
 
-    #ifdef CPSTL_USING_STL
+    #if definedCPSTL_USING_STL || defined(CPSTL_USING_STD_ALLOCATION)
+
         #include <memory>
     #endif
 
     namespace cpstd{
-        #ifdef CPSTL_USING_STL
+    #if definedCPSTL_USING_STL || defined(CPSTL_USING_STD_ALLOCATION)
 
             template <typename T>
             constexpr T* addressof(T& arg) noexcept {

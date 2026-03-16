@@ -52,9 +52,6 @@
 		option(CPSTL_VECTOR_EXAMPLES "Enables Building Examples" FALSE)
 		option(CPSTL_VECTOR_TESTING "Enabled Unit Testing" FALSE)
 
-		set(CPSTL_VECTOR_ALLOCATION_METHOD "dummy" CACHE STRING "CPVector allocation method")
-		set_property(CACHE CPSTL_VECTOR_ALLOCATION_METHOD PROPERTY STRINGS "Parent" "dummy" "std" "CPP" "C")
-		
 		option(CPSTL_VECTOR_SORTING "Enables the compilation of the sorting module" FALSE)
 	#
 	##################################################################################################
