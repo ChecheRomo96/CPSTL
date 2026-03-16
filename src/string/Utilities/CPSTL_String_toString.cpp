@@ -3,7 +3,7 @@
 cpstd::string cpstd::to_string(int val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     string result;
     bool isNegative = false;
     unsigned value = (val>0)?val:-1*val;
@@ -48,7 +48,7 @@ cpstd::string cpstd::to_string(int val){
 cpstd::string cpstd::to_string(long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     string result;
     bool isNegative = false;
     unsigned long value = (val>0)?val:-1*val;
@@ -93,7 +93,7 @@ cpstd::string cpstd::to_string(long val){
 cpstd::string cpstd::to_string(long long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     string result;
     bool isNegative = false;
     unsigned long long value = (val>0)?val:-1*val;
@@ -138,15 +138,10 @@ cpstd::string cpstd::to_string(long long val){
 cpstd::string cpstd::to_string(unsigned val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     string result;
     bool isNegative = false;
 
-    // Handle the case where the value is negative
-    if (val < 0) {
-        isNegative = true;
-        val = -val;
-    }
 
     // Special case for 0
     if (val == 0) {
@@ -158,11 +153,6 @@ cpstd::string cpstd::to_string(unsigned val){
         char digit = '0' + static_cast<char>(val % 10);
         result.push_back(digit);
         val /= 10;
-    }
-
-    // Add the negative sign if necessary
-    if (isNegative) {
-        result.push_back('-');
     }
 
     // Reverse the string to get the correct order
@@ -183,7 +173,7 @@ cpstd::string cpstd::to_string(unsigned val){
 cpstd::string cpstd::to_string(unsigned long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     string result;
 
     // Special case for 0
@@ -216,7 +206,7 @@ cpstd::string cpstd::to_string(unsigned long val){
 cpstd::string cpstd::to_string(unsigned long long val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     string result;
 
     // Special case for 0
@@ -249,7 +239,7 @@ cpstd::string cpstd::to_string(unsigned long long val){
 cpstd::string cpstd::to_string(float val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     if (val == 0.0)
         return "0";
 
@@ -289,7 +279,7 @@ cpstd::string cpstd::to_string(float val){
 cpstd::string cpstd::to_string(double val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     if (val == 0.0)
         return "0";
 
@@ -329,7 +319,7 @@ cpstd::string cpstd::to_string(double val){
 cpstd::string cpstd::to_string(long double val){
 #if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
     return std::to_string(val);
-#elif defined(CPSTL_STRING_USING_C_ALLOCATION)
+#else
     if (val == 0.0)
         return "0";
 

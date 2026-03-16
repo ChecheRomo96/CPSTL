@@ -8,6 +8,7 @@
 #endif
 
 #include <CPSTL.h>
+#include <limits>
 
 #if defined(CPSTL_STRING_ENABLED)
     
@@ -1425,7 +1426,6 @@
 
             cpstd::swap(a,c);
             cpstd::string result = std::move(c) + b;
-            std::cout<<result<<std::endl;
 
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
@@ -1926,69 +1926,68 @@
     //! of the size() method.
                             
         TEST(CPSTL_String_NonMemberFunctions, to__string) {
-
             {
-                int x = INT_MAX;
+                int x = std::numeric_limits<int>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"2147483647"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
 
-                x = INT_MIN;
+                x = std::numeric_limits<int>::min();
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"-2147483648"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
             }
 
             {
-                long x = LONG_MAX;
+                long x = std::numeric_limits<long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"9223372036854775807"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
 
-                x = LONG_MIN;
+                x = std::numeric_limits<long>::min();
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"-9223372036854775808"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
             }
 
             {
-                long long x = LLONG_MAX;
+                long long x = std::numeric_limits<long long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"9223372036854775807"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
 
-                x = LLONG_MIN;
+                x = std::numeric_limits<long long>::min();
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"-9223372036854775808"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
             }
 
             {
-                unsigned x = UINT_MAX;
+                unsigned x = std::numeric_limits<unsigned>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"4294967295"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
             }
 
             {
-                unsigned long x = ULONG_MAX;
+                unsigned long x = std::numeric_limits<unsigned long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"18446744073709551615"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
             }
 
             {
-                unsigned long long x = ULLONG_MAX;
+                unsigned long long x = std::numeric_limits<unsigned long long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"18446744073709551615"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
             }
 
             {
                 int8_t x = INT8_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"127"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), "127"), 0);
 
                 x = INT8_MIN;
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"-128"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), "-128"), 0);
             }
 
             {
                 uint8_t x = UINT8_MAX;
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(),"255"),0);
+                ASSERT_EQ(strcmp(myString.c_str(), "255"), 0);
             }
 
             {

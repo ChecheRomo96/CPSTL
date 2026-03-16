@@ -32,11 +32,16 @@
 	
 	set(CPSTL_BUILD_TARGET "Submodule" CACHE STRING "CPString build target")
 	set_property(CACHE CPSTL_BUILD_TARGET PROPERTY STRINGS "Dev" "Submodule" "Export" "Install")
+	
+	set(CPSTL_ALLOCATION_METHOD "dummy" CACHE STRING "CPVector allocation method")
+	set_property(CACHE CPSTL_ALLOCATION_METHOD PROPERTY STRINGS "dummy" "std" "CPP" "C")
 
 	set(CPSTL_EXCEPTIONS FALSE CACHE BOOL "") # Enables the compilation of the Exceptions module
 
 	set(CPSTL_EXAMPLES FALSE CACHE BOOL "") # Enables Building Examples
 	set(CPSTL_TESTING FALSE CACHE BOOL "") # Enabled Unit Testing
+
+	set(CPSTL_USING_STL CACHE BOOL "") # Enables using STL compatibility
 
 	##################################################################################################
 	# Vector configuration
@@ -48,7 +53,7 @@
 		option(CPSTL_VECTOR_TESTING "Enabled Unit Testing" FALSE)
 
 		set(CPSTL_VECTOR_ALLOCATION_METHOD "dummy" CACHE STRING "CPVector allocation method")
-		set_property(CACHE CPSTL_VECTOR_ALLOCATION_METHOD PROPERTY STRINGS  "dummy" "std::vector" "CPP" "C")
+		set_property(CACHE CPSTL_VECTOR_ALLOCATION_METHOD PROPERTY STRINGS "Parent" "dummy" "std" "CPP" "C")
 		
 		option(CPSTL_VECTOR_SORTING "Enables the compilation of the sorting module" FALSE)
 	#
@@ -62,7 +67,7 @@
 		option(CPSTL_STRING_TESTING "Enable unit testing" FALSE)
 		
 		set(CPSTL_STRING_ALLOCATION_METHOD "dummy" CACHE STRING "CPSTL_String allocation method")
-		set_property(CACHE CPSTL_STRING_ALLOCATION_METHOD PROPERTY STRINGS "dummy" "std::string" "CPP" "C")
+		set_property(CACHE CPSTL_STRING_ALLOCATION_METHOD PROPERTY STRINGS "Parent" "dummy" "std" "CPP" "C")
 
 		option(CPSTL_STRING_ITERATORS "Enable using Iterators" FALSE)
 	#

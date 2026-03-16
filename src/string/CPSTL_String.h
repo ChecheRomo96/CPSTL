@@ -94,7 +94,7 @@
                     ////////////////////////////////////////////////////////////////////////////////////////////
                     // C String
                     
-                        #if defined(CPSTL_STRING_USING_C_ALLOCATION)
+                        #if defined(CPSTL_STRING_USING_C_ALLOCATION) || defined(CPSTL_STRING_USING_CPP_ALLOCATION)
                             size_t _size;
                             size_t _capacity;
                             char* _buffer;

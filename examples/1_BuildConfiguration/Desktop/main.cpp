@@ -16,12 +16,9 @@ int main(){
     std::cout << "  cpstd::string enabled" << std::endl;
     std::cout << std::endl;
 #endif
-    
-    int32_t x = INT32_MIN;
+    long x = LONG_MAX;
     std::cout<< cpstd::to_string(x) <<std::endl;
     
-    x = INT32_MAX;
-    std::cout<< cpstd::to_string(x) <<std::endl;
 
     return 0;
 }

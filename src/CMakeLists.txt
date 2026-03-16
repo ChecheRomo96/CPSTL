@@ -65,6 +65,24 @@
 ######################################################################################################
 # Add Compliler Definitions
 
+	if( ${CPSTL_USING_STL} )
+		message("Using STL compatibility")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_STL)
+	endif()
+
+	if( ${CPSTL_ALLOCATION_METHOD} STREQUAL "dummy" )
+		message("No allocation method selected")
+	elseif( ${CPSTL_ALLOCATION_METHOD} STREQUAL "std" )
+		message("Using std for allocation")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_STD_ALLOCATION)
+	elseif( ${CPSTL_ALLOCATION_METHOD} STREQUAL "CPP" )
+		message("Using C++ allocators (new, new[], delete, delete[]")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_CPP_ALLOCATION)
+	elseif( ${CPSTL_ALLOCATION_METHOD} STREQUAL "C" )
+		message("Using C allocators (malloc, calloc, free)")
+		target_compile_definitions(CPSTL PUBLIC CPSTL_USING_C_ALLOCATION)
+	endif()
+
 	if( ${CPSTL_EXCEPTIONS} )
 		message("CPSTL exceptions enabled")
 		target_compile_definitions(CPSTL PUBLIC CPSTL_EXCEPTIONS_ENABLED)
@@ -74,10 +92,15 @@
 
 		message("CPSTL::vector enabled")
 		target_compile_definitions(CPSTL PUBLIC CPSTL_VECTOR_ENABLED)
+		
+		if( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "Parent" )
+			message("Using parent allocation method")
+			set(CPSTL_VECTOR_ALLOCATION_METHOD ${CPSTL_ALLOCATION_METHOD})
+		endif()
 
 		if( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "dummy" )
 			message("No allocation method selected")
-		elseif( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "std::vector" )
+		elseif( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "std" )
 			message("Using std::vector for allocation")
 			target_compile_definitions(CPSTL PUBLIC CPSTL_VECTOR_USING_STD_ALLOCATION)
 		elseif( ${CPSTL_VECTOR_ALLOCATION_METHOD} STREQUAL "CPP" )
@@ -95,9 +118,14 @@
 		message("CPSTL::string enabled")
 		target_compile_definitions(CPSTL PUBLIC CPSTL_STRING_ENABLED)
 
+		if( ${CPSTL_STRING_ALLOCATION_METHOD} STREQUAL "Parent" )
+			message("Using parent allocation method")
+			set(CPSTL_STRING_ALLOCATION_METHOD ${CPSTL_ALLOCATION_METHOD})
+		endif()
+
 		if( ${CPSTL_STRING_ALLOCATION_METHOD} STREQUAL "dummy" )
 			message("No allocation method selected")
-		elseif( ${CPSTL_STRING_ALLOCATION_METHOD} STREQUAL "std::string" )
+		elseif( ${CPSTL_STRING_ALLOCATION_METHOD} STREQUAL "std" )
 			message("Using std::string for allocation")
 			target_compile_definitions(CPSTL PUBLIC CPSTL_STRING_USING_STD_ALLOCATION)
 		elseif( ${CPSTL_STRING_ALLOCATION_METHOD} STREQUAL "CPP" )
