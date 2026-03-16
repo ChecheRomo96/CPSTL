@@ -822,7 +822,7 @@
                 cpstd::string myString2;
                 ASSERT_EQ(strcmp(myString2.c_str(), ""), 0);
 
-                myString2 = std::move(myString);  
+                myString2 = cpstd::move(myString);  
                 ASSERT_EQ(strcmp(myString.c_str(), ""), 0);
                 ASSERT_EQ(strcmp(myString2.c_str(), "Hello World"), 0);
             }
