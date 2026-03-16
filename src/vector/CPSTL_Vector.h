@@ -415,7 +415,6 @@
                            
                            void resize(size_type new_size, const_reference value = T()){
                                 if (new_size < _Size){
-                                    // Destroy elements if resizing to a smaller size
                                     for (size_type i = new_size; i < _Size; ++i){
                                         cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
                                     }
@@ -435,7 +434,10 @@
 
                                     size_type constructed = 0;
 
-                                    try{
+                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
+                                    try
+                                    {
+                                #endif
                                         // Move old elements into new storage
                                         for (; constructed < _Size; ++constructed){
                                             cpstd::allocator_traits<allocator_type>::construct(
@@ -453,9 +455,9 @@
                                                 value
                                             );
                                         }
+                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
                                     }
                                     catch (...){
-                                        // Destroy only the elements successfully constructed in new_buffer
                                         for (size_type i = 0; i < constructed; ++i){
                                             cpstd::allocator_traits<allocator_type>::destroy(_Alloc, new_buffer + i);
                                         }
@@ -463,13 +465,12 @@
                                         cpstd::allocator_traits<allocator_type>::deallocate(_Alloc, new_buffer, new_capacity);
                                         throw;
                                     }
+                                #endif
 
-                                    // Destroy old elements
                                     for (size_type i = 0; i < _Size; ++i){
                                         cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
                                     }
 
-                                    // Deallocate old storage
                                     if (_Buffer != nullptr){
                                         cpstd::allocator_traits<allocator_type>::deallocate(_Alloc, _Buffer, _Capacity);
                                     }
@@ -478,10 +479,14 @@
                                     _Capacity = new_capacity;
                                     _Size = new_size;
                                 }
-                                else{
+                                else
+                                {
                                     size_type constructed = _Size;
 
-                                    try{
+                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
+                                    try
+                                    {
+                                #endif
                                         for (; constructed < new_size; ++constructed){
                                             cpstd::allocator_traits<allocator_type>::construct(
                                                 _Alloc,
@@ -489,14 +494,18 @@
                                                 value
                                             );
                                         }
+                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
                                     }
                                     catch (...)
                                     {
                                         for (size_type i = _Size; i < constructed; ++i){
                                             cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
                                         }
+
                                         throw;
                                     }
+                                #endif
+
                                     _Size = new_size;
                                 }
                             }
