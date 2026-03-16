@@ -8,7 +8,6 @@
 #endif
 
 #include <CPSTL.h>
-#include <limits>
 
 #if defined(CPSTL_STRING_ENABLED)
     
@@ -822,7 +821,7 @@
                 cpstd::string myString2;
                 ASSERT_EQ(strcmp(myString2.c_str(), ""), 0);
 
-                myString2 = std::move(myString);  
+                myString2 = cpstd::move(myString);  
                 ASSERT_EQ(strcmp(myString.c_str(), ""), 0);
                 ASSERT_EQ(strcmp(myString2.c_str(), "Hello World"), 0);
             }
@@ -1373,7 +1372,7 @@
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_rval_rval) {
             cpstd::string a = "012";
             cpstd::string b = "345";
-            cpstd::string result = std::move(a) + std::move(b);
+            cpstd::string result = cpstd::move(a) + cpstd::move(b);
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
         }
     //
@@ -1425,7 +1424,7 @@
             cpstd::string c = "";
 
             cpstd::swap(a,c);
-            cpstd::string result = std::move(c) + b;
+            cpstd::string result = cpstd::move(c) + b;
 
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
@@ -1463,7 +1462,7 @@
 
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_rval_Cstr) {
             cpstd::string a = "012";
-            cpstd::string result = std::move(a) + "345";
+            cpstd::string result = cpstd::move(a) + "345";
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
         }
@@ -1499,7 +1498,7 @@
 
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_Cstr_rval) {
             cpstd::string a = "345";
-            cpstd::string result = "012" + std::move(a);
+            cpstd::string result = "012" + cpstd::move(a);
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
         }
@@ -1535,7 +1534,7 @@
 
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_rval_char) {
             cpstd::string a = "01234";
-            cpstd::string result = std::move(a) + '5';
+            cpstd::string result = cpstd::move(a) + '5';
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
         }
@@ -1568,7 +1567,7 @@
 
         TEST(CPSTL_String_NonMemberFunctions, Concatenation_char_rval) {
             cpstd::string a = "12345";
-            cpstd::string result = '0' + std::move(a);
+            cpstd::string result = '0' + cpstd::move(a);
             ASSERT_EQ(strcmp(result.c_str(), "012345"), 0);
             ASSERT_EQ(a.size(), 0);
         }
@@ -1927,51 +1926,51 @@
                             
         TEST(CPSTL_String_NonMemberFunctions, to__string) {
             {
-                int x = std::numeric_limits<int>::max();
+                int x = cpstd::numeric_limits<int>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
 
-                x = std::numeric_limits<int>::min();
+                x = cpstd::numeric_limits<int>::min();
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
             }
 
             {
-                long x = std::numeric_limits<long>::max();
+                long x = cpstd::numeric_limits<long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
 
-                x = std::numeric_limits<long>::min();
+                x = cpstd::numeric_limits<long>::min();
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
             }
 
             {
-                long long x = std::numeric_limits<long long>::max();
+                long long x = cpstd::numeric_limits<long long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
 
-                x = std::numeric_limits<long long>::min();
+                x = cpstd::numeric_limits<long long>::min();
                 myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
             }
 
             {
-                unsigned x = std::numeric_limits<unsigned>::max();
+                unsigned x = cpstd::numeric_limits<unsigned>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
             }
 
             {
-                unsigned long x = std::numeric_limits<unsigned long>::max();
+                unsigned long x = cpstd::numeric_limits<unsigned long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
             }
 
             {
-                unsigned long long x = std::numeric_limits<unsigned long long>::max();
+                unsigned long long x = cpstd::numeric_limits<unsigned long long>::max();
                 cpstd::string myString = cpstd::to_string(x);
-                ASSERT_EQ(strcmp(myString.c_str(), std::to_string(x).c_str()), 0);
+                ASSERT_EQ(strcmp(myString.c_str(),cpstd::to_string(x).c_str()), 0);
             }
 
             {
