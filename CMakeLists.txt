@@ -64,7 +64,7 @@
 		option(CPSTL_STRING_TESTING "Enable unit testing" FALSE)
 		
 		set(CPSTL_STRING_ALLOCATION_METHOD "dummy" CACHE STRING "CPSTL_String allocation method")
-		set_property(CACHE CPSTL_STRING_ALLOCATION_METHOD PROPERTY STRINGS "Parent" "dummy" "std" "CPP" "C")
+		option(CPSTL_ENABLE_UNICODE_STRINGS "Enable Unicode string support" FALSE)
 
 		option(CPSTL_STRING_ITERATORS "Enable using Iterators" FALSE)
 	#
