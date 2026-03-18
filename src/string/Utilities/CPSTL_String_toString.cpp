@@ -1,7 +1,7 @@
 #include "CPSTL_String_toString.h"
 
 cpstd::string cpstd::to_string(int val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     string result;
@@ -46,7 +46,7 @@ cpstd::string cpstd::to_string(int val){
 }
 
 cpstd::string cpstd::to_string(long val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     string result;
@@ -91,7 +91,7 @@ cpstd::string cpstd::to_string(long val){
 }
 
 cpstd::string cpstd::to_string(long long val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if  defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     string result;
@@ -136,7 +136,7 @@ cpstd::string cpstd::to_string(long long val){
 }
 
 cpstd::string cpstd::to_string(unsigned val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if  defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     string result;
@@ -171,7 +171,7 @@ cpstd::string cpstd::to_string(unsigned val){
 }
 
 cpstd::string cpstd::to_string(unsigned long val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if  defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     string result;
@@ -204,8 +204,9 @@ cpstd::string cpstd::to_string(unsigned long val){
 }
 
 cpstd::string cpstd::to_string(unsigned long long val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
-    return std::to_string(val);
+#if  defined(CPSTL_USING_STL)
+	std::string tmp = std::to_string(val);
+    return cpstd::string(tmp.c_str(), tmp.length());
 #else
     string result;
 
@@ -237,7 +238,7 @@ cpstd::string cpstd::to_string(unsigned long long val){
 }
 
 cpstd::string cpstd::to_string(float val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if  defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     if (val == 0.0)
@@ -277,7 +278,7 @@ cpstd::string cpstd::to_string(float val){
 }
 
 cpstd::string cpstd::to_string(double val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if  defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     if (val == 0.0)
@@ -317,7 +318,7 @@ cpstd::string cpstd::to_string(double val){
 }
 
 cpstd::string cpstd::to_string(long double val){
-#if defined(CPSTL_STRING_USING_STD_ALLOCATION) || defined(CPSTL_USING_STL)
+#if  defined(CPSTL_USING_STL)
     return std::to_string(val);
 #else
     if (val == 0.0)

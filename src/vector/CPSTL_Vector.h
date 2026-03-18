@@ -2,13 +2,13 @@
 #define CROSS_PLATFFORM_STL_VECTOR_TEMPLATE_H
 
     #include <CPSTL_BuildSettings.h>
-    #include <utility/CPSTL_Move.h>
     #include <CPinitializer_list.h>
     #include <CPiterator.h>
     #include <CPmemory.h>
     #include <CPutility.h>
     #include <CPalgorithm.h>
     #include <utility/CPSTL_types.h>
+    #include <utility/CPSTL_Move.h>
 
     #if defined CPSTL_USING_STL
         #include <iostream>
@@ -79,7 +79,7 @@
                         size_type _Size;
                         size_type _Capacity;
                         pointer _Buffer;
-                        Alloc _Alloc; // Instance of the custom allocator
+                        Alloc _Alloc;
                     //
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 public:
