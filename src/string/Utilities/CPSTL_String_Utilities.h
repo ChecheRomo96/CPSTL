@@ -1,6 +1,0 @@
-#ifndef CPSTL_STRING_UTILITIES_H
-#define CPSTL_STRING_UTILITIES_H
-
-    #include "CPSTL_String_toString.h"
-
-#endif//CPSTL_STRING_UTILITIES_H

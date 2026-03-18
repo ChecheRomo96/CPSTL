@@ -7,7 +7,6 @@
     
     #if defined (CPSTL_STRING_ENABLED)
         #include "string/CPSTL_String.h"
-        #include "string/Utilities/CPSTL_String_Utilities.h"
     #endif
 
 #endif//CPSTL_STRING_H

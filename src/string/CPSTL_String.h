@@ -37,6 +37,19 @@
             using u16string = basic_string<char16_t>;
             using u32string = basic_string<char32_t>;
         #endif
+
+        
+        cpstd::string to_string( int val );
+        cpstd::string to_string( long val );
+        cpstd::string to_string( long long val );
+
+        cpstd::string to_string( unsigned val );
+        cpstd::string to_string( unsigned long val );
+        cpstd::string to_string( unsigned long long val );
+
+        cpstd::string to_string (float val);
+        cpstd::string to_string (double val);
+        cpstd::string to_string (long double val); 
         
     }
     
