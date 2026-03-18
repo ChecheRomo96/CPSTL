@@ -8,13 +8,14 @@
     //#include <CPfunctional.h>
     #include "CPSTL_types.h"
 
-    #if definedCPSTL_USING_STL || defined(CPSTL_USING_STD_ALLOCATION)
-
+    #if defined(CPSTL_USING_STL) || defined(CPSTL_USING_STD_ALLOCATION)
         #include <memory>
+    #else
+        #include <cstdlib>
     #endif
-
+    
     namespace cpstd{
-    #if definedCPSTL_USING_STL || defined(CPSTL_USING_STD_ALLOCATION)
+    #if defined(CPSTL_USING_STL) || defined(CPSTL_USING_STD_ALLOCATION)
 
             template <typename T>
             constexpr T* addressof(T& arg) noexcept {
@@ -38,9 +39,11 @@
             public:
                 using value_type = T;
                 using pointer = value_type*;
-                using reference = value_type&;
+                using reference       = value_type&;
                 using const_pointer = const value_type*;
                 using const_reference = const value_type&;
+                using void_pointer        = void*;
+                using const_void_pointer  = const void*;
                 using size_type = cpstd::size_t;
                 using difference_type = cpstd::ptrdiff_t;
 
@@ -99,17 +102,10 @@
                     return cpstd::numeric_limits<size_type>::max() / sizeof(value_type);
                 }
 
-                #if defined(CPSTL_USING_CPP_ALLOCATION)
-                    template<typename... Args>
-                    void construct(pointer ptr, Args&&... args) {
-                        new (ptr) value_type(cpstd::forward<Args>(args)...);
-                    }
-
-                #elif defined(CPSTL_USING_C_ALLOCATION)
-                    void construct ( pointer p, const_reference val = value_type()){
-                        *p = val;
-                    }
-                #endif
+                template<typename... Args>
+                void construct(pointer ptr, Args&&... args) {
+                    new (ptr) value_type(cpstd::forward<Args>(args)...);
+                }
 
                 static void destroy(pointer ptr) {
                 #if defined(CPSTL_USING_CPP_ALLOCATION) || defined(CPSTL_USING_C_ALLOCATION)

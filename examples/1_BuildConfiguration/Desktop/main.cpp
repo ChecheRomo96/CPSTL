@@ -16,9 +16,14 @@ int main(){
     std::cout << "  cpstd::string enabled" << std::endl;
     std::cout << std::endl;
 #endif
-    long x = LONG_MAX;
-    std::cout<< cpstd::to_string(x).c_str() <<std::endl;
     
+    cpstd::string str = "Hello, CPSTL!";
+    std::cout << "cpstd::string str: " << str.c_str() << std::endl;
 
+	cpstd::wstring wstr = L"Hello, CPSTL!";
+
+    for (size_t i = 0; i < wstr.size(); ++i) {
+        std::wcout << "wstr[" << i << "] = " << wstr[i] << std::endl;
+	}
     return 0;
 }
