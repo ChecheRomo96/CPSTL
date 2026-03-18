@@ -11,16 +11,13 @@
 ######################################################################################################
 # Append Sources and Headers
 
+    list( APPEND CPSTL_SOURCES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.cpp")
+
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.h" )
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_CharTraits.h" )
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_CharTraits.tpp" )
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_basic_string.h" )
     list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_basic_string.tpp" )
-#
-######################################################################################################
-# Add Subdirectories
-    
-    add_subdirectory(Utilities)
 #
 ######################################################################################################
 # Refresh Sources List and Header List at PARENT_SCOPE
