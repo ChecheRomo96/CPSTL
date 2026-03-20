@@ -17,27 +17,37 @@
             using forward_iterator_tag = std::forward_iterator_tag;
             using bidirectional_iterator_tag = std::bidirectional_iterator_tag;
             using random_access_iterator_tag = std::random_access_iterator_tag;
-            using contiguous_iterator_tag  = std::contiguous_iterator_tag;
 
-            template <class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&> 
+            #if CPSTD_CPLUSPLUS >= 202001L 
+                using contiguous_iterator_tag = std::contiguous_iterator_tag;
+            #endif
+
+            #if CPSTD_CPLUSPLUS <= 201112L 
+                template <class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&>
+            #endif
             using iterator = std::iterator<Category, T, Distance, Pointer, Reference>;
-
         #else
             struct input_iterator_tag {};
             struct output_iterator_tag {};
             struct forward_iterator_tag : public input_iterator_tag {};
             struct bidirectional_iterator_tag : public forward_iterator_tag {};
             struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-            struct contiguous_iterator_tag : public random_access_iterator_tag {};
-            
+
+            #if CPSTD_CPLUSPLUS >= 202001L 
+                struct contiguous_iterator_tag : public random_access_iterator_tag {};
+            #endif
+
+            #if CPSTD_CPLUSPLUS <= 201112L 
             template <class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&> 
-            struct iterator {
-                typedef T         value_type;
-                typedef Distance  difference_type;
-                typedef Pointer   pointer;
-                typedef Reference reference;
-                typedef Category  iterator_category;
-            };
+                struct iterator {
+                    typedef T         value_type;
+                    typedef Distance  difference_type;
+                    typedef Pointer   pointer;
+                    typedef Reference reference;
+                    typedef Category  iterator_category;
+                };
+            #endif
+
         #endif
     }
 

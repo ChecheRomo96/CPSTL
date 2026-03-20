@@ -1,6 +1,8 @@
 # CPSTL: Cross-Platform STL Wrapper
 
-CPSTL is a library that serves as a wrapper for the C++ Standard Template Library (STL), enabling cross-platform development whether the STL is available or not. This library provides a consistent interface for STL functionality, allowing developers to write code that can run on multiple platforms without being dependent on the STL's presence.
+CPSTL is a lightweight compatibility layer that provides an STL-like interface for C++ across a wide range of platforms, including environments where the standard library is partially available or entirely absent. It abstracts differences between C++ standard versions and standard library implementations, allowing developers to write portable and consistent code without relying directly on std.
+
+Internally, CPSTL selectively reuses the standard library when available and falls back to custom implementations when necessary, ensuring consistent behavior across platforms.
 
 ## Repository Structure
 

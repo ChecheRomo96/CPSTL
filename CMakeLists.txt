@@ -17,8 +17,10 @@
 	##################################################################################################
 	# Set up C++ Version
 
-		set(CMAKE_CXX_STANDARD 17) 
+		set(CPSTL_CXX_STANDARD "11" CACHE STRING "C++ standard to use")
+		set(CMAKE_CXX_STANDARD ${CPSTL_CXX_STANDARD})
 		set(CMAKE_CXX_STANDARD_REQUIRED ON)
+		set(CMAKE_CXX_EXTENSIONS OFF)
 	#
 	##################################################################################################
 #
