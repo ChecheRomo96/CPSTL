@@ -1,6 +1,29 @@
 #ifndef CPSTL_BUILD_SETTINGS_H
 #define CPSTL_BUILD_SETTINGS_H
 
+   // Reset (importante para evitar basura)
+    #define CPSTL_COMPILER_MSVC   0
+    #define CPSTL_COMPILER_GCC    0
+    #define CPSTL_COMPILER_CLANG  0
+
+    // Detection
+    #if defined(_MSC_VER)
+        #undef CPSTL_COMPILER_MSVC
+        #define CPSTL_COMPILER_MSVC 1
+
+    #elif defined(__clang__)
+        #undef CPSTL_COMPILER_CLANG
+        #define CPSTL_COMPILER_CLANG 1
+
+    #elif defined(__GNUC__)
+        #undef CPSTL_COMPILER_GCC
+        #define CPSTL_COMPILER_GCC 1
+
+    #else
+        #error "Unsupported compiler"
+    #endif
+
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // CPSTL Version
 

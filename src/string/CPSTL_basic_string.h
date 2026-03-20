@@ -272,10 +272,6 @@
                     int compare(size_type pos, size_type len, const basic_string& str) const;int compare(size_type pos, size_type len, const basic_string& str, size_type subpos, size_type sublen = npos) const;
                     int compare(const CharT * s) const;int compare(size_type pos, size_type len, const CharT* s) const;
                     int compare(size_type pos, size_type len, const CharT* s, size_type n) const;
-
-                
-
-
             };
 
             // Non-member function overloads

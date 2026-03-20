@@ -3,7 +3,6 @@
 
     #include <CPSTL_BuildSettings.h>
 
-    #include <utility/CPSTL_types.h>
-    #include <utility/CPSTL_Iterator.h>
+    #include <iterator/CPSTL_Iterator.h>
 
 #endif//CPSTL_ITERATOR_H

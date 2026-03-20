@@ -63,10 +63,7 @@
 		option(CPSTL_STRING_EXAMPLES "Enable building examples" FALSE)
 		option(CPSTL_STRING_TESTING "Enable unit testing" FALSE)
 		
-		set(CPSTL_STRING_ALLOCATION_METHOD "dummy" CACHE STRING "CPSTL_String allocation method")
 		option(CPSTL_ENABLE_UNICODE_STRINGS "Enable Unicode string support" FALSE)
-
-		option(CPSTL_STRING_ITERATORS "Enable using Iterators" FALSE)
 	#
 	##################################################################################################
 #

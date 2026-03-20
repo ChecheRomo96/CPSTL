@@ -11,11 +11,12 @@
 ######################################################################################################
 # Append Sources and Headers
 
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits.h")
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_HelperClasses.h")
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_PrimaryTypeCategories.h")
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_CompositeTypeCategories.h")
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_TypeTraits_TypeProperties.h")
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_iterator_primitives.h")
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_iterator_class.h")
+    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_iterator_traits.h")
+
+    #add_subdirectory(type_traits)
+
 #
 ######################################################################################################
 # CPSTL Vector Installation
@@ -24,19 +25,19 @@
 
         install(
             FILES ${HEADERS_LIST_LOCAL} 
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/utility/type_traits 
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/streams 
         )
 
         install(
             TARGETS CPSTL 
             EXPORT CPSTLExport
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility/type_traits 
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/streams
         )
 
         install(
             EXPORT CPSTLExport
             FILE CPSTL-config.cmake
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility/type_traits 
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/streams
         )
     endif()
 #
