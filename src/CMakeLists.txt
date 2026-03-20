@@ -20,13 +20,11 @@
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPSTL.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPSTL_BuildSettings.h")
 	
-	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPtype_traits")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPalgorithm")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPexception")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPinitializer_list")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPutility")
 
-	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPtype_traits.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPalgorithm.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPexception.h")
 	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPinitializer_list.h")
@@ -52,6 +50,19 @@
 		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPstring.h")
 		add_subdirectory(string)
 	endif()
+	
+
+	if( ${CPSTL_ITERATOR_STATUS} )
+		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPiterator")
+		list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPiterator.h")
+		add_subdirectory(iterator)
+	endif()
+
+	
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPtype_traits")
+	list( APPEND HEADERS_LIST "${CMAKE_CURRENT_LIST_DIR}/CPtype_traits.h")
+	add_subdirectory(type_traits)
+
 #
 ######################################################################################################
 # Create the CPSTL library
@@ -89,10 +100,8 @@
 	endif()
 
 	if( ${CPSTL_VECTOR_STATUS} )
-
 		message("CPSTL::vector enabled")
 		target_compile_definitions(CPSTL PUBLIC CPSTL_VECTOR_ENABLED)
-		
 	endif()
 
 
@@ -100,11 +109,6 @@
 
 		message("CPSTL::string enabled")
 		target_compile_definitions(CPSTL PUBLIC CPSTL_STRING_ENABLED)
-
-		if( ${CPSTL_STRING_ALLOCATION_METHOD} STREQUAL "Parent" )
-			message("Using parent allocation method")
-			set(CPSTL_STRING_ALLOCATION_METHOD ${CPSTL_ALLOCATION_METHOD})
-		endif()
 
 		if( ${CPSTL_ENABLE_UNICODE_STRINGS} )
 			message("Unicode string support enabled")

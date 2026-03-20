@@ -26,18 +26,43 @@
     namespace cpstd{  
 
         using string = basic_string<char>;
+        using wstring   = basic_string<wchar_t>;
 
         #ifdef CPSTL_ENABLE_UNICODE_STRINGS
-            using wstring   = basic_string<wchar_t>;
-    
             #if defined(__cpp_char8_t)
                 using u8string = basic_string<char8_t>;
             #endif
-
             using u16string = basic_string<char16_t>;
             using u32string = basic_string<char32_t>;
         #endif
+        // Convert from String functions
 
+        int stoi (const cpstd::string&  str, size_t* idx = 0, int base = 10);
+        int stoi (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
+
+        long stol (const cpstd::string&  str, size_t* idx = 0, int base = 10);
+        long stol (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
+
+        unsigned long stoul (const cpstd::string&  str, size_t* idx = 0, int base = 10);
+        unsigned long stoul (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
+
+        long long stoll (const cpstd::string&  str, size_t* idx = 0, int base = 10);
+        long long stoll (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
+
+        unsigned long long stoull (const cpstd::string&  str, size_t* idx = 0, int base = 10);
+        unsigned long long stoull (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
+
+        float stof (const cpstd::string&  str, size_t* idx = 0);
+        float stof (const cpstd::wstring& str, size_t* idx = 0);
+
+        double stod (const cpstd::string&  str, size_t* idx = 0);
+        double stod (const cpstd::wstring& str, size_t* idx = 0);
+
+        long double stold (const cpstd::string&  str, size_t* idx = 0);
+        long double stold (const cpstd::wstring& str, size_t* idx = 0);
+
+
+        // Convert to String functions
         
         cpstd::string to_string( int val );
         cpstd::string to_string( long val );
@@ -51,6 +76,20 @@
         cpstd::string to_string (double val);
         cpstd::string to_string (long double val); 
         
+
+        cpstd::wstring to_wstring( int val );
+        cpstd::wstring to_wstring( long val );
+        cpstd::wstring to_wstring( long long val );
+
+        cpstd::wstring to_wstring( unsigned val );
+        cpstd::wstring to_wstring( unsigned long val );
+        cpstd::wstring to_wstring( unsigned long long val );
+
+        cpstd::wstring to_wstring (float val);
+        cpstd::wstring to_wstring (double val);
+        cpstd::wstring to_wstring (long double val); 
+        
+
     }
     
 #endif//CPSTL_STRING_CLASS_H

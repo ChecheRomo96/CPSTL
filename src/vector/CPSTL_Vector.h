@@ -10,7 +10,7 @@
     #include <utility/CPSTL_types.h>
     #include <utility/CPSTL_Move.h>
 
-    #if defined CPSTL_USING_STL
+    #if defined(CPSTL_USING_STL)
         #include <iostream>
         #include <vector>
     #endif
@@ -34,14 +34,8 @@
         //! @tparam T Data type for the Dynamic Array
 
             #ifdef CPSTL_USING_STL
-                template <class T, class Alloc = std::allocator<T>>
-                struct vector_helper {
-                    using type = std::vector<T, Alloc>;
-                };
-
-                // Convenience alias
-                template <class T, class Alloc = std::allocator<T>>
-                using vector = typename vector_helper<T, Alloc>::type;
+                template <class T, class Alloc = std::allocator<T> >
+                using vector = std::vector<T, Alloc>;
             #else
                 template <class T, class Alloc = cpstd::allocator<T>>
                 class  vector{

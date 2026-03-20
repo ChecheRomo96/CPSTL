@@ -13,3 +13,6 @@ if( ${CPSTL_TESTING}  AND ${CPSTL_STRING_TESTING})
     target_link_libraries( CPSTL_string_tests PUBLIC CPSTL PUBLIC GTest::gtest_main )
     gtest_discover_tests(CPSTL_string_tests)
 endif() 
+
+
+add_subdirectory(CPSTL_iterator)
