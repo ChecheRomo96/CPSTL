@@ -1,21 +1,30 @@
 ######################################################################################################
-# Store this directory as a variable called MCC_SRC_DIRECTORY to reference in deeper directories
+# Initialize Lists
 
-    set( CPSTL_VECTOR_SRC_DIRECTORY  ${CMAKE_CURRENT_LIST_DIR})
-#
-######################################################################################################
-# Initialize MCC_SOURCES and HEADER_LIST as an empty string list
-
-    set( HEADERS_LIST_LOCAL "" )
+	set(PRIVATE_SOURCES "")       # .cpp
+    set(PUBLIC_INCLUDE_FILES "")  # .h + .tpp
+    set(PRIVATE_INCLUDE_FILES "") # .h + .tpp internos
 #
 ######################################################################################################
 # Append Sources and Headers
 
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Move.h")
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Move.h")
 
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_types.h")
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_allocator.h")
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_types.h")
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_allocator.h")
 
+#
+######################################################################################################
+# Refrehsh list at parent scope
+
+    list( APPEND CPSTL_PRIVATE_SOURCES "${PRIVATE_SOURCES}")
+    list( APPEND CPSTL_PUBLIC_INCLUDE_FILES "${PUBLIC_INCLUDE_FILES}")
+    list( APPEND CPSTL_PRIVATE_INCLUDE_FILES "${PRIVATE_INCLUDE_FILES}")
+
+
+    set(CPSTL_PRIVATE_SOURCES ${CPSTL_PRIVATE_SOURCES} PARENT_SCOPE)
+    set(CPSTL_PUBLIC_INCLUDE_FILES ${CPSTL_PUBLIC_INCLUDE_FILES} PARENT_SCOPE)
+    set(CPSTL_PRIVATE_INCLUDE_FILES ${CPSTL_PRIVATE_INCLUDE_FILES} PARENT_SCOPE)
 #
 ######################################################################################################
 # CPSTL Vector Installation
@@ -23,7 +32,7 @@
     if( ${CPSTL_INSTALL} )
 
         install(
-            FILES ${HEADERS_LIST_LOCAL} 
+            FILES ${PUBLIC_INCLUDE_FILES} 
             DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/utility 
         )
 
