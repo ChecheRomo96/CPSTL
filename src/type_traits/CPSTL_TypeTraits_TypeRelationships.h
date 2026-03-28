@@ -5,20 +5,10 @@
 #include <CPtype_traits.h>
 
 #if defined(CPSTL_USING_STL)
-#include <type_traits>
+    #include <type_traits>
 #endif
 
 namespace cpstd {
-
-    namespace detail {
-
-        template <class T>
-        T&& Declval() noexcept;
-
-        template <class To>
-        void TestConvertible(To);
-
-    } // namespace detail
 
     // ============================================================
     // is_same
@@ -88,26 +78,25 @@ namespace cpstd {
 
 #else
 
-    namespace detail {
-
-        template <class From, class To, class = void>
-        struct is_convertible_impl : false_type {};
-
-        template <class From, class To>
-        struct is_convertible_impl<
-            From,
-            To,
-            decltype(
-                detail::TestConvertible<To>(detail::Declval<From>()),
-                void()
-                )
-        > : true_type {
-        };
-
-    } // namespace detail
-
     template <class From, class To>
-    struct is_convertible : detail::is_convertible_impl<From, To> {};
+    struct is_convertible {
+    private:
+        static From&& Declval() noexcept;
+        static void TestConvertible(To);
+
+        template <class F, class T>
+        static auto test(int) -> decltype(
+            TestConvertible(Declval()),
+            true_type()
+        );
+
+        template <class, class>
+        static false_type test(...);
+
+    public:
+        static const bool value = decltype(test<From, To>(0))::value;
+        typedef integral_constant<bool, value> type;
+    };
 
 #endif
 
@@ -131,30 +120,24 @@ namespace cpstd {
 
 #else
 
-    namespace detail {
-
-        template <class Fn, class... Args>
-        struct is_invocable_impl {
-        private:
-            template <class F, class... A>
-            static auto test(int) -> decltype(
-                detail::Declval<F>()(detail::Declval<A>()...),
-                true_type()
-                );
-
-            template <class, class...>
-            static false_type test(...);
-
-        public:
-            typedef decltype(test<Fn, Args...>(0)) type;
-            static const bool value = type::value;
-        };
-
-    } // namespace detail
-
     template <class Fn, class... Args>
-    struct is_invocable
-        : integral_constant<bool, detail::is_invocable_impl<Fn, Args...>::value> {
+    struct is_invocable {
+    private:
+        template <class T>
+        static T&& Declval() noexcept;
+
+        template <class F, class... A>
+        static auto test(int) -> decltype(
+            Declval<F>()(Declval<A>()...),
+            true_type()
+        );
+
+        template <class, class...>
+        static false_type test(...);
+
+    public:
+        static const bool value = decltype(test<Fn, Args...>(0))::value;
+        typedef integral_constant<bool, value> type;
     };
 
 #endif
@@ -177,30 +160,28 @@ namespace cpstd {
 
 #else
 
-    namespace detail {
-
-        template <class Fn, class... Args>
-        struct is_nothrow_invocable_impl {
-        private:
-            template <class F, class... A>
-            static integral_constant<
-                bool,
-                noexcept(detail::Declval<F>()(detail::Declval<A>()...))
-            > test(int);
-
-            template <class, class...>
-            static false_type test(...);
-
-        public:
-            typedef decltype(test<Fn, Args...>(0)) type;
-            static const bool value = type::value && is_invocable<Fn, Args...>::value;
-        };
-
-    } // namespace detail
-
     template <class Fn, class... Args>
-    struct is_nothrow_invocable
-        : integral_constant<bool, detail::is_nothrow_invocable_impl<Fn, Args...>::value> {
+    struct is_nothrow_invocable {
+    private:
+        template <class T>
+        static T&& Declval() noexcept;
+
+        template <class F, class... A>
+        static integral_constant<
+            bool,
+            noexcept(Declval<F>()(Declval<A>()...))
+        > test(int);
+
+        template <class, class...>
+        static false_type test(...);
+
+        typedef decltype(test<Fn, Args...>(0)) result_type;
+
+    public:
+        static const bool value =
+            result_type::value && is_invocable<Fn, Args...>::value;
+
+        typedef integral_constant<bool, value> type;
     };
 
 #endif
@@ -222,24 +203,20 @@ namespace cpstd {
 
 #else
 
-    namespace detail {
-
-        template <class From, class To, bool = is_convertible<From, To>::value>
-        struct is_nothrow_convertible_impl : false_type {};
-
-        template <class From, class To>
-        struct is_nothrow_convertible_impl<From, To, true>
-            : integral_constant<
-            bool,
-            noexcept(detail::TestConvertible<To>(detail::Declval<From>()))
-            > {
-        };
-
-    } // namespace detail
-
     template <class From, class To>
-    struct is_nothrow_convertible
-        : detail::is_nothrow_convertible_impl<From, To> {
+    struct is_nothrow_convertible {
+    private:
+        static From&& Declval() noexcept;
+        static void TestConvertible(To);
+
+        static const bool convertible = is_convertible<From, To>::value;
+
+    public:
+        static const bool value =
+            convertible &&
+            noexcept(TestConvertible(Declval()));
+
+        typedef integral_constant<bool, value> type;
     };
 
 #endif

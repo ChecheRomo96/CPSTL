@@ -1,28 +1,29 @@
 ######################################################################################################
-# Store this directory as a variable called MCC_SRC_DIRECTORY to reference in deeper directories
+# Initialize Lists
 
-    set( CPSTL_VECTOR_SRC_DIRECTORY  ${CMAKE_CURRENT_LIST_DIR})
-#
-######################################################################################################
-# Initialize a list for all the header files in this directory
-
-    set( HEADERS_LIST_LOCAL "" )
+	set(PRIVATE_SOURCES "")       # .cpp
+    set(PUBLIC_INCLUDE_FILES "")  # .h + .tpp
+    set(PRIVATE_INCLUDE_FILES "") # .h + .tpp internos
 #
 ######################################################################################################
 # Append Sources and Headers
-
-    list( APPEND CPSTL_SOURCES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.cpp")
-
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.h" )
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_CharTraits.h" )
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_CharTraits.tpp" )
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_basic_string.h" )
-    list( APPEND HEADERS_LIST_LOCAL "${CMAKE_CURRENT_LIST_DIR}/CPSTL_basic_string.tpp" )
+    
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_String.h" )
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_CharTraits.h" )
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_CharTraits.tpp" )
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_basic_string.h" )
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_basic_string.tpp" )
 #
 ######################################################################################################
-# Refresh Sources List and Header List at PARENT_SCOPE
+# Refrehsh list at parent scope
 
-    set( CPSTL_SOURCES "${CPSTL_SOURCES}" PARENT_SCOPE)
+    list( APPEND CPSTL_PRIVATE_SOURCES "${PRIVATE_SOURCES}")
+    list( APPEND CPSTL_PUBLIC_INCLUDE_FILES "${PUBLIC_INCLUDE_FILES}")
+    list( APPEND CPSTL_PRIVATE_INCLUDE_FILES "${PRIVATE_INCLUDE_FILES}")
+
+    set(CPSTL_PRIVATE_SOURCES ${CPSTL_PRIVATE_SOURCES} PARENT_SCOPE)
+    set(CPSTL_PUBLIC_INCLUDE_FILES ${CPSTL_PUBLIC_INCLUDE_FILES} PARENT_SCOPE)
+    set(CPSTL_PRIVATE_INCLUDE_FILES ${CPSTL_PRIVATE_INCLUDE_FILES} PARENT_SCOPE)
 #
 ######################################################################################################
 # CPSTL String Installation
@@ -30,7 +31,7 @@
     if( ${CPSTL_INSTALL} )
 
         install(
-            FILES ${HEADERS_LIST_LOCAL} 
+            FILES ${PUBLIC_INCLUDE_FILES} 
             DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/string 
         )
 

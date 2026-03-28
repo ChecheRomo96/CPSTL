@@ -123,6 +123,12 @@
 		${CPSTL_PRIVATE_INCLUDE_FILES}
 		${CPSTL_PUBLIC_INCLUDE_FILES}
 	)
+	
+	target_include_directories(
+		CPSTL PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:include/CPSTL-${CPSTL_VERSION}>
+	)
 #
 ######################################################################################################
 # CPSTL install process

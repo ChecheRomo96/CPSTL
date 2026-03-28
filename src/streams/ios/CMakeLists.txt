@@ -7,11 +7,8 @@
 #
 ######################################################################################################
 # Append Sources and Headers
-
-    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_Move.h")
-
-    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_types.h")
-    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_allocator.h")
+    
+    list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_ios.h")
 #
 ######################################################################################################
 # Refrehsh list at parent scope
@@ -31,19 +28,19 @@
 
         install(
             FILES ${PUBLIC_INCLUDE_FILES} 
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/utility 
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/include/CPSTL/streams 
         )
 
         install(
             TARGETS CPSTL 
             EXPORT CPSTLExport
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/streams
         )
 
         install(
             EXPORT CPSTLExport
             FILE CPSTL-config.cmake
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/utility
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/CPSTL/streams
         )
     endif()
 #
