@@ -12,7 +12,6 @@
 
     list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_types.h")
     list( APPEND PUBLIC_INCLUDE_FILES "${CMAKE_CURRENT_LIST_DIR}/CPSTL_allocator.h")
-
 #
 ######################################################################################################
 # Refrehsh list at parent scope
@@ -20,7 +19,6 @@
     list( APPEND CPSTL_PRIVATE_SOURCES "${PRIVATE_SOURCES}")
     list( APPEND CPSTL_PUBLIC_INCLUDE_FILES "${PUBLIC_INCLUDE_FILES}")
     list( APPEND CPSTL_PRIVATE_INCLUDE_FILES "${PRIVATE_INCLUDE_FILES}")
-
 
     set(CPSTL_PRIVATE_SOURCES ${CPSTL_PRIVATE_SOURCES} PARENT_SCOPE)
     set(CPSTL_PUBLIC_INCLUDE_FILES ${CPSTL_PUBLIC_INCLUDE_FILES} PARENT_SCOPE)

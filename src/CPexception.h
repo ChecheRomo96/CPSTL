@@ -1,7 +1,7 @@
 #ifndef CPSTL_EXCEPTION_H
 #define CPSTL_EXCEPTION_H
 
-    #include "CPVector_BuildSettings.h"
+    #include "CPSTL_BuildSettings.h"
 
     namespace cpstd{
 
