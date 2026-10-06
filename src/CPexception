@@ -1,7 +1,6 @@
 #ifndef CPSTL_EXCEPTION_HEADER
 #define CPSTL_EXCEPTION_HEADER
 
-    #include <CPVector_BuildSettings.h>
     #include <CPexception.h>
-        
+
 #endif//CPSTL_EXCEPTION_HEADER

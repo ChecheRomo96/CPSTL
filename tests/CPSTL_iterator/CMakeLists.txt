@@ -1,3 +1,0 @@
-add_executable( CPSTL_iterator_type_traits_tests CPSTL_iterator_type_traits.cc ) 
-target_link_libraries( CPSTL_iterator_type_traits_tests PUBLIC CPSTL PUBLIC GTest::gtest_main )
-gtest_discover_tests(CPSTL_iterator_type_traits_tests)

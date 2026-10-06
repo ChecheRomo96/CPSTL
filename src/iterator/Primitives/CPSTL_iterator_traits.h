@@ -23,21 +23,14 @@
                 typedef typename Iterator::iterator_category iterator_category;
             };
 
+            // Pointer specialization. value_type drops cv-qualifiers as in
+            // C++20 (`volatile int*` -> `int`); pointer and reference keep them.
             template<class T>
             struct iterator_traits<T*> {
                 typedef cpstd::ptrdiff_t                  difference_type;
-                typedef T                                 value_type;
+                typedef typename cpstd::remove_cv<T>::type value_type;
                 typedef T*                                pointer;
                 typedef T&                                reference;
-                typedef cpstd::random_access_iterator_tag iterator_category;
-            };
-
-            template<class T>
-            struct iterator_traits<const T*> {
-                typedef cpstd::ptrdiff_t                  difference_type;
-                typedef T                                 value_type;
-                typedef const T*                          pointer;
-                typedef const T&                          reference;
                 typedef cpstd::random_access_iterator_tag iterator_category;
             };
         #endif

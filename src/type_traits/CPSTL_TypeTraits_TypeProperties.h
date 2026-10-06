@@ -27,13 +27,12 @@
 
         
         template<typename T>
-        struct is_unsigned {
-            #if defined(__is_unsigned)
-                static constexpr bool value = __is_unsigned(T);
-            #else
-                static constexpr bool value = ( T(0) < T(-1) );
-            #endif
-        };
+        struct is_unsigned
+        #if defined(__is_unsigned)
+            : cpstd::integral_constant<bool, __is_unsigned(T)> {};
+        #else
+            : cpstd::integral_constant<bool, ( T(0) < T(-1) )> {};
+        #endif
 
 
     #endif

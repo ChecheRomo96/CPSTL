@@ -7,7 +7,7 @@
     namespace cpstd
     {
         template <typename T>
-        typename cpstd::remove_reference<T>::type&& move(T&& t) {
+        constexpr typename cpstd::remove_reference<T>::type&& move(T&& t) noexcept {
             return static_cast<typename cpstd::remove_reference<T>::type&&>(t);
         }
 

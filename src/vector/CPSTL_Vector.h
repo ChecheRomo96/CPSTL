@@ -7,1233 +7,663 @@
     #include <CPmemory.h>
     #include <CPutility.h>
     #include <CPalgorithm.h>
+    #include <CPtype_traits.h>
     #include <utility/CPSTL_types.h>
     #include <utility/CPSTL_Move.h>
+    #include <utility/CPSTL_allocator.h>
 
     #if defined(CPSTL_USING_STL)
-        #include <iostream>
         #include <vector>
     #endif
 
-    #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
-        #include "CPVector_Exceptions.h"
-    #endif
-    
     namespace cpstd {
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //! @brief Cross Platform Vector class
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //! @brief Cross-platform dynamic array.
         //!
-        //! cpstd::Vector<T> is a dynamic-size sequence container that stores elements contiguously. It
-        //! automatically expands as needed and can minimize reallocations with the reserve() function.
-        //! The elements are stored contiguously, meaning you can access them through iterators or regular
-        //! pointers. This allows passing pointers to vector elements to functions expecting array pointers.
-        //! The storage is managed automatically, expanding as needed. Vectors usually occupy more space
-        //! than static arrays since extra memory is allocated for future growth. Reallocation can be
-        //! costly; you can avoid it with the reserve() function when the element count is known beforehand.
-        //! @tparam T Data type for the Dynamic Array
-
-            #ifdef CPSTL_USING_STL
-                template <class T, class Alloc = std::allocator<T> >
-                using vector = std::vector<T, Alloc>;
-            #else
-                template <class T, class Alloc = cpstd::allocator<T>>
-                class  vector{
-                public:
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // Typdefs and aliases
-                    
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Value Types
-
-                            using value_type = T;
-                            using allocator_type = Alloc;
-                            using reference = value_type&;
-                            using const_reference = const value_type&;
-                            using pointer = typename cpstd::allocator_traits<allocator_type>::pointer;
-                            using const_pointer = typename cpstd::allocator_traits<allocator_type>::const_pointer;
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Iterator Types
-
-                            using iterator = pointer;
-                            using const_iterator = const_pointer;
-                            using reverse_iterator = cpstd::reverse_iterator<iterator>;
-                            using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;
-                            using difference_type = cpstd::ptrdiff_t;
-                            using size_type = cpstd::size_t;
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                protected:
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // Instance Variables
-
-                        size_type _Size;
-                        size_type _Capacity;
-                        pointer _Buffer;
-                        Alloc _Alloc;
-                    //
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                public:
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // iterators
-
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @name Iterators
-                        //! @{
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return iterator to beginning
-                            //!
-                            //! This function returns an iterator pointing to the beginning of the vector's elements.
-                            //!
-                            //! @return iterator - An iterator to the beginning of the vector.
-
-                                iterator begin() noexcept{
-                                    return iterator(_Buffer);
-                                }
-
-                                const_iterator begin() const noexcept{
-                                    return const_iterator(_Buffer);
-                                }                        
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return iterator to end
-                            //!
-                            //! This function returns an iterator pointing to the end of the vector's elements.
-                            //!
-                            //! @return iterator - An iterator to the end of the vector.
-
-                                iterator end() noexcept{
-                                    return iterator(_Buffer + _Size);
-                                }
-
-                                const_iterator end() const noexcept{
-                                    return const_iterator(_Buffer + _Size);
-
-                                }                    
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return reverse iterator to reverse beginning
-                            //!
-                            //! This function returns a reverse iterator pointing to the beginning of the reversed vector's elements.
-                            //!
-                            //! @return reverse_iterator - A reverse iterator to the beginning of the reversed vector.
-
-                                reverse_iterator rbegin() noexcept{
-                                    return reverse_iterator(_Buffer + _Size);
-                                }
-
-                                const_reverse_iterator rbegin() const noexcept{
-                                    return const_reverse_iterator(_Buffer + _Size);
-                                }                        
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return reverse iterator to reverse end
-                            //!
-                            //! This function returns a reverse iterator pointing to the end of the reversed vector's elements.
-                            //!
-                            //! @return reverse_iterator - A reverse iterator to the end of the reversed vector.
-
-                                iterator rend() noexcept{
-                                    return iterator(_Buffer);
-                                }
-
-                                const_iterator rend() const noexcept{
-                                    return const_iterator(_Buffer);
-
-                                }                    
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return const_iterator to beginning
-                            //!
-                            //! This function returns a constant iterator pointing to the beginning of the vector's elements.
-                            //!
-                            //! @return const_iterator - A constant iterator to the beginning of the vector's elements.
-
-                                const_iterator cbegin() const noexcept{
-                                    return const_iterator(_Buffer);
-                                }                        
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return const_iterator to end
-                            //!
-                            //! This function returns a constant iterator pointing to the end of the vector's elements.
-                            //!
-                            //! @return const_iterator - A constant iterator to the end of the vector's elements.
-
-                                const_iterator cend() const noexcept{
-                                    return const_iterator(_Buffer + _Size);
-
-                                }                    
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return const_reverse_iterator to reverse beginning
-                            //!
-                            //! This function returns a constant reverse iterator pointing to the beginning of the vector's elements.
-                            //!
-                            //! @return const_reverse_iterator - A constant reverse iterator to the beginning of the vector's elements.
-
-                                const_reverse_iterator crbegin() const noexcept{
-                                    return const_reverse_iterator(_Buffer + _Size);
-                                }                        
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Return const_reverse_iterator to reverse end
-                            //!
-                            //! This function returns a constant reverse iterator pointing to the end of the vector's elements.
-                            //!
-                            //! @return const_reverse_iterator - A constant reverse iterator to the end of the vector's elements.
-
-                                const_reverse_iterator crend() const noexcept{
-                                    return const_reverse_iterator(_Buffer);
-                                }                    
-                            //!
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @}
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @name Constructors, Destructor, and Assignment Operator
-                    //! @{
-                        
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Default constructor
-                        //!
-                        //! Initializes the vector to have size() = 0, the Capacity value is undefined, it's value is only bigger than size at all times. In order to reduce 
-                        //! the capacity of the vector see shrink_to_fit() or clear().
-                        
-                            vector() {
-                                _Buffer = nullptr;
-                                _Size = 0;
-                                _Capacity = 0;
-                            }   
-                        //!
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Fill constructor. 
-                        //!
-                        //! Resizes the container to contain count elements, does nothing if count == 0.\n\n
-                        //! If value parameter is not given additional default-inserted elements are appended\n 
-                        //! If value parameter is given additional copies of value are appended.\n
-                        //! @tparam count New size of the conatainer
-                        //! @tparam value The value to initialize the elements with
-
-                            explicit vector (size_type n, const allocator_type& alloc = allocator_type()) : vector(){
-
-                                resize(n);
-                            }
-
-                            vector (size_type n, const value_type& val, const allocator_type& alloc = allocator_type()) : vector(){
-
-                                resize(n, val);
-                            }
-                        //!
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief range constructor.
-                        //!
-                        //! Constructs a container with as many elements as the range [first,last), with each element emplace-constructed from its corresponding element in that range, in the same order.
-                        //! Input iterators to the initial and final positions in a range. The range used is [first,last), which includes all the elements between first and last, including the element pointed by first but not the element pointed by last.
-                        //! The function template argument InputIterator shall be an input iterator type that points to elements of a type from which value_type objects can be constructed.
-                        //! @tparam InputIterator shall be an input iterator type that points to elements of a type from which value_type objects can be constructed.
-                        //! @param first Input iterators to the initial and final positions in a range.
-                        //! @param last Input iterators to the initial and final positions in a range.
-                        //! @param alloc Allocator object.
-
-
-
-                            template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
-                            vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) : vector(){
-                                _Alloc = alloc;
-                                assign(first, last);
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Copy constructor.
-                        //!
-                        //! Constructs the container with the copy of the contents of other
-                        //! @tparam other another container to be used as source to initialize the elements of the container with
-                        
-                            vector(const vector<value_type, allocator_type>& other) : vector(){
-                                resize(other.size());
-                                for (size_type i = 0; i < size(); ++i){
-                                    cpstd::allocator_traits<allocator_type>::construct(
-                                        _Alloc,
-                                        _Buffer + i,
-                                        other[i]
-                                    );
-                                }
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Copy constructor.
-                        //!
-                        //! Constructs the container with the copy of the contents of an array of objects of type T.
-                        //! @tparam pointer location of the data to copy
-                        //! @tparam len number of elements to copy
-
-                            vector(const vector& x, const allocator_type& alloc) : vector() {
-                                _Alloc = alloc;
-                                resize(x.size());
-                                cpstd::uninitialized_copy(x._Buffer, x._Buffer + x._Size, _Buffer);
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Move constructor. 
-                        //!
-                        //! Constructs the container with the copy of the contents of other
-                        //! @tparam pointer location of the data to copy
-                        //! @tparam len number of elements to copy
-                        
-                            vector(vector<value_type, allocator_type>&& source) noexcept: vector(){
-                                cpstd::swap(_Buffer, source._Buffer);
-                                cpstd::swap(_Size, source._Size);
-                                cpstd::swap(_Capacity, source._Capacity);
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief cpstd::initializer list constructor. 
-                        //!
-                        //! Constructs the container with an initializer list
-                        //! @tparam list std::initializer list with matching template argument
-                        //
-                            vector(cpstd::initializer_list<T> list): vector(){
-                                resize(list.size());
-                                auto it = begin();
-                                for (const auto& item : list) {
-                                    *it = item;
-                                    ++it;
-                                }
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Destructor. 
-                        //!
-                        //! Destroys all the elements amd changes the size and capacity to 0. (Releases the used memory)
-                        
-                            ~vector(){
-                                if (_Buffer){
-                                    for (size_type i = 0; i < _Size; ++i){
-                                        cpstd::allocator_traits<allocator_type>::destroy(
-                                            _Alloc,
-                                            _Buffer + i
-                                        );
-                                    }
-
-                                    cpstd::allocator_traits<allocator_type>::deallocate(
-                                        _Alloc,
-                                        _Buffer,
-                                        _Capacity
-                                    );
-                                }
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Assignment Operators
-
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Assignment operator.
-                            //! 
-                            //! This operator is used to assign new contents to the container by replacing the existing contents.
-                            //! @tparam source Another container of the same type.
-                            
-                                vector<value_type, allocator_type>& operator=(const vector<value_type, allocator_type>& source){
-                                    if (this != &source) {
-                                        resize(source.size());
-                                        auto it = begin();
-                                        for (const auto& item : source) {
-                                            *it = item;
-                                            ++it;
-                                        }
-                                    }
-                                    return *this;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Move Assignment operator.
-                            //! 
-                            //! This operator is used to assign new contents to the container by replacing the existing contents.
-                            //! @tparam source Another container of the same type.
-                             
-                                vector<value_type, allocator_type>& operator=(vector<value_type, allocator_type>&& source) noexcept{
-                                    if (this != &source) {
-                                        cpstd::swap(_Buffer, source._Buffer);
-                                        cpstd::swap(_Size, source._Size);
-                                        cpstd::swap(_Capacity, source._Capacity);
-                                    }
-                                    return *this;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief cpstd::initializer list constructor
-                            //!
-                            //! Constructs the container with an initializer list
-                            //! @tparam list std::initializer list with matching template argument
-                            //
-                                vector<value_type, allocator_type>& operator=(cpstd::initializer_list<T> il) { 
-                                    resize(il.size());
-                                    auto it = begin();
-                                    for (const auto& item : il) {
-                                        *it = item;
-                                        ++it;
-                                    }
-                                    return *this;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @}
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @name Capacity
-                    //! @{
-                    
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Returns the number of elements in the vector.
-                        //!
-                        //! This is the number of actual objects held in the vector, which is not necessarily equal to its storage capacity.
-                        
-                            size_type size() const noexcept{
-                                return _Size;
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Resizes the container to contain new_size elements, does nothing if new_size == size().
-                        //!
-                        //! If the current size is greater than new_size, the container is reduced to to fit new_size elements.\n
-                        //! If the current size is less than count and value parameter is unused, then additional default-inserted elements are appended.
-                        //! If the current size is less than count and value parameter is used, then additional copies of value are appended.
-                        //! @tparam new_size New size of the container.
-                        //! @tparam value The value to initialize the new elements with.
-                           
-                           void resize(size_type new_size, const_reference value = T()){
-                                if (new_size < _Size){
-                                    for (size_type i = new_size; i < _Size; ++i){
-                                        cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
-                                    }
-
-                                    _Size = new_size;
-                                    return;
-                                }
-
-                                if (new_size == _Size){
-                                    return;
-                                }
-
-                                // new_size > _Size
-                                if (new_size > _Capacity){
-                                    size_type new_capacity = new_size;
-                                    pointer new_buffer = cpstd::allocator_traits<allocator_type>::allocate(_Alloc, new_capacity);
-
-                                    size_type constructed = 0;
-
-                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
-                                    try
-                                    {
-                                #endif
-                                        // Move old elements into new storage
-                                        for (; constructed < _Size; ++constructed){
-                                            cpstd::allocator_traits<allocator_type>::construct(
-                                                _Alloc,
-                                                new_buffer + constructed,
-                                                cpstd::move(_Buffer[constructed])
-                                            );
-                                        }
-
-                                        // Construct new elements with the provided value
-                                        for (; constructed < new_size; ++constructed){
-                                            cpstd::allocator_traits<allocator_type>::construct(
-                                                _Alloc,
-                                                new_buffer + constructed,
-                                                value
-                                            );
-                                        }
-                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
-                                    }
-                                    catch (...){
-                                        for (size_type i = 0; i < constructed; ++i){
-                                            cpstd::allocator_traits<allocator_type>::destroy(_Alloc, new_buffer + i);
-                                        }
-
-                                        cpstd::allocator_traits<allocator_type>::deallocate(_Alloc, new_buffer, new_capacity);
-                                        throw;
-                                    }
-                                #endif
-
-                                    for (size_type i = 0; i < _Size; ++i){
-                                        cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
-                                    }
-
-                                    if (_Buffer != nullptr){
-                                        cpstd::allocator_traits<allocator_type>::deallocate(_Alloc, _Buffer, _Capacity);
-                                    }
-
-                                    _Buffer = new_buffer;
-                                    _Capacity = new_capacity;
-                                    _Size = new_size;
-                                }
-                                else
-                                {
-                                    size_type constructed = _Size;
-
-                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
-                                    try
-                                    {
-                                #endif
-                                        for (; constructed < new_size; ++constructed){
-                                            cpstd::allocator_traits<allocator_type>::construct(
-                                                _Alloc,
-                                                _Buffer + constructed,
-                                                value
-                                            );
-                                        }
-                                #if defined(CPSTL_EXCEPTIONS_ENABLED)
-                                    }
-                                    catch (...)
-                                    {
-                                        for (size_type i = _Size; i < constructed; ++i){
-                                            cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
-                                        }
-
-                                        throw;
-                                    }
-                                #endif
-
-                                    _Size = new_size;
-                                }
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Returns the size of the storage space currently allocated for the vector, expressed in terms of elements.
-                        //!
-                        //! This capacity is not necessarily equal to the vector size. It can be equal or greater, with the extra space allowing to accommodate for growth without the need to reallocate on each insertion.
-                        //! Notice that this capacity does not suppose a limit on the size of the vector. When this capacity is exhausted and more is needed, it is automatically expanded by the container (reallocating it storage space). The theoretical limit on the size of a vector is given by member max_size.
-                        //! The capacity of a vector can be explicitly altered by calling member vector::reserve.
-                        
-                            size_type capacity() const noexcept{
-                                return _Capacity;
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Checks if the vector is empty.
-                        //!
-                        //! This function determines whether the vector contains any elements.
-                        //! @return true if the vector is empty, false otherwise.
-
-                            bool empty() const {
-                                return (_Size == 0) ? true : false;
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Increase the capacity of the vector (the total number of elements that the vector can hold without requiring reallocation) to a value that's greater or equal to capacity.
-                        //!
-                        //! If new_cap is greater than the current capacity(), new storage is allocated, otherwise the function does nothing.\n
-                        //! reserve() does not change the size of the vector.\n
-                        //! If after the operation the new size() is greater than old capacity() a reallocation takes place, in which case all iterators (including the end() iterator) and all references to the elements are invalidated. Otherwise, no iterators or references are invalidated.\n
-                        //! After a call to reserve(), insertions will not trigger reallocation unless the insertion would make the size of the vector greater than the value of capacity().\n
-                        //! If an allocation fails and exceptions are enabled (CPSTL_VECTOR_EXCEPTIONS_ENABLED), then the method throws a cpstd::bad_allocation exception.\n
-                        
-                            void reserve(size_type new_cap){
-                                if (new_cap > _Capacity) {
-                                    // Reallocate memory if necessary
-                                    pointer new_buffer = _Alloc.allocate(new_cap);
-                                    for (size_type i = 0; i < _Size; ++i) {
-                                        cpstd::allocator_traits<allocator_type>::construct(
-                                            _Alloc,
-                                            &new_buffer[i],
-                                            cpstd::move(_Buffer[i])
-                                        );
-
-                                        cpstd::allocator_traits<allocator_type>::destroy(
-                                            _Alloc,
-                                            &_Buffer[i]
-                                        );
-                                    }
-                                    _Alloc.deallocate(_Buffer, _Capacity);  // Deallocate the old memory
-                                    _Buffer = new_buffer;
-                                    _Capacity = new_cap;
-                                }
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Requests the container to reduce its capacity to fit its size.
-                        //!
-                        //! The request is non-binding, and the container implementation is free to optimize otherwise and leave the vector with a capacity greater than its size.\n
-                        //! This may cause a reallocation, but has no effect on the vector size and cannot alter its elements.                     
-                         
-                            void shrink_to_fit(){
-                                if (_Capacity > _Size) {
-                                    pointer newBuffer = _Alloc.allocate(_Size);
-                                    if (newBuffer) {
-                                        cpstd::uninitialized_move(_Buffer, _Buffer + _Size, newBuffer);
-                                        for (size_type i = 0; i < _Size; ++i) {
-                                            _Buffer[i].~T();
-                                        }
-                                        _Alloc.deallocate(_Buffer, _Capacity);
-                                        _Buffer = newBuffer;
-                                        _Capacity = _Size;
-                                    }
-                                }
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @}
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @name Element Access
-                    //! @{
-                    
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Subscript Array Operators
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Non-const subscript array operator. This operator references the element at the specified position.
-                            //!
-                            //! Similar to the at() function, it might cause undefined behavior if the position is out of the vector's size bounds.
-                            //! @param position Position of the element to fetch.
-                            
-                                reference operator[](size_type position) {
-                                    return _Buffer[position];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Const subscript array operator. This operator references the element at the specified position, providing read-only access.
-                            //!
-                            //! Similar to the at() function, it might cause undefined behavior if the position is out of the vector's size bounds.
-                            //! @param position Position of the element to fetch.
-
-                                const_reference operator[](size_type position) const {
-                                    return _Buffer[position];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // at
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Access element
-                            //!
-                            //! Returns a reference to the element at position n in the vector.
-                            //! The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it 
-                            //! is not (i.e., if n is greater than, or equal to, its size). This is in contrast with member operator[], that does not check against bounds.
-                            //! @tparam position Position of an element in the container.
-                            //! If this is greater than, or equal to, the vector size, an exception of type out_of_range is thrown.\n
-                            //! Notice that the first element has a position of 0 (not 1).\n
-                            //! Member type size_type is an unsigned integral type.\n
-                            
-                                reference at(size_type position) {
-                                #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
-                                    if(position >= _Size){
-                                        throw cpstd::out_of_range("Index requested on subscript array does not exists");
-                                    }
-                                #endif
-                                    
-                                    return _Buffer[position];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Access element
-                            //!
-                            //! Returns a const_reference to the element at position n in the vector.
-                            //! The function automatically checks whether n is within the bounds of valid elements in the vector, throwing an out_of_range exception if it 
-                            //! is not (i.e., if n is greater than, or equal to, its size). This is in contrast with member operator[], that does not check against bounds.
-                            //! @tparam position Position of an element in the container.
-                            //! If this is greater than, or equal to, the vector size, an exception of type out_of_range is thrown.\n
-                            //! Notice that the first element has a position of 0 (not 1).\n
-                            //! Member type size_type is an unsigned integral type.\n
-
-                                const_reference at(size_type position) const{
-                                    #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
-                                        if (position >= _Size){
-                                            throw cpstd::out_of_range("Index requested on subscript array does not exist");
-                                        }
-                                    #endif
-
-                                    return _Buffer[position];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // front
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Access first element 
-                            //!
-                            //! Returns a reference to the first element in the vector.\n
-                            //! Unlike member vector::begin, which returns an iterator to this same element, this function returns a direct reference.\n
-                            //! Calling this function on an empty container causes undefined behavior.
-                            
-                                reference front() {
-                                    return _Buffer[0];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Access first element 
-                            //!
-                            //! Returns a const_reference to the first element in the vector.\n
-                            //! Unlike member vector::begin, which returns an const_iterator to this same element, this function returns a direct const_reference.\n
-                            //! Calling this function on an empty container causes undefined behavior.
-
-                                const_reference front() const {
-                                    return _Buffer[0];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // back
-                        
-                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Access first element 
-                            //!
-                            //! Returns a reference to the last element in the vector.\n
-                            //! Unlike member vector::end, which returns an iterator to this same element, this function returns a direct reference.\n
-                            //! Calling this function on an empty container causes undefined behavior.
-                            
-                                reference back() {
-                                    return _Buffer[_Size-1];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Access first element 
-                            //!
-                            //! Returns a const_reference to the last element in the vector.\n
-                            //! Unlike member vector::end, which returns an const_iterator to this same element, this function returns a direct const_reference.\n
-                            //! Calling this function on an empty container causes undefined behavior.
-
-                                const_reference back() const {
-                                    return _Buffer[_Size-1];
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // data
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Access data
-                            //!
-                            //! Returns a direct pointer to the memory array used internally by the vector to store its owned elements if the function is non-const.
-                            //! For the const version, returns a direct const_pointer to the memory array.
-                            //!
-                            //! Because elements in the vector are guaranteed to be stored in contiguous storage locations in the same 
-                            //! order as represented by the vector, the pointer retrieved can be offset to access any element in the array.
-                            //!
-                            //! @return For the non-const version, returns a pointer to the memory array. For the const version, returns a const_pointer.
-                            
-                                pointer data() noexcept{
-                                    return _Buffer;
-                                }
-
-                                const_pointer data() const noexcept{
-                                    return _Buffer;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @}
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @name Modifiers
-                    //! @{
-                        
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // assign
-
-
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
-                            //!
-                            //! In the range version, the new contents are elements constructed from each of the elements in the range between first and last, in the same order.
-                            //!
-                            //! @param n   New size for the container.
-                            //! @param val Value to fill the container with. Each of the 'n' elements in the container will be initialized to a copy of this value.
-                                
-                                template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
-                                void assign (InputIterator first, InputIterator last){
-                                    resize(cpstd::distance(first, last));
-                                    cpstd::copy(first, last, _Buffer);
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Assigns new contents to the container by initializing it with 'n' elements, each initialized to a copy of 'val'.
-                            //!
-                            //! @param n   New size for the container.
-                            //! @param val Value to fill the container with. Each of the 'n' elements in the container will be initialized to a copy of this value.
-                                
-                                void assign(size_type n, const value_type& val) {
-                                    resize(n);
-                                    for (size_type i = 0; i < size(); i++) {
-                                        _Buffer[i] = val;
-                                    }
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Assigns new contents to the container by replacing the existing contents with the elements from another container.
-                            //!
-                            //! @param il Another container of the same type used to assign the new contents to this container.
-                             
-                                void assign(cpstd::initializer_list<T> il) {
-                                    resize(il.size());
-                                    size_type i = 0;
-                                    for (const auto& elem : il) {
-                                        _Buffer[i++] = elem;
-                                    }
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // push_back
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Appends the given element value to the end of the container.
-                            //! 
-                            //! Increases the size of the container by one and appends the given 'value' at the end.
-                            //!
-                            //! @param value The value to be added at the end of the container.
-
-                                void push_back(const_reference value){
-                                    resize(size() + 1);
-                                    _Buffer[_Size-1] = value;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Appends the given element value to the end of the container.
-                            //!
-                            //! If after the operation the new size() is greater than old capacity() a reallocation takes place.
-                            //! The class used must implement the proper move semantics in order for this method to be able to call a move assignment operator.
-                            //! @tparam value the value of the element to append.
-
-                                void push_back(value_type&& Rvalue){
-                                    resize(size() + 1);
-                                    _Buffer[_Size-1] = cpstd::move(Rvalue);
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Delete the last elemnt
-                        //!
-                        //! When you call this method on an empty vector, it leads to undefined behavior. The C++ standard does not specify what should happen in this scenario. Attempting to remove an element from an empty container is an error and can cause the program to crash or produce incorrect results.
-                        //! @tparam value The value of the element to append.
-                        //! @return Returns the poped value
-                        
-                            void pop_back(){
-                            #ifdef CPSTL_VECTOR_EXCEPTIONS_ENABLED
-                                if (size() == 0) {
-                                    throw cpstd::out_of_range("Index requested on subscript array does not exist");
-                                }
-                            #endif
-
-                                resize(size() - 1);
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // insert
-
-
-                            iterator insert(const_iterator position, const value_type& val) {
-                                size_type index = position - _Buffer;
-                                resize(size() + 1);
-
-                                for (size_type i = _Size - 1; i > index; --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - 1]);
-                                }
-
-                                _Buffer[index] = val;
-
-                                return _Buffer + index;
-                            }
-
-                            iterator insert(const_iterator position, size_type n, const value_type& val){
-                                size_type index = position - _Buffer;
-                                resize(_Size + n);
-
-                                for (size_type i = _Size - 1; i >= index + n; --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - n]);
-                                }
-
-                                for (size_type i = index; i < index + n; ++i) {
-                                    _Buffer[i] = val;
-                                }
-
-                                return _Buffer + index;
-                            }
-
-                            template <class InputIterator, cpstd::enable_if_t<cpstd::is_pointer_v<InputIterator>>* = nullptr>  
-                            iterator insert(const_iterator position, InputIterator first, InputIterator last){
-                                resize(cpstd::distance(first, last));
-
-                                for (size_t i = 0; first != last; ++first, ++i) {
-                                    _Buffer[i] = *first;
-                                }
-                            }
-
-                            iterator insert(const_iterator position, value_type&& val){
-                                size_type index = position - _Buffer;
-                                resize(size() + 1);
-
-                                for (size_type i = _Size - 1; i > index; --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - 1]);
-                                }
-
-                                _Buffer[index] = cpstd::move(val);
-                                
-                                return _Buffer + index;
-                            }
-
-                            iterator insert(const_iterator position, cpstd::initializer_list<T> il){
-                                size_type index = position - _Buffer;
-                                resize(size() + il.size());
-
-                                // Shift elements to make space for the new ones
-                                for (size_type i = size() - 1; i >= index + il.size(); --i) {
-                                    _Buffer[i] = cpstd::move(_Buffer[i - il.size()]);
-                                }
-
-                                // Copy elements from the initializer_list
-                                size_type i = index;
-                                for (const auto& elem : il) {
-                                    _Buffer[i++] = elem;
-                                }
-
-                                return _Buffer + index; 
-                            }
-                        // 
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // erase
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Deletes the element at the given index from the list, if index >= size the method does nothing.
-                            //!
-                            //! The element is destroyed and erased.
-                            //! @tparam index The index of the element to be erased.
-
-                                iterator erase(const_iterator position){
-                                    size_type index = position - begin();
-
-                                    if (index < _Size) {
-                                        for (size_type i = index; i < _Size - 1; i++) {
-                                            _Buffer[i] = cpstd::move(_Buffer[i + 1]);
-                                        }
-                                        resize(size() - 1);
-                                    }
-
-                                    return begin() + index;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Erases the elements between both given indices
-                            //!
-                            //! The elements are destroyed and erased. The elemnts erased include (this*)[first] and (this*)[last]. If (last<=first) or (first>=size()) the method does nothing.
-                            //! @tparam first The index of the first element to be erased.
-                            //! @tparam last The index of the last element to be erased.
-
-                                iterator erase(const_iterator first, const_iterator last){
-                                    const_iterator cbeginIt = begin();
-                                    const_iterator cendIt = end();
-
-                                    if (first >= last){
-                                        return begin() + static_cast<size_type>(cpstd::distance(cbeginIt, first));
-                                    }
-
-                                    last = cpstd::min(last, cendIt);
-
-                                    size_type start_index = static_cast<size_type>(cpstd::distance(cbeginIt, first));
-                                    size_type range = static_cast<size_type>(cpstd::distance(first, last));
-
-                                    for (size_type i = start_index; i + range < _Size; ++i){
-                                        _Buffer[i] = cpstd::move(_Buffer[i + range]);
-                                    }
-
-                                    resize(_Size - range);
-
-                                    return begin() + start_index;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Swaps the elements at index_a and index_b
-                        //!
-                        //! The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at a location provided by the container. However, if the required location has been occupied by an existing element, the inserted element is constructed at another location at first, and then move assigned into the required location.
-                        //! The class used must implement the proper move semantics in order for this method to be able to call a move assignment operator.
-                        //! @tparam index_a the value of the first element to swap.
-
-                            void swap(vector<value_type, allocator_type>& x) noexcept {
-                                cpstd::swap(_Size, x._Size);
-                                cpstd::swap(_Capacity, x._Capacity);
-                                cpstd::swap(_Buffer, x._Buffer);
-                                cpstd::swap(_Alloc, x._Alloc);
-                            }
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Removes all elements from the vector (which are destroyed), leaving the container with a size and capacity of 0.
-                        //!
-                        //! if ( capacity > 0 ) A reallocation is guaranteed to happen, and the vector capacity is guaranteed to change due to calling this function.
-                         
-                            void clear() noexcept{
-                                for (size_type i = 0; i < _Size; ++i) {
-                                    cpstd::allocator_traits<allocator_type>::destroy(_Alloc, _Buffer + i);
-                                }
-                                _Size = 0;
-                            } 
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // emplace
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Construct and insert element
-                            //!
-                            //! Inserts a new element at the specified position.
-                            //!
-                            //! This function extends the container by constructing a new element in place at the specified position
-                            //! using the provided arguments (args) for its construction.
-                            //!
-                            //! @tparam Args The types of arguments used for constructing the new element.
-                            //! @param position Iterator pointing to the position where the new element will be inserted.
-                            //! @param args Arguments forwarded for the construction of the new element.
-                            //! 
-                            //! This operation effectively increases the container size by one.
-                            //!
-                            //! Automatic reallocation of the allocated storage space occurs only if the new size surpasses the current capacity.
-                            //!
-                            //! Because vectors use an array as their underlying storage, inserting elements at positions other than the vector's end
-                            //! causes all elements after the specified position to shift by one to their new positions. This can be less efficient compared
-                            //! to operations performed by other sequence containers (e.g., list or forward_list). Consider using emplace_back for direct
-                            //! extension at the end of the container.
-                            //!
-                            //! The element is constructed in-place by calling allocator_traits::construct with the forwarded args.
-                            //!
-                            //! Another related member function is insert, which either copies or moves existing objects into the container.
-                            //!
-                            //! @see emplace_back
-                            //!
-                            //! @param Position in the container where the new element is inserted.\n
-                            //! Member type const_iterator is a random access iterator type that points to a const element.
-                            //! @tparam args Arguments forwarded to construct the new element.
-                            //! @return An iterator that points to the newly emplaced element.\n\n
-                            //! Member type iterator is a random access iterator type that points to an element.\n\n
-                            //! If a reallocation happens, the storage is allocated using the container's allocator, which may throw exceptions on failure (for the default allocator, bad_alloc is thrown if the allocation request does not succeed).
-
-                                template <class... Args>
-                                iterator emplace(const_iterator position, Args&&... args) {
-                                    // Convert the const_iterator to an iterator using const_cast
-                                    auto pos = begin() + cpstd::distance(cbegin(), position);
-
-                                    // Resize the vector to accommodate the new element
-                                    size_type index = pos - _Buffer;
-                                    resize(_Size + 1);
-
-                                    // Shift elements to make space for the new one
-                                    for (size_type i = _Size - 1; i > index; --i) {
-                                        _Buffer[i] = cpstd::move(_Buffer[i - 1]);
-                                    }
-
-                                    // Construct the new element in place at the specified position
-                                    cpstd::allocator_traits<allocator_type>::construct(
-                                        _Alloc,
-                                        _Buffer + index,
-                                        cpstd::forward<Args>(args)...
-                                    );
-
-                                    return _Buffer + index;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // emplace_back
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Construct and insert element at the end
-                            //!
-                            //! Inserts a new element at the end of the vector, right after its current last element.
-                            //! This new element is constructed in place using args as the arguments for its constructor.
-                            //!
-                            //! This effectively increases the container size by one, which causes an automatic reallocation
-                            //! of the allocated storage space if -and only if- the new vector size surpasses the current
-                            //! vector capacity.
-                            //!
-                            //! The element is constructed in-place by calling allocator_traits::construct with args forwarded.
-                            //!
-                            //! A similar member function exists, push_back, which either copies or moves an existing object
-                            //! into the container.
-                            //!
-                            //! @param args Arguments forwarded to construct the new element.
-                            //! @return none.
-                            //!
-                            //! If a reallocation happens, the storage is allocated using the container's allocator, which
-                            //! may throw exceptions on failure (for the default allocator, bad_alloc is thrown if the
-                            //! allocation request does not succeed).
-                                
-                                template <class... Args>
-                                void emplace_back(Args&&... args) {
-                                    if (_Size == _Capacity) {
-                                        // If the vector is full, reallocate the buffer to accommodate the new element
-                                        reserve(_Size == 0 ? 1 : 2 * _Size);
-                                    }
-
-                                    // Construct the new element in place at the end of the vector
-                                    cpstd::allocator_traits<allocator_type>::construct(
-                                        _Alloc,
-                                        _Buffer + _Size,
-                                        cpstd::forward<Args>(args)...
-                                    );
-
-                                    // Increment the size
-                                    ++_Size;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @}
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @name Non Member Functions
-                    //! @{
-                    
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // Relational Operators
-                        
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Equal to.
-                            //! Checks if both vectors are equal in size and contents.
-                            //! It is important that the class T has defined == and != operators.
-                            //! @tparam source Another container of the same type.
-                             
-                                friend bool operator==(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
-                                    if( lhs.size() == rhs.size() ){
-                                        for(size_type i = 0; i < lhs.size(); i++){
-                                            if(lhs[i] != rhs[i]){
-                                                return false;
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        return false;
-                                    }
-
-                                    return true;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Not equal to.
-                            //! Checks if both vectors are not equal in size or contents.
-                            //! It is important that the class T has defined == and != operators.
-                            //! @tparam source Another container of the same type.
-                            
-                                friend bool operator!=(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
-                                    return !(lhs == rhs);
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Less than.
-                            //! Checks if the left vector is lexicographically less than the right vector.
-                            //! It is important that the class T has defined < operator.
-                            //! @tparam source Another container of the same type.
-                            
-                                friend bool operator<(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
-                                    size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
-
-                                    for(size_type i = 0; i < last; i++){
-                                        if(lhs[i] < rhs[i]){return 1;}
-                                    }
-
-                                    if(lhs.size() < rhs.size()){return 1;}
-                                    return 0;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Less than or equal to.
-                            //! Checks if the left vector is lexicographically less than or equal to the right vector.
-                            //! It is important that the class T has defined < operator.
-                            //! @tparam source Another container of the same type.
-                            
-                                friend bool operator<=(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
-                                    size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
-
-                                    for (size_type i = 0; i < last; i++) {
-                                        if (lhs[i] < rhs[i]) { return 1; }
-                                    }
-
-                                    if (lhs.size() <= rhs.size()) { return 1; }
-                                    return 0;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Greater than.
-                            //! Checks if the left vector is lexicographically greater than the right vector.
-                            //! It is important that the class T has defined > operator.
-                            //! @tparam source Another container of the same type.
-                            
-                                friend bool operator>(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
-                                    size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
-
-                                    for(size_type i = 0; i < last; i++){
-                                        if(lhs[i] > rhs[i]){return 1;}
-                                    }
-
-                                    if(lhs.size() > rhs.size()){return 1;}
-                                    return 0;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                            //! @brief Greater than or equal to.
-                            //! Checks if the left vector is lexicographically greater than or equal to the right vector.
-                            //! It is important that the class T has defined > operator.
-                            //! @tparam source Another container of the same type.
-                            
-                                friend bool operator>=(const cpstd::vector<value_type, allocator_type>& lhs, const cpstd::vector<value_type, allocator_type>& rhs){
-                                    size_type last = (lhs.size() < rhs.size()) ? lhs.size() : rhs.size();
-
-                                    for (size_type i = 0; i < last; i++) {
-                                        if (lhs[i] > rhs[i]) { return 1; }
-                                    }
-
-                                    if (lhs.size() >= rhs.size()) { return 1; }
-                                    return 0;
-                                }
-                            //
-                            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        //! @brief Swap contents.
-                        //! Exchanges the contents of this vector with another vector.
-                        //! This operation does not involve the allocation or deallocation of storage.
-                        //! @tparam vector Another vector of the same type.
-                        //! @param x Vector to swap with.
-                            
-                            friend void swap (vector<value_type, allocator_type>& x){
-                                swap(x);
-                            } 
-                        //
-                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //! @}
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                };
-            #endif    
+        //! With CPSTL_USING_STL, `cpstd::vector` is `std::vector`. Otherwise it is
+        //! a contiguous, growable array with the `std::vector` interface:
+        //! elements are constructed in raw storage with placement new, so `T`
+        //! needs no default constructor unless an operation creates elements
+        //! without a value, and `push_back`/`emplace_back`/`insert` grow the
+        //! capacity geometrically.
         //!
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // cpstd::swap(vector& , vector&) Specialization
+        //! **Memory exhaustion.** The CPSTL allocator returns `nullptr` instead
+        //! of throwing. Every operation that needs more storage then has no
+        //! effect: the size, capacity and elements stay as they were, so the
+        //! caller can detect the failure by checking `size()` or `capacity()`.
+        //! A copy constructor that cannot allocate yields an empty vector.
+        //! `at()` does not check bounds in this mode; it behaves like
+        //! `operator[]`.
+        //!
+        //! @tparam T Element type.
+        //! @tparam Alloc Allocator; `cpstd::allocator<T>` by default.
+
+        #if defined(CPSTL_USING_STL)
+
+            template <class T, class Alloc = std::allocator<T> >
+            using vector = std::vector<T, Alloc>;
+
+        #else
 
             template <class T, class Alloc = cpstd::allocator<T>>
-            void swap(vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) noexcept{
+            class vector {
+            public:
+                using value_type = T;
+                using allocator_type = Alloc;
+                using reference = value_type&;
+                using const_reference = const value_type&;
+                using pointer = typename cpstd::allocator_traits<allocator_type>::pointer;
+                using const_pointer = typename cpstd::allocator_traits<allocator_type>::const_pointer;
+                using iterator = pointer;
+                using const_iterator = const_pointer;
+                using reverse_iterator = cpstd::reverse_iterator<iterator>;
+                using const_reverse_iterator = cpstd::reverse_iterator<const_iterator>;
+                using difference_type = cpstd::ptrdiff_t;
+                using size_type = cpstd::size_t;
+
+            private:
+                using traits = cpstd::allocator_traits<allocator_type>;
+
+                pointer _Buffer;
+                size_type _Size;
+                size_type _Capacity;
+                allocator_type _Alloc;
+
+                // Capacity for at least `needed` elements: double the current
+                // one (starting at 1), never below `needed`, never above max_size().
+                size_type GrownCapacity(size_type needed) const noexcept {
+                    const size_type limit = max_size();
+                    size_type grown = (_Capacity == 0) ? 1 : _Capacity;
+                    if (grown <= limit / 2) {
+                        grown = (_Capacity == 0) ? 1 : _Capacity * 2;
+                    } else {
+                        grown = limit;
+                    }
+                    return grown < needed ? needed : grown;
+                }
+
+                void DestroyRange(pointer first, pointer last) noexcept {
+                    for (; first != last; ++first) {
+                        traits::destroy(_Alloc, first);
+                    }
+                }
+
+                // Moves every element into `storage` (capacity `capacity`),
+                // leaving the slots in [gapIndex, gapIndex + gapSize) of the new
+                // storage unconstructed, and releases the old storage.
+                void AdoptStorage(pointer storage, size_type capacity,
+                                  size_type gapIndex = 0, size_type gapSize = 0) noexcept {
+                    for (size_type i = 0; i < _Size; ++i) {
+                        const size_type target = (i < gapIndex) ? i : i + gapSize;
+                        traits::construct(_Alloc, storage + target, cpstd::move(_Buffer[i]));
+                        traits::destroy(_Alloc, _Buffer + i);
+                    }
+                    if (_Buffer != nullptr) {
+                        traits::deallocate(_Alloc, _Buffer, _Capacity);
+                    }
+                    _Buffer = storage;
+                    _Capacity = capacity;
+                }
+
+                bool Reallocate(size_type capacity) {
+                    pointer storage = traits::allocate(_Alloc, capacity);
+                    if (storage == nullptr) {
+                        return false;
+                    }
+                    AdoptStorage(storage, capacity);
+                    return true;
+                }
+
+                // Opens `count` slots at `index`. Slots below the old size hold
+                // moved-from elements (assign into them); slots at or above it
+                // are raw (construct into them). `constructedEnd` receives the
+                // first raw slot of the gap. Returns false, unchanged, when no
+                // storage can be obtained.
+                bool OpenGap(size_type index, size_type count, size_type& constructedEnd) {
+                    const size_type oldSize = _Size;
+                    if (count > max_size() - oldSize) {
+                        return false;
+                    }
+                    if (oldSize + count > _Capacity) {
+                        const size_type capacity = GrownCapacity(oldSize + count);
+                        pointer storage = traits::allocate(_Alloc, capacity);
+                        if (storage == nullptr) {
+                            return false;
+                        }
+                        AdoptStorage(storage, capacity, index, count);
+                        constructedEnd = index;  // the whole gap is raw
+                        return true;
+                    }
+                    const size_type tail = oldSize - index;
+                    if (count <= tail) {
+                        for (size_type i = 0; i < count; ++i) {
+                            traits::construct(_Alloc, _Buffer + oldSize + i,
+                                              cpstd::move(_Buffer[oldSize - count + i]));
+                        }
+                        for (size_type i = oldSize - count; i > index; --i) {
+                            _Buffer[i - 1 + count] = cpstd::move(_Buffer[i - 1]);
+                        }
+                        constructedEnd = index + count;  // whole gap holds moved-from elements
+                    } else {
+                        for (size_type i = 0; i < tail; ++i) {
+                            traits::construct(_Alloc, _Buffer + index + count + i,
+                                              cpstd::move(_Buffer[index + i]));
+                        }
+                        constructedEnd = oldSize;  // [index, oldSize) moved-from, rest raw
+                    }
+                    return true;
+                }
+
+                // Fills the gap opened by OpenGap from `source[0, count)`.
+                template <class Source>
+                void FillGap(size_type index, size_type count, size_type constructedEnd, const Source& source) {
+                    for (size_type i = 0; i < count; ++i) {
+                        if (index + i < constructedEnd) {
+                            _Buffer[index + i] = source(i);
+                        } else {
+                            traits::construct(_Alloc, _Buffer + index + i, source(i));
+                        }
+                    }
+                    _Size += count;
+                }
+
+                struct FillSource {
+                    const value_type& value;
+                    const value_type& operator()(size_type) const { return value; }
+                };
+
+                struct ArraySource {
+                    const value_type* values;
+                    const value_type& operator()(size_type i) const { return values[i]; }
+                };
+
+            public:
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //! @name Construction and assignment
+                //! @{
+
+                vector() noexcept : _Buffer(nullptr), _Size(0), _Capacity(0), _Alloc() {}
+
+                explicit vector(const allocator_type& alloc) noexcept
+                    : _Buffer(nullptr), _Size(0), _Capacity(0), _Alloc(alloc) {}
+
+                //! @brief `n` value-initialized elements; empty if storage is unavailable.
+                explicit vector(size_type n, const allocator_type& alloc = allocator_type()) : vector(alloc) {
+                    resize(n);
+                }
+
+                //! @brief `n` copies of `value`; empty if storage is unavailable.
+                vector(size_type n, const value_type& value, const allocator_type& alloc = allocator_type())
+                    : vector(alloc) {
+                    resize(n, value);
+                }
+
+                //! @brief Copies `[first, last)`; partially filled if storage runs out.
+                template <class InputIterator,
+                          typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>
+                vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+                    : vector(alloc) {
+                    for (; first != last; ++first) {
+                        if (!TryEmplaceBack(*first)) {
+                            break;
+                        }
+                    }
+                }
+
+                //! @brief Copies `other` into storage of exactly its size; empty on failure.
+                vector(const vector& other) : vector(other._Alloc) {
+                    CopyFrom(other);
+                }
+
+                vector(const vector& other, const allocator_type& alloc) : vector(alloc) {
+                    CopyFrom(other);
+                }
+
+                //! @brief Takes `source`'s storage and leaves it empty.
+                vector(vector&& source) noexcept
+                    : _Buffer(source._Buffer), _Size(source._Size), _Capacity(source._Capacity),
+                      _Alloc(cpstd::move(source._Alloc)) {
+                    source._Buffer = nullptr;
+                    source._Size = 0;
+                    source._Capacity = 0;
+                }
+
+                vector(cpstd::initializer_list<T> list, const allocator_type& alloc = allocator_type())
+                    : vector(alloc) {
+                    if (list.size() != 0 && Reallocate(list.size())) {
+                        for (const value_type& item : list) {
+                            traits::construct(_Alloc, _Buffer + _Size, item);
+                            ++_Size;
+                        }
+                    }
+                }
+
+                ~vector() {
+                    clear();
+                    if (_Buffer != nullptr) {
+                        traits::deallocate(_Alloc, _Buffer, _Capacity);
+                    }
+                }
+
+                //! @brief Copies `source`; unchanged if storage is unavailable.
+                vector& operator=(const vector& source) {
+                    if (this != &source) {
+                        AssignRange(source._Buffer, source._Size);
+                    }
+                    return *this;
+                }
+
+                vector& operator=(vector&& source) noexcept {
+                    if (this != &source) {
+                        clear();
+                        if (_Buffer != nullptr) {
+                            traits::deallocate(_Alloc, _Buffer, _Capacity);
+                        }
+                        _Buffer = source._Buffer;
+                        _Size = source._Size;
+                        _Capacity = source._Capacity;
+                        _Alloc = cpstd::move(source._Alloc);
+                        source._Buffer = nullptr;
+                        source._Size = 0;
+                        source._Capacity = 0;
+                    }
+                    return *this;
+                }
+
+                vector& operator=(cpstd::initializer_list<T> list) {
+                    AssignRange(list.begin(), list.size());
+                    return *this;
+                }
+
+                //! @brief Replaces the contents with `[first, last)`; unchanged if storage is unavailable.
+                template <class InputIterator,
+                          typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>
+                void assign(InputIterator first, InputIterator last) {
+                    vector copy(first, last, _Alloc);
+                    swap(copy);
+                }
+
+                //! @brief Replaces the contents with `n` copies of `value`; unchanged if storage is unavailable.
+                void assign(size_type n, const value_type& value) {
+                    if (n > _Capacity) {
+                        vector copy(n, value, _Alloc);
+                        if (copy.size() == n) {
+                            swap(copy);
+                        }
+                        return;
+                    }
+                    const size_type common = (n < _Size) ? n : _Size;
+                    const value_type copy = value;  // `value` may be an element
+                    for (size_type i = 0; i < common; ++i) {
+                        _Buffer[i] = copy;
+                    }
+                    for (size_type i = common; i < n; ++i) {
+                        traits::construct(_Alloc, _Buffer + i, copy);
+                    }
+                    DestroyRange(_Buffer + n, _Buffer + _Size);
+                    _Size = n;
+                }
+
+                void assign(cpstd::initializer_list<T> list) {
+                    AssignRange(list.begin(), list.size());
+                }
+
+                allocator_type get_allocator() const { return _Alloc; }
+
+                //! @}
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //! @name Iterators
+                //! @{
+
+                iterator begin() noexcept { return _Buffer; }
+                const_iterator begin() const noexcept { return _Buffer; }
+                iterator end() noexcept { return _Buffer + _Size; }
+                const_iterator end() const noexcept { return _Buffer + _Size; }
+                reverse_iterator rbegin() noexcept { return reverse_iterator(end()); }
+                const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(end()); }
+                reverse_iterator rend() noexcept { return reverse_iterator(begin()); }
+                const_reverse_iterator rend() const noexcept { return const_reverse_iterator(begin()); }
+                const_iterator cbegin() const noexcept { return begin(); }
+                const_iterator cend() const noexcept { return end(); }
+                const_reverse_iterator crbegin() const noexcept { return rbegin(); }
+                const_reverse_iterator crend() const noexcept { return rend(); }
+
+                //! @}
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //! @name Capacity
+                //! @{
+
+                size_type size() const noexcept { return _Size; }
+                size_type capacity() const noexcept { return _Capacity; }
+                bool empty() const noexcept { return _Size == 0; }
+                size_type max_size() const noexcept { return traits::max_size(_Alloc); }
+
+                //! @brief Ensures room for `new_cap` elements; no effect on failure.
+                void reserve(size_type new_cap) {
+                    if (new_cap > _Capacity && new_cap <= max_size()) {
+                        Reallocate(new_cap);
+                    }
+                }
+
+                //! @brief Releases unused capacity; no effect on failure.
+                void shrink_to_fit() {
+                    if (_Capacity == _Size) {
+                        return;
+                    }
+                    if (_Size == 0) {
+                        traits::deallocate(_Alloc, _Buffer, _Capacity);
+                        _Buffer = nullptr;
+                        _Capacity = 0;
+                        return;
+                    }
+                    Reallocate(_Size);
+                }
+
+                //! @brief Changes the size, value-initializing new elements; no effect on failure.
+                void resize(size_type n) {
+                    ResizeImpl(n, ValueInitializer());
+                }
+
+                //! @brief Changes the size, copying `value` into new elements; no effect on failure.
+                void resize(size_type n, const value_type& value) {
+                    ResizeImpl(n, CopyInitializer{value});
+                }
+
+                //! @}
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //! @name Element access
+                //! @{
+
+                reference operator[](size_type position) { return _Buffer[position]; }
+                const_reference operator[](size_type position) const { return _Buffer[position]; }
+                reference at(size_type position) { return _Buffer[position]; }
+                const_reference at(size_type position) const { return _Buffer[position]; }
+                reference front() { return _Buffer[0]; }
+                const_reference front() const { return _Buffer[0]; }
+                reference back() { return _Buffer[_Size - 1]; }
+                const_reference back() const { return _Buffer[_Size - 1]; }
+                pointer data() noexcept { return _Buffer; }
+                const_pointer data() const noexcept { return _Buffer; }
+
+                //! @}
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //! @name Modifiers
+                //! @{
+
+                //! @brief Appends a copy of `value` (which may be an element); no effect on failure.
+                void push_back(const value_type& value) { TryEmplaceBack(value); }
+
+                //! @brief Appends `value` by move; no effect on failure.
+                void push_back(value_type&& value) { TryEmplaceBack(cpstd::move(value)); }
+
+                //! @brief Constructs an element at the end from `args`; no effect on failure.
+                template <class... Args>
+                void emplace_back(Args&&... args) { TryEmplaceBack(cpstd::forward<Args>(args)...); }
+
+                //! @brief Removes the last element; no effect when empty.
+                void pop_back() {
+                    if (_Size != 0) {
+                        --_Size;
+                        traits::destroy(_Alloc, _Buffer + _Size);
+                    }
+                }
+
+                //! @brief Inserts a copy of `value` before `position`.
+                //! @return The inserted element; on failure the vector is unchanged
+                //! and the iterator points at `position`.
+                iterator insert(const_iterator position, const value_type& value) {
+                    return insert(position, size_type(1), value);
+                }
+
+                iterator insert(const_iterator position, value_type&& value) {
+                    return emplace(position, cpstd::move(value));
+                }
+
+                iterator insert(const_iterator position, size_type n, const value_type& value) {
+                    const size_type index = static_cast<size_type>(position - cbegin());
+                    if (n == 0) {
+                        return _Buffer + index;
+                    }
+                    const value_type copy = value;  // `value` may be an element that moves
+                    size_type constructedEnd = 0;
+                    if (!OpenGap(index, n, constructedEnd)) {
+                        return _Buffer + index;
+                    }
+                    FillGap(index, n, constructedEnd, FillSource{copy});
+                    return _Buffer + index;
+                }
+
+                template <class InputIterator,
+                          typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>
+                iterator insert(const_iterator position, InputIterator first, InputIterator last) {
+                    const size_type index = static_cast<size_type>(position - cbegin());
+                    vector values(first, last, _Alloc);  // also guards against ranges into *this
+                    if (values.empty()) {
+                        return _Buffer + index;
+                    }
+                    size_type constructedEnd = 0;
+                    if (!OpenGap(index, values.size(), constructedEnd)) {
+                        return _Buffer + index;
+                    }
+                    FillGap(index, values.size(), constructedEnd, ArraySource{values.data()});
+                    return _Buffer + index;
+                }
+
+                iterator insert(const_iterator position, cpstd::initializer_list<T> list) {
+                    const size_type index = static_cast<size_type>(position - cbegin());
+                    if (list.size() == 0) {
+                        return _Buffer + index;
+                    }
+                    size_type constructedEnd = 0;
+                    if (!OpenGap(index, list.size(), constructedEnd)) {
+                        return _Buffer + index;
+                    }
+                    FillGap(index, list.size(), constructedEnd, ArraySource{list.begin()});
+                    return _Buffer + index;
+                }
+
+                //! @brief Constructs an element before `position` from `args`.
+                template <class... Args>
+                iterator emplace(const_iterator position, Args&&... args) {
+                    const size_type index = static_cast<size_type>(position - cbegin());
+                    value_type element(cpstd::forward<Args>(args)...);  // args may refer to elements
+                    size_type constructedEnd = 0;
+                    if (!OpenGap(index, 1, constructedEnd)) {
+                        return _Buffer + index;
+                    }
+                    if (index < constructedEnd) {
+                        _Buffer[index] = cpstd::move(element);
+                    } else {
+                        traits::construct(_Alloc, _Buffer + index, cpstd::move(element));
+                    }
+                    ++_Size;
+                    return _Buffer + index;
+                }
+
+                iterator erase(const_iterator position) {
+                    return erase(position, position + 1);
+                }
+
+                iterator erase(const_iterator first, const_iterator last) {
+                    const size_type start = static_cast<size_type>(first - cbegin());
+                    const size_type stop = static_cast<size_type>(last - cbegin());
+                    if (start >= stop || stop > _Size) {
+                        return _Buffer + start;
+                    }
+                    const size_type count = stop - start;
+                    for (size_type i = start; i + count < _Size; ++i) {
+                        _Buffer[i] = cpstd::move(_Buffer[i + count]);
+                    }
+                    DestroyRange(_Buffer + _Size - count, _Buffer + _Size);
+                    _Size -= count;
+                    return _Buffer + start;
+                }
+
+                void swap(vector& other) noexcept {
+                    cpstd::swap(_Buffer, other._Buffer);
+                    cpstd::swap(_Size, other._Size);
+                    cpstd::swap(_Capacity, other._Capacity);
+                    cpstd::swap(_Alloc, other._Alloc);
+                }
+
+                //! @brief Destroys every element, keeping the capacity.
+                void clear() noexcept {
+                    DestroyRange(_Buffer, _Buffer + _Size);
+                    _Size = 0;
+                }
+
+                //! @}
+
+            private:
+                template <class... Args>
+                bool TryEmplaceBack(Args&&... args) {
+                    if (_Size < _Capacity) {
+                        traits::construct(_Alloc, _Buffer + _Size, cpstd::forward<Args>(args)...);
+                        ++_Size;
+                        return true;
+                    }
+                    if (_Size == max_size()) {
+                        return false;
+                    }
+                    const size_type capacity = GrownCapacity(_Size + 1);
+                    pointer storage = traits::allocate(_Alloc, capacity);
+                    if (storage == nullptr) {
+                        return false;
+                    }
+                    // Construct first: args may refer to an element of the old storage.
+                    traits::construct(_Alloc, storage + _Size, cpstd::forward<Args>(args)...);
+                    AdoptStorage(storage, capacity);
+                    ++_Size;
+                    return true;
+                }
+
+                struct ValueInitializer {
+                    void operator()(allocator_type& alloc, pointer slot) const { traits::construct(alloc, slot); }
+                };
+
+                struct CopyInitializer {
+                    const value_type& value;
+                    void operator()(allocator_type& alloc, pointer slot) const { traits::construct(alloc, slot, value); }
+                };
+
+                // Grows or shrinks to `n`, constructing new elements with `init`.
+                template <class Initializer>
+                void ResizeImpl(size_type n, const Initializer& init) {
+                    if (n <= _Size) {
+                        DestroyRange(_Buffer + n, _Buffer + _Size);
+                        _Size = n;
+                        return;
+                    }
+                    if (n > max_size()) {
+                        return;
+                    }
+                    if (n > _Capacity) {
+                        pointer storage = traits::allocate(_Alloc, n);
+                        if (storage == nullptr) {
+                            return;
+                        }
+                        // Construct the new tail first: a copied value may be an element.
+                        for (size_type i = _Size; i < n; ++i) {
+                            init(_Alloc, storage + i);
+                        }
+                        AdoptStorage(storage, n);
+                    } else {
+                        for (size_type i = _Size; i < n; ++i) {
+                            init(_Alloc, _Buffer + i);
+                        }
+                    }
+                    _Size = n;
+                }
+
+                void CopyFrom(const vector& other) {
+                    if (other._Size != 0 && Reallocate(other._Size)) {
+                        for (size_type i = 0; i < other._Size; ++i) {
+                            traits::construct(_Alloc, _Buffer + i, other._Buffer[i]);
+                        }
+                        _Size = other._Size;
+                    }
+                }
+
+                // Replaces the contents with values[0, count); unchanged on failure.
+                void AssignRange(const value_type* values, size_type count) {
+                    if (count > _Capacity) {
+                        pointer storage = traits::allocate(_Alloc, count);
+                        if (storage == nullptr) {
+                            return;
+                        }
+                        for (size_type i = 0; i < count; ++i) {
+                            traits::construct(_Alloc, storage + i, values[i]);
+                        }
+                        clear();
+                        if (_Buffer != nullptr) {
+                            traits::deallocate(_Alloc, _Buffer, _Capacity);
+                        }
+                        _Buffer = storage;
+                        _Capacity = count;
+                        _Size = count;
+                        return;
+                    }
+                    const size_type common = (count < _Size) ? count : _Size;
+                    for (size_type i = 0; i < common; ++i) {
+                        _Buffer[i] = values[i];
+                    }
+                    for (size_type i = common; i < count; ++i) {
+                        traits::construct(_Alloc, _Buffer + i, values[i]);
+                    }
+                    DestroyRange(_Buffer + count, _Buffer + _Size);
+                    _Size = count;
+                }
+            };
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Comparisons: element-wise equality and lexicographic order
+
+            template <class T, class Alloc>
+            bool operator==(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+                if (lhs.size() != rhs.size()) {
+                    return false;
+                }
+                for (cpstd::size_t i = 0; i < lhs.size(); ++i) {
+                    if (!(lhs[i] == rhs[i])) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            template <class T, class Alloc>
+            bool operator!=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) { return !(lhs == rhs); }
+
+            template <class T, class Alloc>
+            bool operator<(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) {
+                const cpstd::size_t common = lhs.size() < rhs.size() ? lhs.size() : rhs.size();
+                for (cpstd::size_t i = 0; i < common; ++i) {
+                    if (lhs[i] < rhs[i]) {
+                        return true;
+                    }
+                    if (rhs[i] < lhs[i]) {
+                        return false;
+                    }
+                }
+                return lhs.size() < rhs.size();
+            }
+
+            template <class T, class Alloc>
+            bool operator>(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) { return rhs < lhs; }
+
+            template <class T, class Alloc>
+            bool operator<=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) { return !(rhs < lhs); }
+
+            template <class T, class Alloc>
+            bool operator>=(const vector<T, Alloc>& lhs, const vector<T, Alloc>& rhs) { return !(lhs < rhs); }
+
+            template <class T, class Alloc>
+            void swap(vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) noexcept {
                 lhs.swap(rhs);
             }
-        //
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    }   
-
-
-
-
-
-
+        #endif
+    }
 
 #endif//CROSS_PLATFFORM_STL_VECTOR_TEMPLATE_H
