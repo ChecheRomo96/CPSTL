@@ -8,7 +8,7 @@
         #include <iterator>
     #endif
 
-    #include "CPSTL_iterator.h"
+    #include "CPSTL_Iterator.h"
     #include "Primitives/CPSTL_iterator_traits.h"
 
     namespace cpstd {

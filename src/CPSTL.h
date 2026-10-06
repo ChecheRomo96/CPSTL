@@ -22,4 +22,12 @@
         #include <CPstring.h>
     #endif
 
+    #ifdef CPSTL_STACK_ENABLED
+        #include <CPstack.h>
+    #endif
+
+    #ifdef CPSTL_QUEUE_ENABLED
+        #include <CPqueue.h>
+    #endif
+
 #endif//CPSTL_H

@@ -1,110 +1,103 @@
-######################################################################################################
-# Setting up the project
+#####################################################################################################
+# CPSTL: Cross-Platform STL
 
-	##################################################################################################
-	# C Make Minimum Version
-		
-		cmake_minimum_required(VERSION 3.14)
-	#
-	##################################################################################################
-	# Project Name Version and Languaje, print and add preprocessor flag
-		
-		project(CPSTL VERSION 1.0.0 LANGUAGES CXX)
-		message(STATUS "Building ${PROJECT_NAME} Version = ${PROJECT_VERSION}...")
+    cmake_minimum_required(VERSION 3.25)
 
-		string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
-	#
-	##################################################################################################
-	# Set up C++ Version
+    project(CPSTL VERSION 1.1.0 LANGUAGES CXX)
 
-		set(CPSTL_CXX_STANDARD "11" CACHE STRING "C++ standard to use")
-		set(CMAKE_CXX_STANDARD ${CPSTL_CXX_STANDARD})
-		set(CMAKE_CXX_STANDARD_REQUIRED ON)
-		set(CMAKE_CXX_EXTENSIONS OFF)
-	#
-	##################################################################################################
+    # library.properties (Arduino) and CPSTL_BuildSettings.h (IDE builds)
+    # carry the same version; refuse to configure when they drift.
+    file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/library.properties" CPSTL_ARDUINO_VERSION_LINE
+        REGEX "^version=" LIMIT_COUNT 1)
+    string(REGEX REPLACE "^version=" "" CPSTL_ARDUINO_VERSION "${CPSTL_ARDUINO_VERSION_LINE}")
+    if(NOT CPSTL_ARDUINO_VERSION STREQUAL PROJECT_VERSION)
+        message(FATAL_ERROR "Version mismatch: CMake declares ${PROJECT_VERSION}, "
+            "library.properties declares ${CPSTL_ARDUINO_VERSION}")
+    endif()
+
+    file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/src/CPSTL_BuildSettings.h" CPSTL_SOURCE_VERSION_LINE
+        REGEX "#define[ \t]+CPSTL_VERSION[ \t]+\"[^\"]+\"" LIMIT_COUNT 1)
+    if(NOT CPSTL_SOURCE_VERSION_LINE MATCHES "\"([^\"]+)\"" OR
+       NOT CMAKE_MATCH_1 STREQUAL PROJECT_VERSION)
+        message(FATAL_ERROR "Version mismatch: CMake declares ${PROJECT_VERSION}, "
+            "CPSTL_BuildSettings.h declares '${CMAKE_MATCH_1}'")
+    endif()
+
+    include(CMakePackageConfigHelpers)
+    include(GNUInstallDirs)
+    include(CMakeOptions.cmake)
+    include(cmake/CPSTLHelpers.cmake)
+
+    set(CMAKE_CXX_STANDARD ${CPSTL_CXX_STANDARD})
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+    message(STATUS "CPSTL ${PROJECT_VERSION}: C++${CPSTL_CXX_STANDARD}, "
+        "STL mode ${CPSTL_USING_STL}, allocation ${CPSTL_ALLOCATION}, "
+        "vector ${CPSTL_VECTOR}, string ${CPSTL_STRING}, "
+        "stack ${CPSTL_STACK}, queue ${CPSTL_QUEUE}")
 #
-######################################################################################################
-# Store this directory as a variable called MCC_SRC_DIRECTORY to reference in deeper directories
+#####################################################################################################
+# Library
 
-	set( ${PROJECT_NAME_UPPER}_ROOT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR} )
+    add_subdirectory(src)
 #
-######################################################################################################
-# Compile Configuration
-	
-	set(CPSTL_BUILD_TARGET "Submodule" CACHE STRING "CPString build target")
-	set_property(CACHE CPSTL_BUILD_TARGET PROPERTY STRINGS "Dev" "Submodule" "Export" "Install")
-	
-	set(CPSTL_ALLOCATION_METHOD "dummy" CACHE STRING "CPVector allocation method")
-	set_property(CACHE CPSTL_ALLOCATION_METHOD PROPERTY STRINGS "dummy" "std" "CPP" "C")
+#####################################################################################################
+# Examples and tests
 
-	set(CPSTL_EXCEPTIONS FALSE CACHE BOOL "") # Enables the compilation of the Exceptions module
+    # Tests first: examples register themselves as CTest smoke tests when
+    # testing is enabled.
+    if(CPSTL_TESTING)
+        include(cmake/BuildTests.cmake)
+        add_subdirectory(tests)
+    endif()
 
-	set(CPSTL_EXAMPLES FALSE CACHE BOOL "") # Enables Building Examples
-	set(CPSTL_TESTING FALSE CACHE BOOL "") # Enabled Unit Testing
+    if(CPSTL_EXAMPLES)
+        add_subdirectory(examples)
+    endif()
 
-	set(CPSTL_USING_STL CACHE BOOL "") # Enables using STL compatibility
-
-	##################################################################################################
-	# Vector configuration
-
-		option(CPSTL_VECTOR_STATUS "Enables the compilation of cpstd::vector<T>" FALSE)
-
-		option(CPSTL_VECTOR_EXCEPTIONS "Enables the compilation of the Exceptions module" FALSE)
-		option(CPSTL_VECTOR_EXAMPLES "Enables Building Examples" FALSE)
-		option(CPSTL_VECTOR_TESTING "Enabled Unit Testing" FALSE)
-
-		option(CPSTL_VECTOR_SORTING "Enables the compilation of the sorting module" FALSE)
-	#
-	##################################################################################################
-	# String configuration
-
-		option(CPSTL_STRING_STATUS "Enables the compilation of cpstd::string" FALSE)
-
-		option(CPSTL_STRING_EXCEPTIONS "Enable CPSTL_String exceptions" FALSE)
-		option(CPSTL_STRING_EXAMPLES "Enable building examples" FALSE)
-		option(CPSTL_STRING_TESTING "Enable unit testing" FALSE)
-		
-		option(CPSTL_ENABLE_UNICODE_STRINGS "Enable Unicode string support" FALSE)
-	#
-	##################################################################################################
+    if(CPSTL_AVR_SMOKE)
+        add_subdirectory(tests/AvrSmoke)
+    endif()
 #
-######################################################################################################
-# Append Source
+#####################################################################################################
+# Package
 
-	add_subdirectory(src)
-	target_compile_definitions(CPSTL INTERFACE ${PROJECT_NAME_UPPER}_VERSION="${PROJECT_VERSION}" )
+    install(TARGETS CPSTL
+        EXPORT CPSTLTargets
+        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        FILE_SET HEADERS DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/CPSTL"
+    )
+
+    install(EXPORT CPSTLTargets
+        NAMESPACE CPSTL::
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CPSTL"
+    )
+
+    configure_package_config_file(
+        "${CMAKE_CURRENT_LIST_DIR}/cmake/CPSTLConfig.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/CPSTLConfig.cmake"
+        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CPSTL"
+    )
+
+    write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/CPSTLConfigVersion.cmake"
+        VERSION ${PROJECT_VERSION}
+        COMPATIBILITY SameMajorVersion
+    )
+
+    install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/CPSTLConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/CPSTLConfigVersion.cmake"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CPSTL"
+    )
+
+    install(FILES
+        "${CMAKE_CURRENT_LIST_DIR}/LICENSE"
+        "${CMAKE_CURRENT_LIST_DIR}/README.md"
+        "${CMAKE_CURRENT_LIST_DIR}/CHANGELOG.md"
+        DESTINATION "."
+    )
 #
-######################################################################################################
-# Append Examples
-
-	if( ${CPSTL_EXAMPLES} )
-		message("Building ${CMAKE_PROJECT_NAME} Examples...")
-		add_subdirectory(examples)
-	endif()
-#
-######################################################################################################
-# Append Tests
-
-	if( ${CPSTL_TESTING} )
-		message("Building ${CMAKE_PROJECT_NAME} Tests...")
-
-		cmake_policy(SET CMP0135 NEW)
-
-		include(FetchContent)
-
-		FetchContent_Declare(
-		  googletest
-		  URL https://github.com/google/googletest/archive/f8d7d77c06936315286eb55f8de22cd23c188571.zip
-		)
-		# For Windows: Prevent overriding the parent project's compiler/linker settings
-		set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-		FetchContent_MakeAvailable(googletest)
-
-		enable_testing()
-		include(GoogleTest)
-		set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${${PROJECT_NAME_UPPER}_ROOT_DIRECTORY}/bin")
-		add_subdirectory(tests)
-	endif()
-#
-######################################################################################################
+#####################################################################################################

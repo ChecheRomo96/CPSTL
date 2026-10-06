@@ -9,9 +9,6 @@
     #include <utility/CPSTL_Move.h>
     
 
-    #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
-        #include <CPexception.h>           
-    #endif  
 
 
     #ifdef CPSTL_USING_STL
