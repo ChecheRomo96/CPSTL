@@ -3,15 +3,13 @@
 
     #include <CPSTL_BuildSettings.h>
     #include <CPinitializer_list.h>
+    #include <CPtype_traits.h>
     #include <CPiterator.h>
     #include <CPmemory.h>
     #include <utility/CPSTL_types.h>
     #include <utility/CPSTL_Move.h>
     
 
-    #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
-        #include <CPexception.h>           
-    #endif  
 
 
     #ifdef CPSTL_USING_STL
@@ -77,11 +75,21 @@
 
 
             private:
-                void InitEmpty();
-                void DestroyBuffer();
-                void EnsureCapacity(size_type required);
-                void AssignFromBuffer(const_pointer s, size_type n);
-                void AssignFill(size_type n, value_type ch);
+                static pointer EmptyBuffer() noexcept;
+                void InitEmpty() noexcept;
+                void DestroyBuffer() noexcept;
+                void Terminate() noexcept;
+                bool EnsureCapacity(size_type required);
+                bool AssignFromBuffer(const_pointer s, size_type n);
+                bool AssignFill(size_type n, value_type ch);
+                bool PointsInside(const_pointer s) const noexcept;
+                iterator IterInsert(const_iterator p, size_type n, CharT c);
+                iterator IterErase(const_iterator p);
+                iterator IterErase(const_iterator first, const_iterator last);
+                basic_string& IterReplace(const_iterator i1, const_iterator i2, const basic_string& str);
+                basic_string& IterReplace(const_iterator i1, const_iterator i2, const CharT* s);
+                basic_string& IterReplace(const_iterator i1, const_iterator i2, const CharT* s, size_type n);
+                basic_string& IterReplace(const_iterator i1, const_iterator i2, size_type n, CharT c);
 
             public:
 
@@ -100,7 +108,7 @@
                     basic_string(size_type n, CharT c,
                                 const allocator_type& alloc = allocator_type());
 
-                    template <class InputIterator>
+                    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>
                     basic_string(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 
                     basic_string(cpstd::initializer_list<CharT> il, const allocator_type& alloc = allocator_type());
@@ -111,6 +119,12 @@
 				// Destructor
 
                     ~basic_string();
+
+                    basic_string& operator=(const basic_string& str);
+                    basic_string& operator=(basic_string&& str) noexcept;
+                    basic_string& operator=(const CharT* s);
+                    basic_string& operator=(CharT c);
+                    basic_string& operator=(cpstd::initializer_list<CharT> il);
 
                 // Iterators
 
@@ -181,7 +195,7 @@
                     basic_string & append(const CharT* s);
                     basic_string& append(const CharT* s, size_type n);
                     basic_string& append(size_type n, CharT c);
-                    template <class InputIterator>   basic_string& append(InputIterator first, InputIterator last);
+                    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>   basic_string& append(InputIterator first, InputIterator last);
                     basic_string& append(cpstd::initializer_list<CharT> il);
 
                     void push_back(CharT c);
@@ -191,7 +205,7 @@
                     basic_string & assign(const CharT* s);
                     basic_string& assign(const CharT* s, size_type n);
                     basic_string& assign(size_type n, CharT c);
-                    template <class InputIterator>   basic_string& assign(InputIterator first, InputIterator last);
+                    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>   basic_string& assign(InputIterator first, InputIterator last);
                     basic_string& assign(cpstd::initializer_list<CharT> il);
                     basic_string& assign(basic_string&& str) noexcept;
 
@@ -200,27 +214,46 @@
                     basic_string & insert(size_type pos, const CharT* s);
                     basic_string& insert(size_type pos, const CharT* s, size_type n);
                     basic_string& insert(size_type pos, size_type n, CharT c);
-                    iterator insert(const_iterator p, size_type n, CharT c);
+
                     iterator insert(const_iterator p, CharT c);
-                    template <class InputIterator>
+                    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>
                     iterator insert(iterator p, InputIterator first, InputIterator last);
                     basic_string& insert(const_iterator p, cpstd::initializer_list<CharT> il);
 
                     basic_string& erase(size_type pos = 0, size_type len = npos);
-                    iterator erase(const_iterator p);
-                    iterator erase(const_iterator first, const_iterator last);
+
+
 
                     basic_string& replace(size_type pos, size_type len, const basic_string& str);
-                    basic_string& replace(const_iterator i1, const_iterator i2, const basic_string& str);
+
                     basic_string& replace(size_type pos, size_type len, const basic_string& str, size_type subpos, size_type sublen);
                     basic_string & replace(size_type pos, size_type len, const CharT * s);
-                    basic_string& replace(const_iterator i1, const_iterator i2, const CharT* s);
+
                     basic_string& replace(size_type pos, size_type len, const CharT* s, size_type n);
-                    basic_string& replace(const_iterator i1, const_iterator i2, const CharT* s, size_type n);
+
                     basic_string& replace(size_type pos, size_type len, size_type n, CharT c);
-                    basic_string& replace(const_iterator i1, const_iterator i2, size_type n, CharT c);
-                    template <class InputIterator>  basic_string& replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last);
+
+                    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type = 0>  basic_string& replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last);
                     basic_string& replace(const_iterator i1, const_iterator i2, cpstd::initializer_list<CharT> il);
+
+
+                    // Iterator overloads are templates so a literal 0 picks the
+                    // position (size_type) overloads, as with std::string; with
+                    // pointer iterators 0 would otherwise convert to both.
+                    template <class It, typename cpstd::enable_if<cpstd::is_same<It, iterator>::value || cpstd::is_same<It, const_iterator>::value, int>::type = 0>
+                    iterator insert(It p, size_type n, CharT c) { return IterInsert(p, n, c); }
+                    template <class It, typename cpstd::enable_if<cpstd::is_same<It, iterator>::value || cpstd::is_same<It, const_iterator>::value, int>::type = 0>
+                    iterator erase(It p) { return IterErase(p); }
+                    template <class It, class It2, typename cpstd::enable_if<(cpstd::is_same<It, iterator>::value || cpstd::is_same<It, const_iterator>::value) && (cpstd::is_same<It2, iterator>::value || cpstd::is_same<It2, const_iterator>::value), int>::type = 0>
+                    iterator erase(It first, It2 last) { return IterErase(first, last); }
+                    template <class It, class It2, typename cpstd::enable_if<(cpstd::is_same<It, iterator>::value || cpstd::is_same<It, const_iterator>::value) && (cpstd::is_same<It2, iterator>::value || cpstd::is_same<It2, const_iterator>::value), int>::type = 0>
+                    basic_string& replace(It i1, It2 i2, const basic_string& str) { return IterReplace(i1, i2, str); }
+                    template <class It, class It2, typename cpstd::enable_if<(cpstd::is_same<It, iterator>::value || cpstd::is_same<It, const_iterator>::value) && (cpstd::is_same<It2, iterator>::value || cpstd::is_same<It2, const_iterator>::value), int>::type = 0>
+                    basic_string& replace(It i1, It2 i2, const CharT* s) { return IterReplace(i1, i2, s); }
+                    template <class It, class It2, typename cpstd::enable_if<(cpstd::is_same<It, iterator>::value || cpstd::is_same<It, const_iterator>::value) && (cpstd::is_same<It2, iterator>::value || cpstd::is_same<It2, const_iterator>::value), int>::type = 0>
+                    basic_string& replace(It i1, It2 i2, const CharT* s, size_type n) { return IterReplace(i1, i2, s, n); }
+                    template <class It, class It2, typename cpstd::enable_if<(cpstd::is_same<It, iterator>::value || cpstd::is_same<It, const_iterator>::value) && (cpstd::is_same<It2, iterator>::value || cpstd::is_same<It2, const_iterator>::value), int>::type = 0>
+                    basic_string& replace(It i1, It2 i2, size_type n, CharT c) { return IterReplace(i1, i2, n, c); }
 
                     void swap(basic_string& str);
 

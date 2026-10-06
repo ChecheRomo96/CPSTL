@@ -1,7 +1,6 @@
-#ifndef CROSS_PLATFORM_ALGORITHM_H
-#define CROSS_PLATFORM_ALGORITHM_H
-    
-    #include <CPalgorithm.h>
-        
+#ifndef CPSTL_ALGORITHM_HEADER
+#define CPSTL_ALGORITHM_HEADER
 
-#endif//CROSS_PLATFORM_ALGORITHM_H
+    #include <CPalgorithm.h>
+
+#endif//CPSTL_ALGORITHM_HEADER

@@ -3,6 +3,10 @@
     
     #include <CPSTL_BuildSettings.h>
     #include <utility/CPSTL_types.h>
+
+    #if defined(CPSTL_USING_STL)
+        #include <type_traits>
+    #endif
     
 
     namespace cpstd{
