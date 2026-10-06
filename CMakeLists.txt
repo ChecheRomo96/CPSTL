@@ -93,11 +93,19 @@
         DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CPSTL"
     )
 
+    # A standalone CPSTL package carries its documents at the prefix root.
+    # Built inside another project (FetchContent), they go to share/doc/CPSTL
+    # so they do not replace that project's own LICENSE, README and CHANGELOG.
+    if(PROJECT_IS_TOP_LEVEL)
+        set(CPSTL_DOC_DESTINATION ".")
+    else()
+        set(CPSTL_DOC_DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/CPSTL")
+    endif()
     install(FILES
         "${CMAKE_CURRENT_LIST_DIR}/LICENSE"
         "${CMAKE_CURRENT_LIST_DIR}/README.md"
         "${CMAKE_CURRENT_LIST_DIR}/CHANGELOG.md"
-        DESTINATION "."
+        DESTINATION "${CPSTL_DOC_DESTINATION}"
     )
 #
 #####################################################################################################
