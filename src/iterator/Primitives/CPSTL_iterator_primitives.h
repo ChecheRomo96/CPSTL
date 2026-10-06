@@ -18,14 +18,9 @@
             using bidirectional_iterator_tag = std::bidirectional_iterator_tag;
             using random_access_iterator_tag = std::random_access_iterator_tag;
 
-            #if CPSTD_CPLUSPLUS >= 202001L 
+            #if CPSTL_CPLUSPLUS >= 202002L
                 using contiguous_iterator_tag = std::contiguous_iterator_tag;
             #endif
-
-            #if CPSTD_CPLUSPLUS <= 201112L 
-                template <class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&>
-            #endif
-            using iterator = std::iterator<Category, T, Distance, Pointer, Reference>;
         #else
             struct input_iterator_tag {};
             struct output_iterator_tag {};
@@ -33,22 +28,22 @@
             struct bidirectional_iterator_tag : public forward_iterator_tag {};
             struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
-            #if CPSTD_CPLUSPLUS >= 202001L 
+            #if CPSTL_CPLUSPLUS >= 202002L
                 struct contiguous_iterator_tag : public random_access_iterator_tag {};
             #endif
-
-            #if CPSTD_CPLUSPLUS <= 201112L 
-            template <class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&> 
-                struct iterator {
-                    typedef T         value_type;
-                    typedef Distance  difference_type;
-                    typedef Pointer   pointer;
-                    typedef Reference reference;
-                    typedef Category  iterator_category;
-                };
-            #endif
-
         #endif
+
+        //! @brief Base class that declares the five iterator member types, like
+        //! the (C++17-deprecated) `std::iterator`. CPSTL keeps its own in both
+        //! modes so deriving from it never triggers deprecation warnings.
+        template <class Category, class T, class Distance = cpstd::ptrdiff_t, class Pointer = T*, class Reference = T&>
+        struct iterator {
+            typedef T         value_type;
+            typedef Distance  difference_type;
+            typedef Pointer   pointer;
+            typedef Reference reference;
+            typedef Category  iterator_category;
+        };
     }
 
     #include "CPSTL_iterator_traits.h"

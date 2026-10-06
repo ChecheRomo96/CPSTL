@@ -9,73 +9,114 @@ namespace cpstd {
     // Helpers
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // An empty string owns no storage: it points at a shared, read-only
+    // terminator and has capacity 0, so default construction never allocates
+    // and c_str() is always valid. Only strings with capacity > 0 write to
+    // their buffer.
     template <class CharT, class Traits, class Alloc>
-    void basic_string<CharT, Traits, Alloc>::InitEmpty() {
-        _buffer = cpstd::allocator_traits<allocator_type>::allocate(_alloc, 1);
-        _buffer[0] = CharT();
+    typename basic_string<CharT, Traits, Alloc>::pointer
+    basic_string<CharT, Traits, Alloc>::EmptyBuffer() noexcept {
+        static CharT terminator = CharT();
+        return &terminator;
+    }
+
+    template <class CharT, class Traits, class Alloc>
+    void basic_string<CharT, Traits, Alloc>::InitEmpty() noexcept {
+        _buffer = EmptyBuffer();
         _size = 0;
         _capacity = 0;
     }
 
     template <class CharT, class Traits, class Alloc>
-    void basic_string<CharT, Traits, Alloc>::DestroyBuffer() {
-        if (_buffer) {
+    void basic_string<CharT, Traits, Alloc>::DestroyBuffer() noexcept {
+        if (_capacity != 0) {
             cpstd::allocator_traits<allocator_type>::deallocate(_alloc, _buffer, _capacity + 1);
-            _buffer = nullptr;
         }
-        _size = 0;
-        _capacity = 0;
+        InitEmpty();
     }
 
     template <class CharT, class Traits, class Alloc>
-    void basic_string<CharT, Traits, Alloc>::EnsureCapacity(size_type required) {
+    void basic_string<CharT, Traits, Alloc>::Terminate() noexcept {
+        if (_capacity != 0) {
+            _buffer[_size] = CharT();
+        }
+    }
+
+    // Grows the storage to hold `required` characters plus the terminator,
+    // doubling when possible. Returns false and changes nothing on overflow or
+    // allocation failure.
+    template <class CharT, class Traits, class Alloc>
+    bool basic_string<CharT, Traits, Alloc>::EnsureCapacity(size_type required) {
         if (required <= _capacity) {
-            return;
+            return true;
+        }
+        if (required > max_size()) {
+            return false;
         }
 
-        size_type newCapacity = (_capacity == 0) ? required : _capacity * 2;
+        size_type newCapacity = (_capacity == 0 || _capacity > max_size() / 2) ? required : _capacity * 2;
         if (newCapacity < required) {
             newCapacity = required;
         }
 
         pointer newBuffer = cpstd::allocator_traits<allocator_type>::allocate(_alloc, newCapacity + 1);
+        if (newBuffer == nullptr) {
+            return false;
+        }
 
         for (size_type i = 0; i < _size; ++i) {
             newBuffer[i] = _buffer[i];
         }
         newBuffer[_size] = CharT();
 
-        if (_buffer) {
+        if (_capacity != 0) {
             cpstd::allocator_traits<allocator_type>::deallocate(_alloc, _buffer, _capacity + 1);
         }
 
         _buffer = newBuffer;
         _capacity = newCapacity;
+        return true;
     }
 
+    // `s` may point into this string: then n <= _size <= _capacity, no
+    // reallocation happens and the forward copy is overlap-safe.
     template <class CharT, class Traits, class Alloc>
-    void basic_string<CharT, Traits, Alloc>::AssignFromBuffer(const_pointer s, size_type n) {
+    bool basic_string<CharT, Traits, Alloc>::AssignFromBuffer(const_pointer s, size_type n) {
         if (!s || n == 0) {
             clear();
-            return;
+            return true;
         }
-
-        EnsureCapacity(n);
+        if (!EnsureCapacity(n)) {
+            return false;
+        }
         for (size_type i = 0; i < n; ++i) {
             _buffer[i] = s[i];
         }
         _size = n;
-        _buffer[_size] = CharT();
+        Terminate();
+        return true;
     }
 
     template <class CharT, class Traits, class Alloc>
-    void basic_string<CharT, Traits, Alloc>::AssignFill(size_type n, value_type ch) {
-        EnsureCapacity(n);
+    bool basic_string<CharT, Traits, Alloc>::AssignFill(size_type n, value_type ch) {
+        if (n == 0) {
+            clear();
+            return true;
+        }
+        if (!EnsureCapacity(n)) {
+            return false;
+        }
         for (size_type i = 0; i < n; ++i) {
             _buffer[i] = ch;
         }
         _size = n;
-        _buffer[_size] = CharT();
+        Terminate();
+        return true;
+    }
+
+    template <class CharT, class Traits, class Alloc>
+    bool basic_string<CharT, Traits, Alloc>::PointsInside(const_pointer s) const noexcept {
+        return _capacity != 0 && s >= _buffer && s <= _buffer + _size;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +190,7 @@ namespace cpstd {
     }
 
     template <class CharT, class Traits, class Alloc>
-    template <class InputIterator>
+    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type>
     basic_string<CharT, Traits, Alloc>::basic_string(InputIterator first, InputIterator last, const allocator_type& alloc)
         : _buffer(nullptr), _size(0), _capacity(0), _alloc(alloc) {
         InitEmpty();
@@ -185,6 +226,56 @@ namespace cpstd {
     template <class CharT, class Traits, class Alloc>
     basic_string<CharT, Traits, Alloc>::~basic_string() {
         DestroyBuffer();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Assignment operators
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Copy assignment reuses the current storage when it fits; on allocation
+    // failure the string is unchanged.
+    template <class CharT, class Traits, class Alloc>
+    basic_string<CharT, Traits, Alloc>&
+    basic_string<CharT, Traits, Alloc>::operator=(const basic_string& str) {
+        if (this != &str) {
+            AssignFromBuffer(str._buffer, str._size);
+        }
+        return *this;
+    }
+
+    template <class CharT, class Traits, class Alloc>
+    basic_string<CharT, Traits, Alloc>&
+    basic_string<CharT, Traits, Alloc>::operator=(basic_string&& str) noexcept {
+        if (this != &str) {
+            DestroyBuffer();
+            _buffer = str._buffer;
+            _size = str._size;
+            _capacity = str._capacity;
+            _alloc = str._alloc;
+            str.InitEmpty();
+        }
+        return *this;
+    }
+
+    template <class CharT, class Traits, class Alloc>
+    basic_string<CharT, Traits, Alloc>&
+    basic_string<CharT, Traits, Alloc>::operator=(const CharT* s) {
+        AssignFromBuffer(s, s ? traits_type::length(s) : 0);
+        return *this;
+    }
+
+    template <class CharT, class Traits, class Alloc>
+    basic_string<CharT, Traits, Alloc>&
+    basic_string<CharT, Traits, Alloc>::operator=(CharT c) {
+        AssignFill(1, c);
+        return *this;
+    }
+
+    template <class CharT, class Traits, class Alloc>
+    basic_string<CharT, Traits, Alloc>&
+    basic_string<CharT, Traits, Alloc>::operator=(cpstd::initializer_list<CharT> il) {
+        AssignFromBuffer(il.begin(), il.size());
+        return *this;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,17 +385,18 @@ namespace cpstd {
     void basic_string<CharT, Traits, Alloc>::resize(size_type n, CharT c) {
         if (n < _size) {
             _size = n;
-            _buffer[_size] = CharT();
+            Terminate();
             return;
         }
-
         if (n > _size) {
-            EnsureCapacity(n);
+            if (!EnsureCapacity(n)) {
+                return;
+            }
             for (size_type i = _size; i < n; ++i) {
                 _buffer[i] = c;
             }
             _size = n;
-            _buffer[_size] = CharT();
+            Terminate();
         }
     }
 
@@ -317,16 +409,14 @@ namespace cpstd {
     template <class CharT, class Traits, class Alloc>
     void basic_string<CharT, Traits, Alloc>::reserve(size_type n) {
         if (n > _capacity) {
-            EnsureCapacity(n);
+            (void)EnsureCapacity(n);
         }
     }
 
     template <class CharT, class Traits, class Alloc>
     void basic_string<CharT, Traits, Alloc>::clear() noexcept {
         _size = 0;
-        if (_buffer) {
-            _buffer[0] = CharT();
-        }
+        Terminate();
     }
 
     template <class CharT, class Traits, class Alloc>
@@ -339,8 +429,14 @@ namespace cpstd {
         if (_size == _capacity) {
             return;
         }
-
+        if (_size == 0) {
+            DestroyBuffer();
+            return;
+        }
         pointer newBuffer = cpstd::allocator_traits<allocator_type>::allocate(_alloc, _size + 1);
+        if (newBuffer == nullptr) {
+            return;
+        }
         for (size_type i = 0; i < _size; ++i) {
             newBuffer[i] = _buffer[i];
         }
@@ -371,9 +467,6 @@ namespace cpstd {
     typename basic_string<CharT, Traits, Alloc>::reference
     basic_string<CharT, Traits, Alloc>::at(size_type pos) {
         if (pos >= _size) {
-        #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
-            throw "cpstd::basic_string::at out of range";
-        #endif
         }
         return _buffer[pos];
     }
@@ -382,9 +475,6 @@ namespace cpstd {
     typename basic_string<CharT, Traits, Alloc>::const_reference
     basic_string<CharT, Traits, Alloc>::at(size_type pos) const {
         if (pos >= _size) {
-        #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
-            throw "cpstd::basic_string::at out of range";
-        #endif
         }
         return _buffer[pos];
     }
@@ -468,33 +558,42 @@ namespace cpstd {
     template <class CharT, class Traits, class Alloc>
     basic_string<CharT, Traits, Alloc>&
     basic_string<CharT, Traits, Alloc>::append(const CharT* s, size_type n) {
-        if (!s || n == 0) {
+        if (!s || n == 0 || n > max_size() - _size) {
             return *this;
         }
-
-        EnsureCapacity(_size + n);
+        // `s` may point into this string; keep its offset across reallocation.
+        const bool inside = PointsInside(s);
+        const size_type offset = inside ? static_cast<size_type>(s - _buffer) : 0;
+        if (!EnsureCapacity(_size + n)) {
+            return *this;
+        }
+        if (inside) {
+            s = _buffer + offset;
+        }
         for (size_type i = 0; i < n; ++i) {
             _buffer[_size + i] = s[i];
         }
         _size += n;
-        _buffer[_size] = CharT();
+        Terminate();
         return *this;
     }
 
     template <class CharT, class Traits, class Alloc>
     basic_string<CharT, Traits, Alloc>&
     basic_string<CharT, Traits, Alloc>::append(size_type n, CharT c) {
-        EnsureCapacity(_size + n);
+        if (n == 0 || n > max_size() - _size || !EnsureCapacity(_size + n)) {
+            return *this;
+        }
         for (size_type i = 0; i < n; ++i) {
             _buffer[_size + i] = c;
         }
         _size += n;
-        _buffer[_size] = CharT();
+        Terminate();
         return *this;
     }
 
     template <class CharT, class Traits, class Alloc>
-    template <class InputIterator>
+    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type>
     basic_string<CharT, Traits, Alloc>&
     basic_string<CharT, Traits, Alloc>::append(InputIterator first, InputIterator last) {
         for (; first != last; ++first) {
@@ -511,9 +610,11 @@ namespace cpstd {
 
     template <class CharT, class Traits, class Alloc>
     void basic_string<CharT, Traits, Alloc>::push_back(CharT c) {
-        EnsureCapacity(_size + 1);
+        if (_size == max_size() || !EnsureCapacity(_size + 1)) {
+            return;
+        }
         _buffer[_size++] = c;
-        _buffer[_size] = CharT();
+        Terminate();
     }
 
     template <class CharT, class Traits, class Alloc>
@@ -561,7 +662,7 @@ namespace cpstd {
     }
 
     template <class CharT, class Traits, class Alloc>
-    template <class InputIterator>
+    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type>
     basic_string<CharT, Traits, Alloc>&
     basic_string<CharT, Traits, Alloc>::assign(InputIterator first, InputIterator last) {
         clear();
@@ -617,22 +718,28 @@ namespace cpstd {
             pos = _size;
         }
 
-        if (!s || n == 0) {
+        if (!s || n == 0 || n > max_size() - _size) {
             return *this;
         }
-
-        EnsureCapacity(_size + n);
-
+        if (PointsInside(s)) {
+            // Shifting would move the source; insert from a copy instead.
+            const basic_string copy(s, n, _alloc);
+            if (copy.size() != n) {
+                return *this;
+            }
+            return insert(pos, copy.data(), n);
+        }
+        if (!EnsureCapacity(_size + n)) {
+            return *this;
+        }
         for (size_type i = _size + 1; i > pos; --i) {
             _buffer[i + n - 1] = _buffer[i - 1];
         }
-
         for (size_type i = 0; i < n; ++i) {
             _buffer[pos + i] = s[i];
         }
-
         _size += n;
-        _buffer[_size] = CharT();
+        Terminate();
         return *this;
     }
 
@@ -643,8 +750,9 @@ namespace cpstd {
             pos = _size;
         }
 
-        EnsureCapacity(_size + n);
-
+        if (n == 0 || n > max_size() - _size || !EnsureCapacity(_size + n)) {
+            return *this;
+        }
         for (size_type i = _size + 1; i > pos; --i) {
             _buffer[i + n - 1] = _buffer[i - 1];
         }
@@ -654,13 +762,13 @@ namespace cpstd {
         }
 
         _size += n;
-        _buffer[_size] = CharT();
+        Terminate();
         return *this;
     }
 
     template <class CharT, class Traits, class Alloc>
     typename basic_string<CharT, Traits, Alloc>::iterator
-    basic_string<CharT, Traits, Alloc>::insert(const_iterator p, size_type n, CharT c) {
+    basic_string<CharT, Traits, Alloc>::IterInsert(const_iterator p, size_type n, CharT c) {
         size_type pos = static_cast<size_type>(p - cbegin());
         insert(pos, n, c);
         return begin() + pos;
@@ -675,7 +783,7 @@ namespace cpstd {
     }
 
     template <class CharT, class Traits, class Alloc>
-    template <class InputIterator>
+    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type>
     typename basic_string<CharT, Traits, Alloc>::iterator
     basic_string<CharT, Traits, Alloc>::insert(iterator p, InputIterator first, InputIterator last) {
         size_type pos = static_cast<size_type>(p - begin());
@@ -718,7 +826,7 @@ namespace cpstd {
 
     template <class CharT, class Traits, class Alloc>
     typename basic_string<CharT, Traits, Alloc>::iterator
-    basic_string<CharT, Traits, Alloc>::erase(const_iterator p) {
+    basic_string<CharT, Traits, Alloc>::IterErase(const_iterator p) {
         size_type pos = static_cast<size_type>(p - cbegin());
         erase(pos, 1);
         return begin() + pos;
@@ -726,7 +834,7 @@ namespace cpstd {
 
     template <class CharT, class Traits, class Alloc>
     typename basic_string<CharT, Traits, Alloc>::iterator
-    basic_string<CharT, Traits, Alloc>::erase(const_iterator first, const_iterator last) {
+    basic_string<CharT, Traits, Alloc>::IterErase(const_iterator first, const_iterator last) {
         size_type pos = static_cast<size_type>(first - cbegin());
         size_type len = static_cast<size_type>(last - first);
         erase(pos, len);
@@ -742,7 +850,7 @@ namespace cpstd {
 
     template <class CharT, class Traits, class Alloc>
     basic_string<CharT, Traits, Alloc>&
-    basic_string<CharT, Traits, Alloc>::replace(const_iterator i1, const_iterator i2, const basic_string& str) {
+    basic_string<CharT, Traits, Alloc>::IterReplace(const_iterator i1, const_iterator i2, const basic_string& str) {
         size_type pos = static_cast<size_type>(i1 - cbegin());
         size_type len = static_cast<size_type>(i2 - i1);
         erase(pos, len);
@@ -765,7 +873,7 @@ namespace cpstd {
 
     template <class CharT, class Traits, class Alloc>
     basic_string<CharT, Traits, Alloc>&
-    basic_string<CharT, Traits, Alloc>::replace(const_iterator i1, const_iterator i2, const CharT* s) {
+    basic_string<CharT, Traits, Alloc>::IterReplace(const_iterator i1, const_iterator i2, const CharT* s) {
         size_type pos = static_cast<size_type>(i1 - cbegin());
         size_type len = static_cast<size_type>(i2 - i1);
         erase(pos, len);
@@ -781,7 +889,7 @@ namespace cpstd {
 
     template <class CharT, class Traits, class Alloc>
     basic_string<CharT, Traits, Alloc>&
-    basic_string<CharT, Traits, Alloc>::replace(const_iterator i1, const_iterator i2, const CharT* s, size_type n) {
+    basic_string<CharT, Traits, Alloc>::IterReplace(const_iterator i1, const_iterator i2, const CharT* s, size_type n) {
         size_type pos = static_cast<size_type>(i1 - cbegin());
         size_type len = static_cast<size_type>(i2 - i1);
         erase(pos, len);
@@ -797,7 +905,7 @@ namespace cpstd {
 
     template <class CharT, class Traits, class Alloc>
     basic_string<CharT, Traits, Alloc>&
-    basic_string<CharT, Traits, Alloc>::replace(const_iterator i1, const_iterator i2, size_type n, CharT c) {
+    basic_string<CharT, Traits, Alloc>::IterReplace(const_iterator i1, const_iterator i2, size_type n, CharT c) {
         size_type pos = static_cast<size_type>(i1 - cbegin());
         size_type len = static_cast<size_type>(i2 - i1);
         erase(pos, len);
@@ -805,7 +913,7 @@ namespace cpstd {
     }
 
     template <class CharT, class Traits, class Alloc>
-    template <class InputIterator>
+    template <class InputIterator, typename cpstd::enable_if<!cpstd::is_integral<InputIterator>::value, int>::type>
     basic_string<CharT, Traits, Alloc>&
     basic_string<CharT, Traits, Alloc>::replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last) {
         size_type pos = static_cast<size_type>(i1 - cbegin());

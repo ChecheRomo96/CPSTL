@@ -2,20 +2,47 @@
 #define CPSTL_ALLOCATOR_CLASS_H
 
     #include <CPSTL_BuildSettings.h>
-    //#include <CPmemory.h>
     #include <CPlimits.h>
     #include <CPutility.h>
-    //#include <CPfunctional.h>
     #include "CPSTL_types.h"
 
-    #if defined(CPSTL_USING_STL) || defined(CPSTL_USING_STD_ALLOCATION)
+    #if defined(CPSTL_USING_STD_ALLOCATION)
         #include <memory>
     #else
-        #include <cstdlib>
+        #include <stdlib.h>
     #endif
-    
+
+    // Placement new is needed to construct elements in raw storage. Hosted
+    // toolchains and the Arduino cores provide it through <new>; bare AVR-GCC
+    // provides no C++ headers, so CPSTL declares the standard inline form.
+    #if defined(__has_include)
+        #if __has_include(<new>)
+            #include <new>
+            #define CPSTL_DETAIL_HAS_NEW_HEADER 1
+        #elif __has_include(<new.h>)
+            #include <new.h>
+            #define CPSTL_DETAIL_HAS_NEW_HEADER 1
+        #endif
+    #endif
+
+    #if !defined(CPSTL_DETAIL_HAS_NEW_HEADER)
+        inline void* operator new(size_t, void* place) noexcept { return place; }
+        inline void operator delete(void*, void*) noexcept {}
+    #endif
+
     namespace cpstd{
-    #if defined(CPSTL_USING_STL) || defined(CPSTL_USING_STD_ALLOCATION)
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //! @brief Default allocator.
+        //!
+        //! With CPSTL_USING_STD_ALLOCATION this is `std::allocator`. Otherwise
+        //! it allocates raw storage with `malloc` (CPSTL_USING_C_ALLOCATION) or
+        //! `::operator new(std::nothrow)` (CPSTL_USING_CPP_ALLOCATION) and
+        //! returns `nullptr` on failure or size overflow instead of throwing, so
+        //! containers can leave themselves unchanged. Elements are constructed
+        //! with placement new and destroyed explicitly.
+
+        #if defined(CPSTL_USING_STD_ALLOCATION)
 
             template <typename T>
             constexpr T* addressof(T& arg) noexcept {
@@ -27,6 +54,7 @@
 
             template <typename T>
             using allocator_traits = std::allocator_traits<T>;
+
         #else
 
             template <typename T>
@@ -52,70 +80,65 @@
                     using other = allocator<U>;
                 };
 
-                // Default constructor
                 allocator() noexcept = default;
-
-                // Copy constructor
                 allocator(const allocator& alloc) noexcept = default;
-
-                // Template copy constructor for different allocator types
                 template <class U>
-                allocator(const allocator<U>& alloc) noexcept {}
-
+                allocator(const allocator<U>&) noexcept {}
                 ~allocator() {}
 
                 pointer address(reference x) const noexcept {
-                    // Get the address of the referenced object x
                     return cpstd::addressof(x);
                 }
 
                 const_pointer address(const_reference x) const noexcept {
-                    // Get the address of the const referenced object x
                     return cpstd::addressof(x);
                 }
 
-                pointer allocate(size_type n, const_pointer hint = 0) {
+                //! @brief Returns raw storage for `n` objects, or `nullptr` when
+                //! `n` is zero, the size overflows, or memory is exhausted.
+                pointer allocate(size_type n, const_pointer hint = 0) noexcept {
                     (void)hint;
+                    if (n == 0 || n > max_size()) {
+                        return nullptr;
+                    }
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
-                    return static_cast<pointer>(::operator new(n * sizeof(T)));
-                #elif defined(CPSTL_USING_C_ALLOCATION)
-                    return static_cast<pointer>(calloc(n , sizeof(T)));
+                    return static_cast<pointer>(::operator new(n * sizeof(T), std::nothrow));
                 #else
-                    // Unknown allocation method
-                    #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
+                    return static_cast<pointer>(malloc(n * sizeof(T)));
                 #endif
                 }
 
-                void deallocate(pointer ptr, size_type n) {
+                void deallocate(pointer ptr, size_type n) noexcept {
+                    (void)n;
+                    if (ptr == nullptr) {
+                        return;
+                    }
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
-                    ::operator delete(ptr);
-                #elif defined(CPSTL_USING_C_ALLOCATION)
-                    free(ptr);
+                    ::operator delete(static_cast<void*>(ptr));
                 #else
-                    // Unknown deallocation method or error handling
-                    #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
+                    free(static_cast<void*>(ptr));
                 #endif
                 }
 
-                // Maximum size possible to allocate
                 size_type max_size() const noexcept {
                     return cpstd::numeric_limits<size_type>::max() / sizeof(value_type);
                 }
 
                 template<typename... Args>
                 void construct(pointer ptr, Args&&... args) {
-                    new (ptr) value_type(cpstd::forward<Args>(args)...);
+                    ::new (static_cast<void*>(ptr)) value_type(cpstd::forward<Args>(args)...);
                 }
 
                 static void destroy(pointer ptr) {
-                #if defined(CPSTL_USING_CPP_ALLOCATION) || defined(CPSTL_USING_C_ALLOCATION)
                     ptr->~value_type();
-                #else
-                    #error "Please specify the memory allocation mode (CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_C_ALLOCATION)"
-                #endif
                 }
             };
 
+            template <typename T, typename U>
+            bool operator==(const allocator<T>&, const allocator<U>&) noexcept { return true; }
+
+            template <typename T, typename U>
+            bool operator!=(const allocator<T>&, const allocator<U>&) noexcept { return false; }
 
             template <typename Alloc>
             struct allocator_traits {

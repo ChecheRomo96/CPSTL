@@ -1,0 +1,6 @@
+#ifndef CPSTL_STACK_HEADER
+#define CPSTL_STACK_HEADER
+
+    #include <CPstack.h>
+
+#endif//CPSTL_STACK_HEADER

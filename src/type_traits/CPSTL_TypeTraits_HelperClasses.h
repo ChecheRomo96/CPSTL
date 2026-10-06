@@ -28,6 +28,14 @@
             constexpr T operator()() const noexcept { return v; }
         };
 
+        #if CPSTL_CPLUSPLUS < 201703L
+            // Pre-C++17 static constexpr members need one out-of-class
+            // definition when odr-used (bound to a reference, as test
+            // frameworks do); C++17 makes them implicitly inline.
+            template <class T, T v>
+            constexpr T integral_constant<T, v>::value;
+        #endif
+
         template< bool B >
         using bool_constant = cpstd::integral_constant<bool, B>;
 
