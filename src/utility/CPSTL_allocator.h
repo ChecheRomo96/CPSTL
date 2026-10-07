@@ -12,6 +12,23 @@
         #include <stdlib.h>
     #endif
 
+    // Some Arm newlib configurations intentionally omit malloc/free from
+    // <stdlib.h> when compiling freestanding C++.  CPSTL's C allocator is a
+    // hook to those C-runtime symbols, so keep their declarations available
+    // without requiring the C++ standard library headers.
+    extern "C" {
+        void* malloc(decltype(sizeof(0)));
+        void free(void*);
+    }
+
+    #if defined(_MSC_VER)
+        #define CPSTL_DETAIL_NOINLINE __declspec(noinline)
+    #elif defined(__GNUC__) || defined(__clang__)
+        #define CPSTL_DETAIL_NOINLINE __attribute__((noinline))
+    #else
+        #define CPSTL_DETAIL_NOINLINE
+    #endif
+
     // Placement new is needed to construct elements in raw storage. Hosted
     // toolchains and the Arduino cores provide it through <new>; bare AVR-GCC
     // provides no C++ headers, so CPSTL declares the standard inline form.
@@ -104,7 +121,7 @@
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
                     return static_cast<pointer>(::operator new(n * sizeof(T), std::nothrow));
                 #else
-                    return static_cast<pointer>(malloc(n * sizeof(T)));
+                    return static_cast<pointer>(::malloc(n * sizeof(T)));
                 #endif
                 }
 
@@ -116,7 +133,7 @@
                 #if defined(CPSTL_USING_CPP_ALLOCATION)
                     ::operator delete(static_cast<void*>(ptr));
                 #else
-                    free(static_cast<void*>(ptr));
+                    ::free(static_cast<void*>(ptr));
                 #endif
                 }
 
@@ -125,7 +142,7 @@
                 }
 
                 template<typename... Args>
-                void construct(pointer ptr, Args&&... args) {
+                CPSTL_DETAIL_NOINLINE void construct(pointer ptr, Args&&... args) {
                     ::new (static_cast<void*>(ptr)) value_type(cpstd::forward<Args>(args)...);
                 }
 
@@ -180,5 +197,7 @@
 
         #endif
     }
+
+    #undef CPSTL_DETAIL_NOINLINE
 
 #endif//CPSTL_ALLOCATOR_CLASS_H

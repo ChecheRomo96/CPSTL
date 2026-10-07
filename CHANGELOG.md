@@ -3,6 +3,15 @@
 This file records user-visible changes to CPSTL. Release dates use the
 `YYYY-MM-DD` format.
 
+## [1.1.3] - 2026-10-07
+
+### Fixed
+
+- The C allocator now declares its `malloc`/`free` hooks explicitly for
+  freestanding Arm C++ configurations, where newlib intentionally omits those
+  declarations from `<stdlib.h>`. This restores compilation of CPSTL consumers
+  while retaining the embedding application's control of the allocator.
+
 ## [1.1.2] - 2026-10-07
 
 ### Changed
