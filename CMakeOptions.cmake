@@ -14,7 +14,7 @@
 
     option(CPSTL_USING_STL "Alias every cpstd facility to std (hosted targets only)" OFF)
 
-    set(CPSTL_ALLOCATION "CPP" CACHE STRING
+    set(CPSTL_ALLOCATION "C" CACHE STRING
         "cpstd::allocator backend: C (malloc/free), CPP (operator new nothrow) or STD (std::allocator)")
     set_property(CACHE CPSTL_ALLOCATION PROPERTY STRINGS C CPP STD)
 

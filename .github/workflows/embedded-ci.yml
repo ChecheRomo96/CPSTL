@@ -76,7 +76,7 @@ jobs:
           retention-days: 7
 
   arduino:
-    name: Arduino AVR / Uno and Mega
+    name: Arduino / AVR and ESP32 compile
     runs-on: ubuntu-24.04
     timeout-minutes: 20
 
@@ -87,15 +87,22 @@ jobs:
       - name: Install arduino-cli
         uses: arduino/setup-arduino-cli@v2
 
-      - name: Install Arduino AVR core
+      - name: Install Arduino AVR and ESP32 cores
         shell: bash
         run: |
           set -euo pipefail
           arduino-cli core update-index
           arduino-cli core install arduino:avr@1.8.6
+          arduino-cli core install esp32:esp32@3.3.3
           arduino-cli version
           arduino-cli core list
 
-      - name: Compile every Arduino sketch
+      - name: Compile every Arduino sketch for AVR
         shell: bash
-        run: ./scripts/test-arduino.sh
+        run: ./scripts/test-arduino.sh --fqbn arduino:avr:uno --fqbn arduino:avr:mega
+
+      # ESP32 enables CPSTL_USING_STL in CPSTL_UserSetup.h, exercising the
+      # hosted-Arduino path independently of the AVR C-allocation path above.
+      - name: Compile every Arduino sketch for ESP32
+        shell: bash
+        run: ./scripts/test-arduino.sh --fqbn esp32:esp32:esp32

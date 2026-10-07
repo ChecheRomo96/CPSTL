@@ -48,6 +48,11 @@ void setup() {
     }
     Serial.print("sum via cpstd::function: ");
     Serial.println(total);
+
+    const bool passed = steps.size() == 7 && steps[0] == 9 &&
+                        steps[6] == 1 && name == "pattern-7" && total == 25;
+    Serial.print("CPSTL hardware smoke: ");
+    Serial.println(passed ? "PASS" : "FAIL");
 }
 
 void loop() {
