@@ -7,251 +7,106 @@
         #define CPSTL_CPLUSPLUS __cplusplus
     #endif
 
+    #if CPSTL_CPLUSPLUS < 201103L
+        #error "CPSTL requires C++11 or newer"
+    #endif
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // CPSTL Version
 
         #ifndef CPSTL_VERSION
-            #define CPSTL_VERSION "1.0.0"
+            #define CPSTL_VERSION "1.1.0"
         #endif
 
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Arduino IDE
+    // IDE-driven builds (no CMake): pick modules and allocation in CPSTL_UserSetup.h
 
         #if defined(ARDUINO)
             #include <Arduino.h>
             #include "CPSTL_UserSetup.h"
         #endif
 
-    //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // PSoC Creator
-
         #if defined(PSOC_CREATOR)
             #include "CPSTL_UserSetup.h"
         #endif
 
     //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // AVR
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Platform helpers
 
         #if defined(__AVR__) || defined(__avr__)
-
             #include <avr/pgmspace.h>
-            #include <stdarg.h>
-
             #ifndef PROGMEM_MACRO
                 #define PROGMEM_MACRO PROGMEM
             #endif
-
-            #if defined(CPSTL_VECTOR_ENABLED)
-
-                // AVR: default vector allocation mode -> C allocation
-                #if !defined(CPSTL_VECTOR_USING_STD_ALLOCATION) && \
-                    !defined(CPSTL_VECTOR_USING_CPP_ALLOCATION) && \
-                    !defined(CPSTL_VECTOR_USING_C_ALLOCATION)
-                    #define CPSTL_VECTOR_USING_C_ALLOCATION
-                #endif
-
-                // Force-disable unsupported modes on AVR
-                #if defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
-                    #undef CPSTL_VECTOR_USING_CPP_ALLOCATION
-                    #define CPSTL_VECTOR_USING_C_ALLOCATION
-                #endif
-
-                #if defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
-                    #undef CPSTL_VECTOR_USING_STD_ALLOCATION
-                    #define CPSTL_VECTOR_USING_C_ALLOCATION
-                #endif
-            #endif
-
-            #if defined(CPSTL_STRING_ENABLED)
-
-                // AVR: default string allocation mode -> C allocation
-                #if !defined(CPSTL_STRING_USING_STD_ALLOCATION) && \
-                    !defined(CPSTL_STRING_USING_CPP_ALLOCATION) && \
-                    !defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    #define CPSTL_STRING_USING_C_ALLOCATION
-                #endif
-
-                // Force-disable unsupported modes on AVR
-                #if defined(CPSTL_STRING_USING_CPP_ALLOCATION)
-                    #undef CPSTL_STRING_USING_CPP_ALLOCATION
-                    #define CPSTL_STRING_USING_C_ALLOCATION
-                #endif
-
-                #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
-                    #undef CPSTL_STRING_USING_STD_ALLOCATION
-                    #define CPSTL_STRING_USING_C_ALLOCATION
-                #endif
-            #endif
-
         #else
             #ifndef PROGMEM_MACRO
                 #define PROGMEM_MACRO
             #endif
         #endif
 
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ESP32
-
-        #if defined(ESP32)
-
-            #include <cstdarg>
-
-            #if defined(CPSTL_VECTOR_ENABLED)
-
-                // ESP32: default vector allocation mode -> STL allocation
-                #if !defined(CPSTL_VECTOR_USING_STD_ALLOCATION) && \
-                    !defined(CPSTL_VECTOR_USING_CPP_ALLOCATION) && \
-                    !defined(CPSTL_VECTOR_USING_C_ALLOCATION)
-                    #define CPSTL_VECTOR_USING_STD_ALLOCATION
-                #endif
-
-                // Prefer STL allocation on ESP32
-                #if defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
-                    #undef CPSTL_VECTOR_USING_CPP_ALLOCATION
-                    #define CPSTL_VECTOR_USING_STD_ALLOCATION
-                #endif
-
-                #if defined(CPSTL_VECTOR_USING_C_ALLOCATION)
-                    #undef CPSTL_VECTOR_USING_C_ALLOCATION
-                    #define CPSTL_VECTOR_USING_STD_ALLOCATION
-                #endif
-            #endif
-
-            #if defined(CPSTL_STRING_ENABLED)
-
-                // ESP32: default string allocation mode -> STL allocation
-                #if !defined(CPSTL_STRING_USING_STD_ALLOCATION) && \
-                    !defined(CPSTL_STRING_USING_CPP_ALLOCATION) && \
-                    !defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    #define CPSTL_STRING_USING_STD_ALLOCATION
-                #endif
-
-                // Prefer STL allocation on ESP32
-                #if defined(CPSTL_STRING_USING_CPP_ALLOCATION)
-                    #undef CPSTL_STRING_USING_CPP_ALLOCATION
-                    #define CPSTL_STRING_USING_STD_ALLOCATION
-                #endif
-
-                #if defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    #undef CPSTL_STRING_USING_C_ALLOCATION
-                    #define CPSTL_STRING_USING_STD_ALLOCATION
-                #endif
-            #endif
-
+        #ifndef INLINE_MACRO
+            #define INLINE_MACRO
         #endif
 
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // PSoC Creator
+    // STL mode
+    //
+    // CPSTL_USING_STL turns every cpstd facility into an alias of its std
+    // counterpart. It requires a hosted standard library, so it is rejected on
+    // AVR, whose toolchain ships none.
 
-        #if defined(PSOC_CREATOR)
-            #include <cstring>
-            #include <cstdint>
-            #include <stdarg.h>
-
-            #ifndef INLINE_MACRO
-                #define INLINE_MACRO
-            #endif
-        #else
-            #ifndef INLINE_MACRO
-                #define INLINE_MACRO
-            #endif
+        #if defined(CPSTL_USING_STL) && (defined(__AVR__) || defined(__avr__))
+            #error "CPSTL_USING_STL needs a C++ standard library, which AVR-GCC does not provide"
         #endif
 
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Desktop targets
+    // Allocation mode used by cpstd::allocator (one of the three)
+    //
+    //   CPSTL_USING_C_ALLOCATION    malloc/free; works without operator new (AVR)
+    //   CPSTL_USING_CPP_ALLOCATION  ::operator new(nothrow)/::operator delete
+    //   CPSTL_USING_STD_ALLOCATION  std::allocator (hosted targets only)
+    //
+    // When none is chosen, AVR uses C allocation and every other target uses
+    // C++ allocation. STL mode always uses std::allocator.
 
-        #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__APPLE__) || defined(__linux__)
+        #if defined(CPSTL_USING_STL) && !defined(CPSTL_USING_STD_ALLOCATION)
+            #undef CPSTL_USING_C_ALLOCATION
+            #undef CPSTL_USING_CPP_ALLOCATION
+            #define CPSTL_USING_STD_ALLOCATION
+        #endif
 
-            #include <cstdarg>
-            #include <cstdlib>
-            #include <cstring>
-            #include <cstdint>
-
-            #if defined(CPSTL_VECTOR_ENABLED)
-
-                // Desktop default vector allocation mode
-                #if !defined(CPSTL_VECTOR_USING_STD_ALLOCATION) && \
-                    !defined(CPSTL_VECTOR_USING_CPP_ALLOCATION) && \
-                    !defined(CPSTL_VECTOR_USING_C_ALLOCATION)
-                    #define CPSTL_VECTOR_USING_STD_ALLOCATION
-                #endif
-
-                #if defined(CPSTL_VECTOR_USING_STD_ALLOCATION)
-                    #include <vector>
-                #elif defined(CPSTL_VECTOR_USING_C_ALLOCATION)
-                    #include <cstdlib>
-                #endif
+        #if !defined(CPSTL_USING_C_ALLOCATION) && \
+            !defined(CPSTL_USING_CPP_ALLOCATION) && \
+            !defined(CPSTL_USING_STD_ALLOCATION)
+            #if defined(__AVR__) || defined(__avr__)
+                #define CPSTL_USING_C_ALLOCATION
+            #else
+                #define CPSTL_USING_CPP_ALLOCATION
             #endif
+        #endif
 
-            #if defined(CPSTL_STRING_ENABLED)
+        #if (defined(CPSTL_USING_C_ALLOCATION) + defined(CPSTL_USING_CPP_ALLOCATION) + \
+             defined(CPSTL_USING_STD_ALLOCATION)) != 1
+            #error "Define exactly one of CPSTL_USING_C_ALLOCATION, CPSTL_USING_CPP_ALLOCATION or CPSTL_USING_STD_ALLOCATION"
+        #endif
 
-                // Desktop default string allocation mode
-                #if !defined(CPSTL_STRING_USING_STD_ALLOCATION) && \
-                    !defined(CPSTL_STRING_USING_CPP_ALLOCATION) && \
-                    !defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    #define CPSTL_STRING_USING_STD_ALLOCATION
-                #endif
-
-                #if defined(CPSTL_STRING_USING_STD_ALLOCATION)
-                    #include <string>
-                    #include <sstream>
-                    #include <iostream>
-                #elif defined(CPSTL_STRING_USING_C_ALLOCATION)
-                    #include <cstring>
-                    #include <cstdlib>
-                #endif
-            #endif
-
+        #if defined(CPSTL_USING_STD_ALLOCATION) && (defined(__AVR__) || defined(__avr__))
+            #error "CPSTL_USING_STD_ALLOCATION needs std::allocator, which AVR-GCC does not provide"
         #endif
 
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Validation: vector allocation mode
-
-        #if defined(CPSTL_VECTOR_ENABLED)
-
-            #if defined(CPSTL_VECTOR_USING_STD_ALLOCATION) && defined(CPSTL_VECTOR_USING_CPP_ALLOCATION)
-                #error "CPSTL vector allocation mode conflict: STD and CPP allocation are both defined"
-            #endif
-
-            #if defined(CPSTL_VECTOR_USING_STD_ALLOCATION) && defined(CPSTL_VECTOR_USING_C_ALLOCATION)
-                #error "CPSTL vector allocation mode conflict: STD and C allocation are both defined"
-            #endif
-
-            #if defined(CPSTL_VECTOR_USING_CPP_ALLOCATION) && defined(CPSTL_VECTOR_USING_C_ALLOCATION)
-                #error "CPSTL vector allocation mode conflict: CPP and C allocation are both defined"
-            #endif
-
-        #endif
-
+    // Exceptions
     //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Validation: string allocation mode
-
-        #if defined(CPSTL_STRING_ENABLED)
-
-            #if defined(CPSTL_STRING_USING_STD_ALLOCATION) && defined(CPSTL_STRING_USING_CPP_ALLOCATION)
-                #error "CPSTL string allocation mode conflict: STD and CPP allocation are both defined"
-            #endif
-
-            #if defined(CPSTL_STRING_USING_STD_ALLOCATION) && defined(CPSTL_STRING_USING_C_ALLOCATION)
-                #error "CPSTL string allocation mode conflict: STD and C allocation are both defined"
-            #endif
-
-            #if defined(CPSTL_STRING_USING_CPP_ALLOCATION) && defined(CPSTL_STRING_USING_C_ALLOCATION)
-                #error "CPSTL string allocation mode conflict: CPP and C allocation are both defined"
-            #endif
-
-        #endif
+    // Without CPSTL_EXCEPTIONS_ENABLED, an allocation failure leaves the
+    // container unchanged (see each container's documentation) instead of
+    // throwing.
 
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#endif // CPSTL_BUILD_SETTINGS_H
+#endif//CPSTL_BUILD_SETTINGS_H

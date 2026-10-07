@@ -9,7 +9,9 @@
         template <typename T> using is_abstract = std::is_abstract<T>;
         template <typename T> using is_const = std::is_const<T>;
         template <typename T> using is_empty = std::is_empty<T>;
-        template <typename T> using is_pod = std::is_pod<T>;
+        // std::is_pod is deprecated since C++20; this is its definition.
+        template <typename T> struct is_pod
+            : std::integral_constant<bool, std::is_standard_layout<T>::value && std::is_trivial<T>::value> {};
         template <typename T> using is_polymorphic = std::is_polymorphic<T>;
         template <typename T> using is_standard_layout = std::is_standard_layout<T>;
         template <typename T> using is_trivial = std::is_trivial<T>;
@@ -27,13 +29,12 @@
 
         
         template<typename T>
-        struct is_unsigned {
-            #if defined(__is_unsigned)
-                static constexpr bool value = __is_unsigned(T);
-            #else
-                static constexpr bool value = ( T(0) < T(-1) );
-            #endif
-        };
+        struct is_unsigned
+        #if defined(__is_unsigned)
+            : cpstd::integral_constant<bool, __is_unsigned(T)> {};
+        #else
+            : cpstd::integral_constant<bool, ( T(0) < T(-1) )> {};
+        #endif
 
 
     #endif

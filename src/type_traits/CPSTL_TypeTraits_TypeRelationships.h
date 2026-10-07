@@ -46,18 +46,11 @@ namespace cpstd {
 
 #else
 
+    // The compiler intrinsic (GCC, Clang, MSVC, AVR-GCC) matches the standard:
+    // false for non-class types, true for private or ambiguous bases and for
+    // is_base_of<T, T> when T is a class.
     template <class Base, class Derived>
-    struct is_base_of {
-    private:
-        static true_type  test(Base*);
-        static false_type test(...);
-
-        static Derived* get();
-
-    public:
-        static const bool value = decltype(test(get()))::value;
-        typedef integral_constant<bool, value> type;
-    };
+    struct is_base_of : integral_constant<bool, __is_base_of(Base, Derived)> {};
 
 #endif
 
@@ -78,8 +71,9 @@ namespace cpstd {
 
 #else
 
+    namespace detail {
     template <class From, class To>
-    struct is_convertible {
+    struct is_convertible_impl {
     private:
         static From&& Declval() noexcept;
         static void TestConvertible(To);
@@ -94,9 +88,13 @@ namespace cpstd {
         static false_type test(...);
 
     public:
-        static const bool value = decltype(test<From, To>(0))::value;
-        typedef integral_constant<bool, value> type;
+        static constexpr bool value = decltype(test<From, To>(0))::value;
     };
+    } // namespace detail
+
+    template <class From, class To>
+    struct is_convertible
+        : integral_constant<bool, detail::is_convertible_impl<From, To>::value> {};
 
 #endif
 
@@ -120,8 +118,9 @@ namespace cpstd {
 
 #else
 
+    namespace detail {
     template <class Fn, class... Args>
-    struct is_invocable {
+    struct is_invocable_impl {
     private:
         template <class T>
         static T&& Declval() noexcept;
@@ -136,9 +135,13 @@ namespace cpstd {
         static false_type test(...);
 
     public:
-        static const bool value = decltype(test<Fn, Args...>(0))::value;
-        typedef integral_constant<bool, value> type;
+        static constexpr bool value = decltype(test<Fn, Args...>(0))::value;
     };
+    } // namespace detail
+
+    template <class Fn, class... Args>
+    struct is_invocable
+        : integral_constant<bool, detail::is_invocable_impl<Fn, Args...>::value> {};
 
 #endif
 
@@ -160,8 +163,9 @@ namespace cpstd {
 
 #else
 
+    namespace detail {
     template <class Fn, class... Args>
-    struct is_nothrow_invocable {
+    struct is_nothrow_invocable_impl {
     private:
         template <class T>
         static T&& Declval() noexcept;
@@ -178,11 +182,14 @@ namespace cpstd {
         typedef decltype(test<Fn, Args...>(0)) result_type;
 
     public:
-        static const bool value =
+        static constexpr bool value =
             result_type::value && is_invocable<Fn, Args...>::value;
-
-        typedef integral_constant<bool, value> type;
     };
+    } // namespace detail
+
+    template <class Fn, class... Args>
+    struct is_nothrow_invocable
+        : integral_constant<bool, detail::is_nothrow_invocable_impl<Fn, Args...>::value> {};
 
 #endif
 
@@ -203,21 +210,28 @@ namespace cpstd {
 
 #else
 
+    namespace detail {
+    // Evaluates the noexcept check only when the conversion exists; asking
+    // noexcept() of an impossible conversion would be a hard error.
+    template <class From, class To, bool Convertible = is_convertible<From, To>::value>
+    struct is_nothrow_convertible_impl {
+        static constexpr bool value = false;
+    };
+
     template <class From, class To>
-    struct is_nothrow_convertible {
+    struct is_nothrow_convertible_impl<From, To, true> {
     private:
         static From&& Declval() noexcept;
-        static void TestConvertible(To);
-
-        static const bool convertible = is_convertible<From, To>::value;
+        static void TestConvertible(To) noexcept;
 
     public:
-        static const bool value =
-            convertible &&
-            noexcept(TestConvertible(Declval()));
-
-        typedef integral_constant<bool, value> type;
+        static constexpr bool value = noexcept(TestConvertible(Declval()));
     };
+    } // namespace detail
+
+    template <class From, class To>
+    struct is_nothrow_convertible
+        : integral_constant<bool, detail::is_nothrow_convertible_impl<From, To>::value> {};
 
 #endif
 

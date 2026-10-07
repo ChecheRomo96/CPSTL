@@ -598,12 +598,10 @@
                     return *this;
                 }
                 
-                friend bool operator==(const testClass& lhs, const testClass& rhs);
+                [[maybe_unused]] friend bool operator==(const testClass& lhs, const testClass& rhs) {
+                    return lhs.a == rhs.a;
+                }
             };
-
-            bool operator==(const testClass& lhs, const testClass& rhs) {
-                return lhs.a == rhs.a;
-            }
         }
 
         TEST(CPSTL_Vector_Modifiers, push_back_move) {

@@ -1,5 +1,5 @@
-#ifndef CPSTL_ITERATOR_CLASS_H
-#define CPSTL_ITERATOR_CLASS_H
+#ifndef CPSTL_ITERATOR_MODULE_H
+#define CPSTL_ITERATOR_MODULE_H
 
     #include <CPSTL_BuildSettings.h>
     #include <CPtype_traits.h>    
@@ -22,31 +22,79 @@
         #ifdef CPSTL_USING_STL
 
             using std::distance;
+            using std::advance;
+            using std::next;
+            using std::prev;
 
         #else
 
-            template<class It>
-            typename cpstd::iterator_traits<It>::difference_type
-            distance(It first, It last)
-            {
-                typedef typename cpstd::iterator_traits<It>::iterator_category category;
-                typedef typename cpstd::iterator_traits<It>::difference_type difference_type;
-
-                static_assert(
-                    cpstd::is_base_of<cpstd::input_iterator_tag, category>::value,
-                    "cpstd::distance requires at least an input iterator"
-                );
-
-                difference_type result = 0;
-                while (first != last) {
-                    ++first;
-                    ++result;
+            namespace detail {
+                template <class It>
+                typename cpstd::iterator_traits<It>::difference_type
+                distance(It first, It last, cpstd::input_iterator_tag) {
+                    typename cpstd::iterator_traits<It>::difference_type result = 0;
+                    for (; first != last; ++first) {
+                        ++result;
+                    }
+                    return result;
                 }
-                return result;
+
+                template <class It>
+                typename cpstd::iterator_traits<It>::difference_type
+                distance(It first, It last, cpstd::random_access_iterator_tag) {
+                    return last - first;
+                }
+
+                template <class It, class Distance>
+                void advance(It& it, Distance n, cpstd::input_iterator_tag) {
+                    for (; n > 0; --n) {
+                        ++it;
+                    }
+                }
+
+                template <class It, class Distance>
+                void advance(It& it, Distance n, cpstd::bidirectional_iterator_tag) {
+                    for (; n > 0; --n) {
+                        ++it;
+                    }
+                    for (; n < 0; ++n) {
+                        --it;
+                    }
+                }
+
+                template <class It, class Distance>
+                void advance(It& it, Distance n, cpstd::random_access_iterator_tag) {
+                    it += n;
+                }
+            }
+
+            //! @brief Number of increments from `first` to `last` (constant time
+            //! for random-access iterators).
+            template <class It>
+            typename cpstd::iterator_traits<It>::difference_type distance(It first, It last) {
+                return detail::distance(first, last, typename cpstd::iterator_traits<It>::iterator_category());
+            }
+
+            //! @brief Moves `it` by `n` (negative only for bidirectional iterators).
+            template <class It, class Distance>
+            void advance(It& it, Distance n) {
+                detail::advance(it, n, typename cpstd::iterator_traits<It>::iterator_category());
+            }
+
+            template <class It>
+            It next(It it, typename cpstd::iterator_traits<It>::difference_type n = 1) {
+                cpstd::advance(it, n);
+                return it;
+            }
+
+            template <class It>
+            It prev(It it, typename cpstd::iterator_traits<It>::difference_type n = 1) {
+                cpstd::advance(it, -n);
+                return it;
             }
 
         #endif
 
     }
 
-#endif//CPSTL_ITERATOR_CLASS_H
+#endif//CPSTL_ITERATOR_MODULE_H
