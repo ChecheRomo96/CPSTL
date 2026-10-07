@@ -1,0 +1,101 @@
+name: Embedded Build
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: embedded-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  avr:
+    name: AVR-GCC / ATmega328P / bare metal
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Install AVR toolchain and simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes ninja-build gcc-avr binutils-avr avr-libc simavr
+
+      - name: Report toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake --version
+          ninja --version
+          avr-g++ --version
+
+      # The library and the self-checking firmware must compile and link with
+      # C allocation and no C++ standard library, warnings as errors.
+      - name: Build Debug and Release
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./scripts/configure.sh atmega328p_avrgcc_avr5 --fresh
+          ./scripts/build.sh atmega328p_avrgcc_avr5 --config Debug --parallel 4
+          ./scripts/build.sh atmega328p_avrgcc_avr5 --config Release --parallel 4
+
+      # Runs the Release firmware on a simulated ATmega328P; it reports its
+      # verdict over USART0 and then sleeps with interrupts off, which ends
+      # the simulation.
+      - name: Run firmware under simavr
+        shell: bash
+        run: |
+          set -euo pipefail
+          firmware=build/atmega328p_avrgcc_avr5/bin/Release/CPSTLAvrSmoke.hex
+          timeout 60 simavr -m atmega328p -f 16000000 "$firmware" 2>&1 | tee simavr.log
+          grep -q "CPSTL AVR smoke: PASS" simavr.log
+
+      - name: Upload AVR firmware
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CPSTL-atmega328p-firmware
+          path: |
+            build/atmega328p_avrgcc_avr5/bin/*/CPSTLAvrSmoke.*
+            simavr.log
+          if-no-files-found: warn
+          retention-days: 7
+
+  arduino:
+    name: Arduino AVR / Uno and Mega
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install arduino-cli
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Arduino AVR core
+        shell: bash
+        run: |
+          set -euo pipefail
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr@1.8.6
+          arduino-cli version
+          arduino-cli core list
+
+      - name: Compile every Arduino sketch
+        shell: bash
+        run: ./scripts/test-arduino.sh

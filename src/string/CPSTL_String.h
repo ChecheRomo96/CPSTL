@@ -9,9 +9,6 @@
     #include <utility/CPSTL_Move.h>
     
 
-    #if defined(CPSTL_STRING_EXCEPTIONS_ENABLED) && defined(CPSTL_EXCEPTIONS_ENABLED)
-        #include <CPexception.h>           
-    #endif  
 
 
     #ifdef CPSTL_USING_STL
@@ -35,60 +32,34 @@
             using u16string = basic_string<char16_t>;
             using u32string = basic_string<char32_t>;
         #endif
-        // Convert from String functions
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Numeric conversions
+        //
+        // In STL mode these are the std functions (which throw on bad input).
+        // Otherwise they never throw: when no number can be read they return 0
+        // and set *idx to 0, and a value outside the result type saturates to
+        // its minimum or maximum. *idx receives the number of characters used.
 
-        int stoi (const cpstd::string&  str, size_t* idx = 0, int base = 10);
-        int stoi (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
+        int stoi (const cpstd::string& str, size_t* idx = nullptr, int base = 10);
+        long stol (const cpstd::string& str, size_t* idx = nullptr, int base = 10);
+        unsigned long stoul (const cpstd::string& str, size_t* idx = nullptr, int base = 10);
+        long long stoll (const cpstd::string& str, size_t* idx = nullptr, int base = 10);
+        unsigned long long stoull (const cpstd::string& str, size_t* idx = nullptr, int base = 10);
+        float stof (const cpstd::string& str, size_t* idx = nullptr);
+        double stod (const cpstd::string& str, size_t* idx = nullptr);
+        long double stold (const cpstd::string& str, size_t* idx = nullptr);
 
-        long stol (const cpstd::string&  str, size_t* idx = 0, int base = 10);
-        long stol (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
-
-        unsigned long stoul (const cpstd::string&  str, size_t* idx = 0, int base = 10);
-        unsigned long stoul (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
-
-        long long stoll (const cpstd::string&  str, size_t* idx = 0, int base = 10);
-        long long stoll (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
-
-        unsigned long long stoull (const cpstd::string&  str, size_t* idx = 0, int base = 10);
-        unsigned long long stoull (const cpstd::wstring& str, size_t* idx = 0, int base = 10);
-
-        float stof (const cpstd::string&  str, size_t* idx = 0);
-        float stof (const cpstd::wstring& str, size_t* idx = 0);
-
-        double stod (const cpstd::string&  str, size_t* idx = 0);
-        double stod (const cpstd::wstring& str, size_t* idx = 0);
-
-        long double stold (const cpstd::string&  str, size_t* idx = 0);
-        long double stold (const cpstd::wstring& str, size_t* idx = 0);
-
-
-        // Convert to String functions
-        
+        // Integers are written exactly; floating-point values use std::to_string's
+        // fixed six-decimal format ("3.140000"), rounded to nearest.
         cpstd::string to_string( int val );
         cpstd::string to_string( long val );
         cpstd::string to_string( long long val );
-
         cpstd::string to_string( unsigned val );
         cpstd::string to_string( unsigned long val );
         cpstd::string to_string( unsigned long long val );
-
         cpstd::string to_string (float val);
         cpstd::string to_string (double val);
-        cpstd::string to_string (long double val); 
-        
-
-        cpstd::wstring to_wstring( int val );
-        cpstd::wstring to_wstring( long val );
-        cpstd::wstring to_wstring( long long val );
-
-        cpstd::wstring to_wstring( unsigned val );
-        cpstd::wstring to_wstring( unsigned long val );
-        cpstd::wstring to_wstring( unsigned long long val );
-
-        cpstd::wstring to_wstring (float val);
-        cpstd::wstring to_wstring (double val);
-        cpstd::wstring to_wstring (long double val); 
-        
+        cpstd::string to_string (long double val);
 
     }
     

@@ -23,7 +23,7 @@ namespace {
         float b;
     };
 
-    int user_defined_function() { return 0; }
+    [[maybe_unused]] int user_defined_function() { return 0; }
 }
 
 TEST(CPSTL_TypeTraitsTest, RemoveConst) {
@@ -211,7 +211,8 @@ TEST(CPSTL_TypeTraitsTest, IsArray) {
 
     // Test case 6: Pointer types and references
     {
-        int* ptr_array = new int[8];
+        int storage[8] = {};
+        int* ptr_array = storage;
         int& ref_array = *ptr_array;
         ASSERT_FALSE((cpstd::is_array_v<decltype(ptr_array)>));
         ASSERT_FALSE((cpstd::is_array_v<decltype(ref_array)>));

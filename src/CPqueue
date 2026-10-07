@@ -1,0 +1,6 @@
+#ifndef CPSTL_QUEUE_HEADER
+#define CPSTL_QUEUE_HEADER
+
+    #include <CPqueue.h>
+
+#endif//CPSTL_QUEUE_HEADER

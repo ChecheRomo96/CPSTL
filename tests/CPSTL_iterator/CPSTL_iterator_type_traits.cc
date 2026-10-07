@@ -191,6 +191,9 @@ TEST(CPSTL_IteratorTraitsTest, ConstRawPointerSpecialization) {
     ASSERT_TRUE((cpstd::is_same<typename Traits::iterator_category, cpstd::random_access_iterator_tag>::value));
 }
 
+// std::iterator_traits strips volatile from value_type only since C++20, so
+// STL mode is checked against the standard it forwards to.
+#if !defined(CPSTL_USING_STL) || CPSTL_CPLUSPLUS >= 202002L
 TEST(CPSTL_IteratorTraitsTest, VolatileRawPointerSpecialization) {
     using Traits = cpstd::iterator_traits<volatile int*>;
 
@@ -208,6 +211,7 @@ TEST(CPSTL_IteratorTraitsTest, ConstVolatileRawPointerSpecialization) {
     ASSERT_TRUE((cpstd::is_same<typename Traits::reference, const volatile int&>::value));
     ASSERT_TRUE((cpstd::is_same<typename Traits::iterator_category, cpstd::random_access_iterator_tag>::value));
 }
+#endif
 
 TEST(CPSTL_IteratorTraitsTest, InputIteratorUsage) {
     int values[3] = {10, 20, 30};
