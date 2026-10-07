@@ -94,7 +94,9 @@ namespace {
 
         RandomAccessIterator operator+(difference_type n) const { return RandomAccessIterator(ptr + n); }
         RandomAccessIterator operator-(difference_type n) const { return RandomAccessIterator(ptr - n); }
-        difference_type operator-(const RandomAccessIterator& other) const { return ptr - other.ptr; }
+        difference_type operator-(const RandomAccessIterator& other) const {
+            return static_cast<difference_type>(ptr - other.ptr);
+        }
 
         bool operator==(const RandomAccessIterator& other) const { return ptr == other.ptr; }
         bool operator!=(const RandomAccessIterator& other) const { return ptr != other.ptr; }
