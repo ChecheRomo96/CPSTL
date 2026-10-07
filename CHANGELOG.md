@@ -5,6 +5,14 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-10-07
+
+### Fixed
+
+- MSVC test builds: explicitly convert the test-only random-access iterator
+  distance to its declared `difference_type`, avoiding the 64-bit pointer
+  difference warning that the warning-as-error policy rejects.
+
 ## [1.1.0] - 2026-10-07
 
 Rescue release: CPSTL builds, is tested in every configuration it supports and

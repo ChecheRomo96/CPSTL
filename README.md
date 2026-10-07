@@ -104,7 +104,7 @@ the configure step, for example
 ## Use from CMake
 
 ```cmake
-find_package(CPSTL 1.1 CONFIG REQUIRED)
+find_package(CPSTL 1.1.1 CONFIG REQUIRED)
 target_link_libraries(app PRIVATE CPSTL::CPSTL)
 ```
 
@@ -120,7 +120,7 @@ Install the repository as a library and include `<CPSTL.h>`; see
 
 ## Status
 
-See [CHANGELOG.md](CHANGELOG.md). Version 1.1.0 is a rescue release validated
+See [CHANGELOG.md](CHANGELOG.md). Version 1.1.1 is a rescue release validated
 on Linux (GCC, Clang), macOS (Apple Clang) and AVR (ATmega328P under simavr,
 Arduino Uno and Mega); ESP32 and the other Arduino targets were not compiled
 in this cycle.
