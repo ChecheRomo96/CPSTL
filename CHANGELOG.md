@@ -3,7 +3,18 @@
 This file records user-visible changes to CPSTL. Release dates use the
 `YYYY-MM-DD` format.
 
-## [Unreleased]
+## [1.1.2] - 2026-10-07
+
+### Changed
+
+- C allocation (`malloc`/`free`) is now the default for CMake and IDE builds.
+  This keeps the default CPSTL implementation linkable on freestanding Arm
+  consumers that do not provide `operator new`/`operator delete`. Hosted
+  users can still select `CPSTL_ALLOCATION=CPP` or `STD` explicitly.
+- The embedded verification matrix is AVR, ESP32 and STM32G0B1. CI now
+  compiles the Arduino sketch for ESP32 as well as AVR; the repository records
+  the reproducible physical-run procedure and the sketch reports a PASS/FAIL
+  verdict over serial.
 
 ## [1.1.1] - 2026-10-07
 

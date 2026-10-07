@@ -21,8 +21,8 @@
             #define CPSTL_USING_STL
         #endif
 
-    // Allocation: leave undefined for the default (C allocation on AVR, C++
-    // allocation elsewhere) or define exactly one of
+    // Allocation: leave undefined for the default C allocation (malloc/free,
+    // including freestanding targets) or define exactly one of
     // CPSTL_USING_C_ALLOCATION, CPSTL_USING_CPP_ALLOCATION,
     // CPSTL_USING_STD_ALLOCATION.
 
