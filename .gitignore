@@ -1,4 +1,5 @@
 build/
-docs/
+dist/
 bin/
 .DS_Store
+cpstl-pending.patch

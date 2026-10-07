@@ -1,90 +1,134 @@
-# CPSTL: Cross-Platform STL Wrapper
+# CPSTL: Cross-Platform STL
 
-CPSTL is a lightweight compatibility layer that provides an STL-like interface for C++ across a wide range of platforms, including environments where the standard library is partially available or entirely absent. It abstracts differences between C++ standard versions and standard library implementations, allowing developers to write portable and consistent code without relying directly on std.
+CPSTL gives C++11 and newer code the familiar `std` interface on targets with
+or without a C++ standard library. Code written against `cpstd::vector`,
+`cpstd::string`, `cpstd::function`, `cpstd::sort` or `cpstd::is_same` builds
+unchanged on a desktop and on an 8-bit AVR.
 
-Internally, CPSTL selectively reuses the standard library when available and falls back to custom implementations when necessary, ensuring consistent behavior across platforms.
+- **STL mode** (`CPSTL_USING_STL`): every `cpstd` name is an alias of its `std`
+  counterpart, at no cost.
+- **CPSTL implementation** (default): CPSTL provides the facilities itself,
+  using only freestanding C headers. Containers never throw: when memory runs
+  out the operation has no effect and the container stays as it was.
 
-## Repository Structure
+## Modules
 
-This repository is the central hub for the CPSTL project. CPSTL has been structured into separate repositories to accommodate various platforms and to ensure compatibility with different environments. Additional repositories include:
+| Header | Contents |
+| --- | --- |
+| `CPvector` | `cpstd::vector` |
+| `CPstring` | `cpstd::basic_string`, `string`, `to_string`, `stoi` and the other conversions |
+| `CPstack` | `cpstd::stack` (LIFO adapter, default container `cpstd::vector`) |
+| `CPqueue` | `cpstd::queue` (FIFO adapter, default container `cpstd::vector`) |
+| `CPalgorithm` | `min`, `max`, `copy`, `copy_backward`, `fill`, `equal`, `find`, `iter_swap`, `sort` |
+| `CPfunctional.h` | `cpstd::function` |
+| `CPmemory.h` | `allocator`, `unique_ptr`, `make_unique`, `uninitialized_copy`, `uninitialized_move` |
+| `CPiterator.h` | iterator tags and traits, `begin`, `end`, `distance`, `advance`, `next`, `prev`, `reverse_iterator`, `back_inserter` |
+| `CPtype_traits` | type categories, properties and relationships |
+| `CPutility` | `move`, `forward`, `swap`, `exchange` |
+| `CPlimits.h` | `numeric_limits` for every arithmetic type |
+| `CPexception` | `exception`, `logic_error`, `out_of_range`, `length_error`, `bad_alloc` |
+| `CPinitializer_list` | `initializer_list` |
+| `CPSTL.h` | everything above that is enabled |
 
-- [CPSTL-Arduino](https://github.com/YourUsername/CPSTL-Arduino): Optimized and tested for use in Arduino projects.
-- [CPSTL-CMake](https://github.com/YourUsername/CPSTL-CMake): Provides directory structures and CMake files for easy integration into larger projects.
+## Configuration
 
-## Key Features
+CMake builds set these cache options; Arduino and PSoC Creator builds edit
+`src/CPSTL_UserSetup.h` instead.
 
-- **Cross-Platform Compatibility:** CPSTL is designed to work on different platforms, ensuring that your code functions consistently regardless of the availability of the C++ STL.
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `CPSTL_USING_STL` | `OFF` | Alias every `cpstd` name to `std` (hosted targets only) |
+| `CPSTL_ALLOCATION` | `CPP` | `C` (`malloc`/`free`, works without `operator new`), `CPP` (`operator new(nothrow)`) or `STD` (`std::allocator`) |
+| `CPSTL_VECTOR` / `CPSTL_STRING` | `ON` | Include the container in `CPSTL.h` |
+| `CPSTL_STACK` / `CPSTL_QUEUE` | `ON` | Include the adapter in `CPSTL.h` |
+| `CPSTL_UNICODE_STRINGS` | `OFF` | Declare `u16string` and `u32string` |
+| `CPSTL_CXX_STANDARD` | `11` | Language level: 11, 14, 17 or 20 |
+| `CPSTL_TESTING` / `CPSTL_EXAMPLES` | `OFF` | Build the tests and the examples |
 
-- **Ease of Use:** The library provides a familiar and user-friendly interface, making it easy for developers familiar with the C++ STL to work with CPSTL.
+Without CMake, AVR uses C allocation and every other target C++ allocation.
 
-- **Integration with CMake:** The repository includes directory structures and CMake files, simplifying the compilation and integration of CPSTL into larger projects.
+## Stack and queue
 
-- **Arduino Support:** CPSTL has been optimized and tested for use in Arduino projects, making it a reliable choice for Arduino development.
+In STL mode `cpstd::stack` and `cpstd::queue` are `std::stack` and
+`std::queue`, with `std::deque` as the default container. The CPSTL
+implementation has no `deque` or `list`, so both adapters default to
+`cpstd::vector`:
 
-- **Dynamic Documentation:** The documentation is adaptable to the package compilation configuration, ensuring that it remains accurate and relevant for specific builds.
+- `stack` pushes and pops at the back of the vector: O(1) amortized.
+- `queue::pop` uses the container's `pop_front` when it has one and otherwise
+  erases the first element, which is O(n) in the queue's length. The elements
+  stay contiguous and `pop` keeps the capacity, so a queue whose container was
+  reserved beforehand never allocates again. For long queues pass a container
+  with a constant-time `pop_front`.
 
-- **Clear Documentation:** The library's documentation is generated using Doxygen, making it easy to understand the provided functions, methods, and classes in CPSTL.
+Write portable code against the common interface: name the container type
+through `container_type` instead of assuming the default, do not use the
+return value of `emplace` (`void` here and in C++11), and do not pop an empty
+adapter (it has no effect in CPSTL and is undefined in std). The
+allocator-extended constructors are not provided.
 
-## Tested Platforms
+`push` and `emplace` may allocate; in the CPSTL implementation a failure
+leaves the adapter unchanged, so check `size()`. For time-critical code reserve the storage first and pass it
+to the constructor. A stack over an explicit `cpstd::vector` does this in both
+modes; the default queue does it in the CPSTL implementation (`std::queue`
+cannot use a vector, which has no `pop_front`):
 
-CPSTL has been rigorously tested on various platforms to ensure its reliability and cross-compatibility:
+```cpp
+cpstd::vector<int> storage;
+storage.reserve(16);
+cpstd::stack<int, cpstd::vector<int> > undo(cpstd::move(storage));  // no allocation up to 16
+```
 
-- Arduino IDE:
-  - AVR (e.g., Arduino Uno, Arduino Mega, etc.) (using C)
-  - ESP32 (using C, C++, and CPSTL)
+## Build and test
 
-- Windows:
-  - Compiled using Visual C++ (cl) (using CPSTL)
+CPSTL uses the shared [RoModularBuild](https://github.com/ChecheRomo96/RoModularBuild)
+workflow, pinned as a submodule:
 
-- Ubuntu:
-  - Compiled using g++ (using CPSTL)
-  - Compiled using clang++ (using CPSTL)
+```sh
+git submodule update --init --recursive
+./scripts/test.sh linux_gcc_x64          # or macos_arm64, windows_msvc_x64, ...
+./scripts/build.sh macos_arm64 --examples-on
+./scripts/install.sh macos_arm64         # Release package in dist/macos_arm64
+```
 
-- Raspbian:
-  - Compiled using g++ (using CPSTL)
-  - Compiled using clang++ (using CPSTL)
+For AVR, `./scripts/build.sh atmega328p_avrgcc_avr5` cross-compiles the
+library and a self-checking ATmega328P firmware with the bare AVR-GCC
+toolchain, and `./scripts/test-arduino.sh` compiles the Arduino sketches with
+`arduino-cli` for the Uno and the Mega.
 
-- macOS:
-  - Compiled using g++ (using CPSTL)
-  - Compiled using clang++ (using CPSTL)
+On Windows use the matching `.ps1` scripts. List the presets with
+`cmake --list-presets`. To test another configuration, pass cache options to
+the configure step, for example
+`./scripts/configure.sh linux_gcc_x64 --fresh -- -DCPSTL_USING_STL=ON`.
 
-## Online Documentation
+## Use from CMake
 
-CPSTL offers comprehensive online documentation generated with Doxygen. This documentation provides detailed insights into the functions, methods, classes, and usage examples provided by the library.
+```cmake
+find_package(CPSTL 1.1 CONFIG REQUIRED)
+target_link_libraries(app PRIVATE CPSTL::CPSTL)
+```
 
-To access the online documentation, please visit the [CPSTL Documentation](https://yourusername.github.io/CPSTL/index.html) website.
+The package carries the configuration it was built with as compile
+definitions, so consumers see the same `cpstd` types.
 
-The online documentation serves as a valuable resource for understanding and effectively utilizing CPSTL in your projects.
+## Use from Arduino
 
-## Quick Start
+Install the repository as a library and include `<CPSTL.h>`; see
+`examples/arduino/BasicUsage`. Pick the configuration in
+`src/CPSTL_UserSetup.h`. On AVR boards containers allocate with `malloc`;
+`cpstd::function` and `unique_ptr` use the core's `operator new`.
 
-This main repository contains all the essential files compatible with various platforms and file systems, including implementations for different environments like Arduino, Windows, Ubuntu, and macOS.
+## Status
 
-- If your primary focus is integrating CPSTL seamlessly with CMake, you'll find dedicated resources in the CPSTL-CMake repository. Here, you'll discover a structured directory layout and CMake files tailored to simplify CPSTL integration into larger projects.
+See [CHANGELOG.md](CHANGELOG.md). Version 1.1.0 is a rescue release validated
+on Linux (GCC, Clang), macOS (Apple Clang) and AVR (ATmega328P under simavr,
+Arduino Uno and Mega); ESP32 and the other Arduino targets were not compiled
+in this cycle.
 
-- For projects centered around Arduino development, we recommend exploring the CPSTL-Arduino repository. This repository is specifically designed with a file structure optimized for Arduino development.
+## License
 
-Please choose the repository that aligns with your project's specific needs to streamline the integration of CPSTL into your development environment and make the most of its cross-platform capabilities.
+Copyright (c) 2026 José Manuel Romo. All rights reserved.
 
-## Unit Testing
-
-Unit testing is a critical aspect of maintaining the quality and reliability of CPSTL across its various sub-repositories. It's important to note that unit testing methods may vary between each sub-project due to the unique requirements and platforms they cater to. Thorough unit testing is conducted on each sub-repository to ensure functionality and compatibility.
-
-[Unit Testing Page](https://yourusername.github.io/CPSTL/d4/df6/test.html)
-
-## Contributions
-
-Your contributions are highly welcome! If you encounter issues, wish to add new features, or enhance existing ones, please submit a pull request to the CPSTL repository.
-
-## Contact
-
-For questions, suggestions, or comments, feel free to open an [issue](https://github.com/YourUsername/CPSTL/issues) on the repository.
-
-We hope CPSTL proves to be a valuable asset in your cross-platform development projects!
-
-## To Do:
-
-- Enhance the documentation structure.
-- Create a tutorials page for the documentation.
-- Implement unit testing for CPSTL-Arduino.
-- Set up unit testing actions for CPSTL-CMake and CPSTL-Arduino.
+CPSTL is currently proprietary. No permission is granted for external use,
+compilation, modification, redistribution, integration, or commercial use
+without prior written authorization. See [LICENSE](LICENSE).

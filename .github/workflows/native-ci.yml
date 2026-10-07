@@ -1,0 +1,141 @@
+name: Native Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  native:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS 15 / Apple Clang / Arm64
+            runner: macos-15
+            preset: macos_arm64
+            compiler: c++
+          - name: Ubuntu 24.04 / GCC / x64
+            runner: ubuntu-24.04
+            preset: linux_gcc_x64
+            compiler: g++
+          - name: Ubuntu 24.04 / Clang / x64
+            runner: ubuntu-24.04
+            preset: linux_clang_x64
+            compiler: clang++
+          - name: Windows 2025 / MSVC / x64
+            runner: windows-2025-vs2026
+            preset: windows_msvc_x64
+            compiler: msvc
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Verify hosted toolchain
+        uses: ./tools/RoModularBuild/actions/report-toolchain
+        with:
+          compiler: ${{ matrix.compiler }}
+
+      - name: Test Debug
+        uses: ./tools/RoModularBuild/actions/project-workflow
+        with:
+          command: test
+          preset: ${{ matrix.preset }}
+          configuration: Debug
+          fresh: true
+          parallel: 4
+
+      - name: Test Release
+        uses: ./tools/RoModularBuild/actions/project-workflow
+        with:
+          command: test
+          preset: ${{ matrix.preset }}
+          configuration: Release
+          parallel: 4
+
+      - name: Build examples
+        uses: ./tools/RoModularBuild/actions/project-workflow
+        with:
+          command: build
+          preset: ${{ matrix.preset }}
+          configuration: Release
+          examples-on: true
+
+  configurations:
+    # Every library configuration on one host: allocation modes, STL mode
+    # and language levels, with sanitizers on the CPSTL implementation.
+    name: Linux GCC / ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: C allocation, C++11, sanitizers
+            options: -DCPSTL_ALLOCATION=C -DCPSTL_CXX_STANDARD=11 "-DCMAKE_CXX_FLAGS=-fsanitize=address,undefined -fno-sanitize-recover=all"
+          - name: C++ allocation, C++17, sanitizers
+            options: -DCPSTL_ALLOCATION=CPP -DCPSTL_CXX_STANDARD=17 "-DCMAKE_CXX_FLAGS=-fsanitize=address,undefined -fno-sanitize-recover=all"
+          - name: std allocation, C++14
+            options: -DCPSTL_ALLOCATION=STD -DCPSTL_CXX_STANDARD=14
+          - name: STL mode, C++11
+            options: -DCPSTL_USING_STL=ON -DCPSTL_CXX_STANDARD=11
+          - name: STL mode, C++20
+            options: -DCPSTL_USING_STL=ON -DCPSTL_CXX_STANDARD=20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Configure
+        shell: bash
+        run: ./scripts/configure.sh linux_gcc_x64 --fresh -- -DCPSTL_EXAMPLES=ON ${{ matrix.options }}
+
+      - name: Test
+        shell: bash
+        run: ./scripts/test.sh linux_gcc_x64 --parallel 4
+
+  package:
+    name: Package consumer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Build and install Release
+        shell: bash
+        run: |
+          ./scripts/build.sh linux_gcc_x64 --fresh --config Release
+          ./scripts/install.sh linux_gcc_x64
+
+      - name: Build and run the consumer
+        shell: bash
+        run: |
+          cmake -S tests/PackageConsumer -B build/package-consumer -G Ninja \
+            -DCMAKE_PREFIX_PATH="$PWD/dist/linux_gcc_x64"
+          cmake --build build/package-consumer
+          ctest --test-dir build/package-consumer --output-on-failure
