@@ -3,6 +3,14 @@
 This file records user-visible changes to CPSTL. Release dates use the
 `YYYY-MM-DD` format.
 
+## [1.1.4] - 2026-10-07
+
+### Fixed
+
+- Limit the freestanding `malloc`/`free` declarations to
+  `__STDC_HOSTED__ == 0`, preserving the platform attributes supplied by the
+  Windows C runtime in hosted builds.
+
 ## [1.1.3] - 2026-10-07
 
 ### Fixed
