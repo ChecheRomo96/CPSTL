@@ -106,7 +106,7 @@ the configure step, for example
 ## Use from CMake
 
 ```cmake
-find_package(CPSTL 1.1.3 CONFIG REQUIRED)
+find_package(CPSTL 1.1.4 CONFIG REQUIRED)
 target_link_libraries(app PRIVATE CPSTL::CPSTL)
 ```
 
@@ -122,7 +122,7 @@ Install the repository as a library and include `<CPSTL.h>`; see
 
 ## Status
 
-See [CHANGELOG.md](CHANGELOG.md). The 1.1.3 candidate is validated on Linux
+See [CHANGELOG.md](CHANGELOG.md). The 1.1.4 candidate is validated on Linux
 (GCC, Clang), macOS (Apple Clang), AVR (ATmega328P under simavr, Arduino Uno
 and Mega) and ESP32 compilation. Hardware execution remains a separate,
 recorded gate for AVR, ESP32 and STM32G0B1.

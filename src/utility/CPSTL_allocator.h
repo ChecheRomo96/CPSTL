@@ -14,12 +14,14 @@
 
     // Some Arm newlib configurations intentionally omit malloc/free from
     // <stdlib.h> when compiling freestanding C++.  CPSTL's C allocator is a
-    // hook to those C-runtime symbols, so keep their declarations available
-    // without requiring the C++ standard library headers.
-    extern "C" {
-        void* malloc(decltype(sizeof(0)));
-        void free(void*);
-    }
+    // hook to those C-runtime symbols, so declare them only in that mode.
+    // Hosted C runtimes may attach platform-specific attributes to them.
+    #if defined(__STDC_HOSTED__) && (__STDC_HOSTED__ == 0)
+        extern "C" {
+            void* malloc(decltype(sizeof(0)));
+            void free(void*);
+        }
+    #endif
 
     #if defined(_MSC_VER)
         #define CPSTL_DETAIL_NOINLINE __declspec(noinline)

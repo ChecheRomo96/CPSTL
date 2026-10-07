@@ -15,7 +15,7 @@
     // CPSTL Version
 
         #ifndef CPSTL_VERSION
-            #define CPSTL_VERSION "1.1.3"
+            #define CPSTL_VERSION "1.1.4"
         #endif
 
     //
