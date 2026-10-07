@@ -38,14 +38,15 @@ CMake builds set these cache options; Arduino and PSoC Creator builds edit
 | Option | Default | Meaning |
 | --- | --- | --- |
 | `CPSTL_USING_STL` | `OFF` | Alias every `cpstd` name to `std` (hosted targets only) |
-| `CPSTL_ALLOCATION` | `CPP` | `C` (`malloc`/`free`, works without `operator new`), `CPP` (`operator new(nothrow)`) or `STD` (`std::allocator`) |
+| `CPSTL_ALLOCATION` | `C` | `C` (`malloc`/`free`, works without `operator new`), `CPP` (`operator new(nothrow)`) or `STD` (`std::allocator`) |
 | `CPSTL_VECTOR` / `CPSTL_STRING` | `ON` | Include the container in `CPSTL.h` |
 | `CPSTL_STACK` / `CPSTL_QUEUE` | `ON` | Include the adapter in `CPSTL.h` |
 | `CPSTL_UNICODE_STRINGS` | `OFF` | Declare `u16string` and `u32string` |
 | `CPSTL_CXX_STANDARD` | `11` | Language level: 11, 14, 17 or 20 |
 | `CPSTL_TESTING` / `CPSTL_EXAMPLES` | `OFF` | Build the tests and the examples |
 
-Without CMake, AVR uses C allocation and every other target C++ allocation.
+Without CMake, CPSTL uses C allocation. Select `CPSTL_USING_CPP_ALLOCATION`
+explicitly only where a C++ allocation runtime is available.
 
 ## Stack and queue
 
@@ -94,7 +95,8 @@ git submodule update --init --recursive
 For AVR, `./scripts/build.sh atmega328p_avrgcc_avr5` cross-compiles the
 library and a self-checking ATmega328P firmware with the bare AVR-GCC
 toolchain, and `./scripts/test-arduino.sh` compiles the Arduino sketches with
-`arduino-cli` for the Uno and the Mega.
+`arduino-cli` for the Uno, Mega and ESP32. The physical verification matrix is
+AVR, ESP32 and STM32G0B1; see [HardwareVerification.md](docs/HardwareVerification.md).
 
 On Windows use the matching `.ps1` scripts. List the presets with
 `cmake --list-presets`. To test another configuration, pass cache options to
@@ -104,7 +106,7 @@ the configure step, for example
 ## Use from CMake
 
 ```cmake
-find_package(CPSTL 1.1.1 CONFIG REQUIRED)
+find_package(CPSTL 1.1.2 CONFIG REQUIRED)
 target_link_libraries(app PRIVATE CPSTL::CPSTL)
 ```
 
@@ -120,10 +122,10 @@ Install the repository as a library and include `<CPSTL.h>`; see
 
 ## Status
 
-See [CHANGELOG.md](CHANGELOG.md). Version 1.1.1 is a rescue release validated
-on Linux (GCC, Clang), macOS (Apple Clang) and AVR (ATmega328P under simavr,
-Arduino Uno and Mega); ESP32 and the other Arduino targets were not compiled
-in this cycle.
+See [CHANGELOG.md](CHANGELOG.md). The 1.1.2 candidate is validated on Linux
+(GCC, Clang), macOS (Apple Clang), AVR (ATmega328P under simavr, Arduino Uno
+and Mega) and ESP32 compilation. Hardware execution remains a separate,
+recorded gate for AVR, ESP32 and STM32G0B1.
 
 ## License
 

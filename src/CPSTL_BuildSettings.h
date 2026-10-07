@@ -15,7 +15,7 @@
     // CPSTL Version
 
         #ifndef CPSTL_VERSION
-            #define CPSTL_VERSION "1.1.1"
+            #define CPSTL_VERSION "1.1.2"
         #endif
 
     //
@@ -70,8 +70,8 @@
     //   CPSTL_USING_CPP_ALLOCATION  ::operator new(nothrow)/::operator delete
     //   CPSTL_USING_STD_ALLOCATION  std::allocator (hosted targets only)
     //
-    // When none is chosen, AVR uses C allocation and every other target uses
-    // C++ allocation. STL mode always uses std::allocator.
+    // When none is chosen, use C allocation so freestanding targets need no
+    // C++ runtime. STL mode always uses std::allocator.
 
         #if defined(CPSTL_USING_STL) && !defined(CPSTL_USING_STD_ALLOCATION)
             #undef CPSTL_USING_C_ALLOCATION
@@ -82,11 +82,7 @@
         #if !defined(CPSTL_USING_C_ALLOCATION) && \
             !defined(CPSTL_USING_CPP_ALLOCATION) && \
             !defined(CPSTL_USING_STD_ALLOCATION)
-            #if defined(__AVR__) || defined(__avr__)
-                #define CPSTL_USING_C_ALLOCATION
-            #else
-                #define CPSTL_USING_CPP_ALLOCATION
-            #endif
+            #define CPSTL_USING_C_ALLOCATION
         #endif
 
         #if (defined(CPSTL_USING_C_ALLOCATION) + defined(CPSTL_USING_CPP_ALLOCATION) + \
