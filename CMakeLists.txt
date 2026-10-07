@@ -3,7 +3,7 @@
 
     cmake_minimum_required(VERSION 3.25)
 
-    project(CPSTL VERSION 1.1.3 LANGUAGES CXX)
+    project(CPSTL VERSION 1.1.4 LANGUAGES CXX)
 
     # library.properties (Arduino) and CPSTL_BuildSettings.h (IDE builds)
     # carry the same version; refuse to configure when they drift.
