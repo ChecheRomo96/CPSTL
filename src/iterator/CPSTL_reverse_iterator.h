@@ -31,7 +31,9 @@
                 typedef typename iterator_traits<Iterator>::reference          reference;
 
             protected:
+                //! @cond INTERNAL
                 Iterator current;
+                //! @endcond
 
             public:
                 reverse_iterator() : current() {}
