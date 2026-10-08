@@ -1,0 +1,11 @@
+<map id="cpstd::exception" name="cpstd::exception">
+<area shape="rect" id="Node000001" title=" " alt="" coords="81,5,211,31"/>
+<area shape="rect" id="Node000002" href="$classcpstd_1_1bad__alloc.html" title=" " alt="" coords="5,79,132,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,42,83,80,80,76,122,38"/>
+<area shape="rect" id="Node000003" href="$classcpstd_1_1logic__error.html" title=" " alt="" coords="156,79,291,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,38,212,76,209,80,167,42"/>
+<area shape="rect" id="Node000004" href="$classcpstd_1_1length__error.html" title=" " alt="" coords="65,152,209,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="201,115,153,154,149,150,197,110"/>
+<area shape="rect" id="Node000005" href="$classcpstd_1_1out__of__range.html" title=" " alt="" coords="233,152,384,177"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="249,110,296,150,293,154,246,115"/>
+</map>
