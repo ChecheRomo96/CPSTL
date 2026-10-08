@@ -53,7 +53,9 @@
                 using const_reference = typename Container::const_reference;
 
             protected:
+                //! @cond INTERNAL
                 Container c;
+                //! @endcond
 
             public:
                 //! @name Construction

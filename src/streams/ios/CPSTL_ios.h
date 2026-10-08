@@ -45,12 +45,14 @@
 
             typedef void (*event_callback) (event ev, ios_base& obj, int index);
         protected: 
+            //! @cond INTERNAL
             ios_base();
             ios_base (const ios_base&) = delete;
         
         private:
             streamsize _width;
             streamsize _precision;
+            //! @endcond
 
         public:
             virtual ~ios_base();
