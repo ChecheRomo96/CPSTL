@@ -27,7 +27,9 @@
             template <class Container>
             class back_insert_iterator {
             protected:
+                //! @cond INTERNAL
                 Container& container;
+                //! @endcond
 
             public:
                 typedef cpstd::output_iterator_tag iterator_category;
