@@ -106,7 +106,7 @@ the configure step, for example
 ## Use from CMake
 
 ```cmake
-find_package(CPSTL 1.1.4 CONFIG REQUIRED)
+find_package(CPSTL 1.1.5 CONFIG REQUIRED)
 target_link_libraries(app PRIVATE CPSTL::CPSTL)
 ```
 
@@ -115,14 +115,15 @@ definitions, so consumers see the same `cpstd` types.
 
 ## Use from Arduino
 
-Install the repository as a library and include `<CPSTL.h>`; see
-`examples/arduino/BasicUsage`. Pick the configuration in
+Install the repository as a library and include `<CPSTL.h>`; the compact,
+self-checking sketches in [`examples/arduino`](examples/arduino) demonstrate
+the supported STL-compatible APIs. Pick the configuration in
 `src/CPSTL_UserSetup.h`. On AVR boards containers allocate with `malloc`;
 `cpstd::function` and `unique_ptr` use the core's `operator new`.
 
 ## Status
 
-See [CHANGELOG.md](CHANGELOG.md). The 1.1.4 candidate is validated on Linux
+See [CHANGELOG.md](CHANGELOG.md). The 1.1.5 candidate is validated on Linux
 (GCC, Clang), macOS (Apple Clang), AVR (ATmega328P under simavr, Arduino Uno
 and Mega) and ESP32 compilation. Hardware execution remains a separate,
 recorded gate for AVR, ESP32 and STM32G0B1.

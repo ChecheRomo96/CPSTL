@@ -12,6 +12,25 @@
 
     namespace cpstd {
 
+        namespace detail {
+
+            // A function name deduced through a forwarding reference has
+            // function type, which cannot be stored as a data member.
+            // std::function decays it to a function pointer; retain that
+            // behaviour without requiring the complete C++ type_traits header
+            // on freestanding targets.
+            template <typename T>
+            struct function_storage {
+                using type = typename cpstd::remove_cv<typename cpstd::remove_reference<T>::type>::type;
+            };
+
+            template <typename ReturnType, typename... Args>
+            struct function_storage<ReturnType(Args...)> {
+                using type = ReturnType (*)(Args...);
+            };
+
+        }
+
         //! @brief Type-erased callable, as `std::function`.
         //!
         //! In STL mode this is `std::function`. Otherwise it stores a copy of the
@@ -55,7 +74,8 @@
                 };
 
                 template <typename F>
-                using Stored = typename cpstd::remove_cv<typename cpstd::remove_reference<F>::type>::type;
+                using Stored = typename cpstd::detail::function_storage<
+                    typename cpstd::remove_reference<F>::type>::type;
 
                 cpstd::unique_ptr<Concept> target;
 

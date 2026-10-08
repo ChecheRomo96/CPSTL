@@ -111,6 +111,9 @@ TEST(FunctionTest, AcceptsFunctionPointersAndMoveOnlyArguments) {
     cpstd::function<int(int)> f(&Twice);
     EXPECT_EQ(f(21), 42);
 
+    cpstd::function<int(int)> by_name(Twice);
+    EXPECT_EQ(by_name(6), 12);
+
     cpstd::function<int(cpstd::unique_ptr<int>)> take =
         [](cpstd::unique_ptr<int> p) { return *p; };
     EXPECT_EQ(take(cpstd::make_unique<int>(9)), 9);

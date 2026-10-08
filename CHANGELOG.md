@@ -3,6 +3,20 @@
 This file records user-visible changes to CPSTL. Release dates use the
 `YYYY-MM-DD` format.
 
+## Unreleased
+
+### Added
+
+- A compact, self-checking Arduino example suite: `BasicUsage`, `Algorithms`,
+  `Containers` and `Function`. Each sketch prints an explicit serial PASS/FAIL
+  verdict and is compiled for Uno, Mega and ESP32 by the existing Arduino
+  verification workflow.
+
+### Fixed
+
+- In CPSTL mode, `cpstd::function` now accepts a function name directly, just
+  as `std::function` does; it stores the decayed function pointer internally.
+
 ## [1.1.4] - 2026-10-07
 
 ### Fixed
