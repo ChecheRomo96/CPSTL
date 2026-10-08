@@ -5,6 +5,8 @@ or without a C++ standard library. Code written against `cpstd::vector`,
 `cpstd::string`, `cpstd::function`, `cpstd::sort` or `cpstd::is_same` builds
 unchanged on a desktop and on an 8-bit AVR.
 
+**Documentation:** [CPSTL API and build guide](https://checheromo96.github.io/CPSTL/)
+
 - **STL mode** (`CPSTL_USING_STL`): every `cpstd` name is an alias of its `std`
   counterpart, at no cost.
 - **CPSTL implementation** (default): CPSTL provides the facilities itself,
