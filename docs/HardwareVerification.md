@@ -4,8 +4,8 @@ CPSTL's embedded support is verified at three levels:
 
 | Target | Build verification | Physical verification | CPSTL mode |
 | --- | --- | --- | --- |
-| AVR ATmega328P (Arduino Uno) | AVR-GCC smoke firmware, simavr and Arduino compilation | Upload `BasicUsage` and observe `CPSTL hardware smoke: PASS` at 9600 baud | CPSTL implementation with C allocation |
-| ESP32 | Arduino compilation for `esp32:esp32:esp32` | Upload `BasicUsage` and observe `CPSTL hardware smoke: PASS` at 9600 baud | STL mode |
+| AVR ATmega328P (Arduino Uno) | AVR-GCC smoke firmware, simavr and every Arduino sketch | Upload an Arduino example and observe its documented `PASS` line at 9600 baud | CPSTL implementation with C allocation |
+| ESP32 | Arduino compilation for `esp32:esp32:esp32` | Upload an Arduino example and observe its documented `PASS` line at 9600 baud | STL mode |
 | STM32G0B1CBT6 | Foundation's Cortex-M0+ consumer build | Flash the Foundation consumer through ST-LINK and observe its configured pass signal | CPSTL implementation with C allocation and no C++ runtime |
 
 The automated builds catch compiler, headers and link configuration errors.
@@ -18,17 +18,18 @@ covers the programmer/debugger connection, board power and the actual target.
 | --- | --- | --- | --- |
 | 2026-10-07 | ESP32 | CP2102 USB-to-UART | `CPSTL hardware smoke: PASS` |
 | 2026-10-07 | Arduino Mega (AVR) | COM8 | `CPSTL hardware smoke: PASS` |
-| 2026-10-07 | STM32G0B1CBT6 | ST-LINK / SWD, 100 kHz | Target detected: ID `0x467`, Rev Z, 128 KB Flash; firmware run pending |
+| 2026-10-07 | STM32G0B1CBT6 | ST-LINK / SWD, 100 kHz | Foundation consumer: 12/12 checks passed (`PASS`) |
 
 ## AVR and ESP32 procedure
 
-1. Open `examples/arduino/BasicUsage/BasicUsage.ino` in Arduino IDE, with this
-   repository installed as the CPSTL library.
+1. Open a sketch under `examples/arduino/` in Arduino IDE, with this repository
+   installed as the CPSTL library. `BasicUsage` is the quickest smoke check;
+   the complete serial criteria are in `examples/arduino/README.md`.
 2. Select either an Arduino Uno or the connected ESP32 board and its serial
    port.
 3. Upload the sketch, then open the serial monitor at 9600 baud.
-4. Record the board model, core version and the line `CPSTL hardware smoke:
-   PASS` in the verification record.
+4. Record the board model, core version and the sketch's documented `PASS`
+   line in the verification record.
 
 An ESP32 has a hosted C++ standard library, so it intentionally uses
 `CPSTL_USING_STL`. The AVR run intentionally uses CPSTL's own implementation
