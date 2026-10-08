@@ -1,0 +1,29 @@
+/** @defgroup CPSTL_Configuration Configuration
+ * @brief Select the same public vocabulary for hosted and freestanding targets.
+ *
+ * CMake uses `CPSTL_*` cache options; Arduino and IDE builds use
+ * `CPSTL_UserSetup.h`. `CPSTL_USING_STL=ON` aliases `cpstd` to `std` on hosted
+ * targets. The default implementation supports C++11 through C++20 and uses
+ * C allocation by default.
+ */
+
+/** @defgroup CPSTL_Runtime Runtime and allocation
+ * @brief Containers never throw and preserve their state on allocation failure.
+ *
+ * Operations that grow a container may allocate. Time-critical callers reserve
+ * capacity first; failure is observable through the operation's documented
+ * result or unchanged container state, never through exceptions.
+ */
+
+/** @defgroup CPSTL_Modules Public modules
+ * @brief `CPvector`, `CPstring`, `CPstack`, `CPqueue`, algorithms, iterators,
+ * type traits, memory, utility, limits and functional vocabulary.
+ */
+
+/** @defgroup CPSTL_Build Build and validation
+ * @brief Presets and scripts are the supported desktop and embedded interface.
+ *
+ * Use `scripts/test.sh <preset>` for native CTest suites and
+ * `scripts/test-arduino.sh` for Arduino compilation. AVR firmware compilation
+ * and simulator execution are separate from physical-hardware evidence.
+ */

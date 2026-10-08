@@ -1,0 +1,39 @@
+name: Validate and Deploy Documentation
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - run: sudo apt-get update && sudo apt-get install --yes doxygen graphviz
+      - run: ./scripts/docs.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: cpstl-documentation
+          path: build/documentation/html
+  deploy:
+    if: github.event_name == 'push'
+    needs: docs
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: cpstl-documentation
+          path: build/documentation/html
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: docs
+          publish_dir: build/documentation/html
