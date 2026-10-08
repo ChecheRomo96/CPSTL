@@ -56,7 +56,8 @@ Use the PowerShell equivalent on Windows.
 
 AVR: `atmega328p_avrgcc_avr5` builds the library and the `CPSTLAvrSmoke`
 firmware (no tests or examples on AVR); run its `.hex` under simavr and look
-for `CPSTL AVR smoke: PASS`. Arduino sketches live in `examples/arduino/`.
+for `CPSTL AVR smoke: PASS`. Public Arduino tutorials live directly under
+`examples/<Tutorial>/`, alongside the matching desktop entry point.
 
 Run the smallest relevant validation first, then broaden it: the C, CPP and
 STD allocation modes, `-DCPSTL_USING_STL=ON`, and C++11 through C++20 via
