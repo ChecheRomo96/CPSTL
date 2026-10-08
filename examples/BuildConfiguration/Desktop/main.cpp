@@ -1,5 +1,4 @@
-// Prints how this CPSTL build is configured and checks that the cpstd names
-// resolve to the expected implementation.
+// Prints how this CPSTL build is configured.
 
 #include <CPSTL.h>
 
@@ -29,13 +28,7 @@ int main() {
     printf("cpstd::string .. enabled\n");
 #endif
 
-    int failures = 0;
-    if (!cpstd::is_same<cpstd::remove_cv<const volatile int>::type, int>::value) {
-        ++failures;
-    }
-    if (cpstd::numeric_limits<unsigned char>::max() != 255) {
-        ++failures;
-    }
-    printf("Self-check ..... %s\n", failures == 0 ? "ok" : "FAILED");
-    return failures;
+    printf("Byte maximum ... %u\n",
+           static_cast<unsigned>(cpstd::numeric_limits<unsigned char>::max()));
+    return 0;
 }

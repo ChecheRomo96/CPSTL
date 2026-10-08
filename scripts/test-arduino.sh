@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-# Compiles every sketch under examples/arduino with arduino-cli, using the
+# Compiles every tutorial sketch under examples with arduino-cli, using the
 # repository itself as the library (exactly what an Arduino user who copied it
 # into their libraries folder gets) and the core's unmodified flags.
 #
@@ -52,9 +52,13 @@ COUNT=0
 for FQBN in $BOARDS; do
     BUILD_ROOT="$ROOT/build/arduino/$(printf '%s' "$FQBN" | tr ':' '_')"
     rm -rf -- "$BUILD_ROOT"
-    for SKETCH in "$ROOT"/examples/arduino/*/*.ino; do
-        [ -f "$SKETCH" ] || die "no sketches under examples/arduino"
+    for SKETCH in "$ROOT"/examples/*/*.ino; do
+        [ -f "$SKETCH" ] || die "no tutorial sketches under examples"
         SKETCH_DIR=$(dirname -- "$SKETCH")
+        # A tutorial is a self-contained example directory. Historical Arduino
+        # test suites such as AUnit_Tests intentionally have no CMakeLists.txt
+        # and are not compiled as public tutorials.
+        [ -f "$SKETCH_DIR/CMakeLists.txt" ] || continue
         NAME=$(basename -- "$SKETCH_DIR")
         LOG="$BUILD_ROOT/$NAME.log"
         mkdir -p -- "$BUILD_ROOT"
@@ -77,5 +81,7 @@ for FQBN in $BOARDS; do
         COUNT=$((COUNT + 1))
     done
 done
+
+[ "$COUNT" -gt 0 ] || die "no tutorial sketches under examples"
 
 printf '%s\n' "All $COUNT Arduino sketch builds passed ($BOARDS )."

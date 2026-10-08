@@ -28,8 +28,8 @@ function(cpstl_add_example example_target)
     add_executable(${example_target} ${ARGN})
     target_link_libraries(${example_target} PRIVATE CPSTL::CPSTL)
     cpstl_enable_warnings(${example_target})
-    # Examples return non-zero when what they print is wrong, so CTest can run
-    # them as smoke tests when testing is enabled too.
+    # Tutorials remain executable smoke coverage when testing is enabled, but
+    # their output teaches a workflow rather than asserting unit-test cases.
     if(CPSTL_TESTING)
         add_test(NAME "example.${example_target}" COMMAND ${example_target})
         set_tests_properties("example.${example_target}" PROPERTIES LABELS "CPSTL;example")

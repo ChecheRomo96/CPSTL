@@ -117,9 +117,9 @@ definitions, so consumers see the same `cpstd` types.
 
 ## Use from Arduino
 
-Install the repository as a library and include `<CPSTL.h>`; the compact,
-self-checking sketches in [`examples/arduino`](examples/arduino) demonstrate
-the supported STL-compatible APIs. Pick the configuration in
+Install the repository as a library and include `<CPSTL.h>`; the compact
+tutorials in [`examples`](examples) demonstrate portable application workflows
+using the supported STL-compatible APIs. Pick the configuration in
 `src/CPSTL_UserSetup.h`. On AVR boards containers allocate with `malloc`;
 `cpstd::function` and `unique_ptr` use the core's `operator new`.
 

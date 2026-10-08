@@ -27,3 +27,16 @@
  * `scripts/test-arduino.sh` for Arduino compilation. AVR firmware compilation
  * and simulator execution are separate from physical-hardware evidence.
  */
+
+/** @page CPSTL_Tutorials Tutorials
+ *
+ * Public tutorials live directly in `examples/<Tutorial>/`. Every tutorial has
+ * an Arduino sketch named after its directory and a matching
+ * `Desktop/main.cpp`, each with its own `CMakeLists.txt`. They demonstrate a
+ * portable task rather than present a unit-test assertion stream; configured
+ * desktop builds still execute them as smoke coverage.
+ *
+ * `examples/AUnit_Tests` is retained as a historical Arduino test suite. It
+ * is deliberately outside the public tutorial contract and is not discovered
+ * by `scripts/test-arduino.sh`.
+ */

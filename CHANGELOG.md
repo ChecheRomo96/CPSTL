@@ -3,6 +3,14 @@
 This file records user-visible changes to CPSTL. Release dates use the
 `YYYY-MM-DD` format.
 
+## Unreleased
+
+### Changed
+
+- Examples are now application tutorials under `examples/<Tutorial>/`, each
+  with an Arduino sketch and matching desktop entry point. They explain
+  portable workflows instead of serving as serial PASS/FAIL tests.
+
 ## [1.1.5] - 2026-10-07
 
 ### Added
