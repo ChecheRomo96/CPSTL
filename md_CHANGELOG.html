@@ -76,50 +76,57 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="autotoc_md9"></a> This file records user-visible changes to CPSTL. Release dates use the <code>YYYY-MM-DD</code> format.</p>
 <h1><a class="anchor" id="autotoc_md10"></a>
-[1.1.5] - 2026-10-07</h1>
+Unreleased</h1>
 <h2><a class="anchor" id="autotoc_md11"></a>
+Changed</h2>
+<ul>
+<li>Examples are now application tutorials under <code>examples/&lt;Tutorial&gt;/</code>, each with an Arduino sketch and matching desktop entry point. They explain portable workflows instead of serving as serial PASS/FAIL tests.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md12"></a>
+[1.1.5] - 2026-10-07</h1>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Added</h2>
 <ul>
 <li>A compact, self-checking Arduino example suite: <code>BasicUsage</code>, <code>Algorithms</code>, <code>Containers</code> and <code>Function</code>. Each sketch prints an explicit serial PASS/FAIL verdict and is compiled for Uno, Mega and ESP32 by the existing Arduino verification workflow.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Fixed</h2>
 <ul>
 <li>In CPSTL mode, <code><a class="el" href="classcpstd_1_1function.html" title="Type-erased callable, as std::function.">cpstd::function</a></code> now accepts a function name directly, just as <code>std::function</code> does; it stores the decayed function pointer internally.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 [1.1.4] - 2026-10-07</h1>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Fixed</h2>
 <ul>
 <li>Limit the freestanding <code>malloc</code>/<code>free</code> declarations to <code>__STDC_HOSTED__ == 0</code>, preserving the platform attributes supplied by the Windows C runtime in hosted builds.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md15"></a>
+<h1><a class="anchor" id="autotoc_md17"></a>
 [1.1.3] - 2026-10-07</h1>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Fixed</h2>
 <ul>
 <li>The C allocator now declares its <code>malloc</code>/<code>free</code> hooks explicitly for freestanding Arm C++ configurations, where newlib intentionally omits those declarations from <code>&lt;stdlib.h&gt;</code>. This restores compilation of CPSTL consumers while retaining the embedding application's control of the allocator.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md17"></a>
+<h1><a class="anchor" id="autotoc_md19"></a>
 [1.1.2] - 2026-10-07</h1>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 Changed</h2>
 <ul>
 <li>C allocation (<code>malloc</code>/<code>free</code>) is now the default for CMake and IDE builds. This keeps the default CPSTL implementation linkable on freestanding Arm consumers that do not provide <code>operator new</code>/<code>operator delete</code>. Hosted users can still select <code>CPSTL_ALLOCATION=CPP</code> or <code>STD</code> explicitly.</li>
 <li>The embedded verification matrix is AVR, ESP32 and STM32G0B1. CI now compiles the Arduino sketch for ESP32 as well as AVR; the repository records the reproducible physical-run procedure and the sketch reports a PASS/FAIL verdict over serial.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md19"></a>
+<h1><a class="anchor" id="autotoc_md21"></a>
 [1.1.1] - 2026-10-07</h1>
-<h2><a class="anchor" id="autotoc_md20"></a>
+<h2><a class="anchor" id="autotoc_md22"></a>
 Fixed</h2>
 <ul>
 <li>MSVC test builds: explicitly convert the test-only random-access iterator distance to its declared <code>difference_type</code>, avoiding the 64-bit pointer difference warning that the warning-as-error policy rejects.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md21"></a>
+<h1><a class="anchor" id="autotoc_md23"></a>
 [1.1.0] - 2026-10-07</h1>
 <p>Rescue release: CPSTL builds, is tested in every configuration it supports and uses the RoModularBuild workflow.</p>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Added</h2>
 <ul>
 <li><code><a class="el" href="classcpstd_1_1stack.html" title="Last-in, first-out container adapter.">cpstd::stack</a></code> (<code>CPstack</code>) and <code><a class="el" href="classcpstd_1_1queue.html">cpstd::queue</a></code> (<code>CPqueue</code>) container adapters with the <code>std</code> interface: <code>push</code>, <code>emplace</code>, <code>pop</code>, <code>top</code> or <code>front</code>/<code>back</code>, <code>empty</code>, <code>size</code>, <code>swap</code> and the comparison operators. In STL mode they are <code>std::stack</code> and <code>std::queue</code>. The CPSTL implementation has no <code>deque</code>, so both default to <code><a class="el" href="classcpstd_1_1vector.html" title="Cross-platform dynamic array.">cpstd::vector</a></code>; <code>queue::pop</code> uses the container's <code>pop_front</code> when it has one and otherwise erases the first element (O(n), keeping the capacity, so a reserved queue never allocates again). New cache options <code>CPSTL_STACK</code> and <code>CPSTL_QUEUE</code> (default <code>ON</code>), <code>CPSTL_STACK_ENABLED</code>/<code>CPSTL_QUEUE_ENABLED</code> in <code><a class="el" href="CPSTL__UserSetup_8h_source.html">CPSTL_UserSetup.h</a></code>, tests in <code>CPSTLAdapterTests</code>, and checks in the header check, the package consumer and the AVR smoke firmware.</li>
@@ -135,7 +142,7 @@ Added</h2>
 <li><code>cpstd::advance</code>, <code>next</code>, <code>prev</code>, <code>max</code>, <code>copy_backward</code>, <code>fill</code>, <code>equal</code>, <code>find</code>, and <code>basic_string</code> assignment operators.</li>
 <li><code>numeric_limits</code> specializations for every character, integer and floating-point type (only <code>bool</code> existed, so <code>max()</code> returned 0).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md23"></a>
+<h2><a class="anchor" id="autotoc_md25"></a>
 Changed</h2>
 <ul>
 <li><code><a class="el" href="classcpstd_1_1vector.html" title="Cross-platform dynamic array.">cpstd::vector</a></code> (CPSTL implementation) was rewritten on placement new: <code>push_back</code> grows geometrically (it reallocated on every call), elements no longer need a default constructor, and every operation is safe when its argument refers to an element of the vector.</li>
@@ -147,7 +154,7 @@ Changed</h2>
 <li><code>iterator_traits&lt;T*&gt;::value_type</code> drops cv-qualifiers, as in C++20.</li>
 <li>The CPSTL exception classes are a working <code>cpstd</code> hierarchy; containers do not throw. The <code>CPSTL_EXCEPTIONS</code>, <code>CPSTL_*_EXCEPTIONS</code>, <code>CPSTL_BUILD_TARGET</code> and per-module <code>*_TESTING</code>/<code>*_EXAMPLES</code> options were removed.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md26"></a>
 Fixed</h2>
 <ul>
 <li>Linux builds: two includes used the wrong case for <code><a class="el" href="CPSTL__Iterator_8h_source.html">CPSTL_Iterator.h</a></code>.</li>
@@ -158,7 +165,7 @@ Fixed</h2>
 <li>Variable templates (<code>is_arithmetic_v</code>, ...) were declared in C++11 builds.</li>
 <li>Test binaries were written into the source tree, so different builds overwrote each other's executables.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md27"></a>
 Known limitations</h2>
 <ul>
 <li>ESP32 and the other non-AVR Arduino targets were not compiled in this release cycle; the <code>AUnit_Tests</code> sketch still holds an older copy of the tests.</li>
@@ -166,7 +173,7 @@ Known limitations</h2>
 <li><code><a class="el" href="CPios_8h_source.html">CPios.h</a></code> (<code>ios_base</code>) is an unfinished stub and is not part of <code><a class="el" href="CPSTL_8h_source.html">CPSTL.h</a></code>.</li>
 <li><code>at()</code> does not check bounds in the CPSTL implementation.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 [1.0.0]</h1>
 <p>Initial version. </p>
 </div></div><!-- contents -->

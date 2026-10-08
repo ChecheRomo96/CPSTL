@@ -5,7 +5,7 @@ var indexSectionsWithContent =
   2: "c",
   3: "aceioprsv",
   4: "abcmprv",
-  5: "chpsv"
+  5: "chpstv"
 };
 
 var indexSectionNames =

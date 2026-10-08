@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['known_20limitations_0',['Known limitations',['../md_CHANGELOG.html#autotoc_md25',1,'']]]
+  ['known_20limitations_0',['Known limitations',['../md_CHANGELOG.html#autotoc_md27',1,'']]]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['changed_0',['changed',['../md_CHANGELOG.html#autotoc_md18',1,'Changed'],['../md_CHANGELOG.html#autotoc_md23',1,'Changed']]],
+  ['changed_0',['changed',['../md_CHANGELOG.html#autotoc_md11',1,'Changed'],['../md_CHANGELOG.html#autotoc_md20',1,'Changed'],['../md_CHANGELOG.html#autotoc_md25',1,'Changed']]],
   ['changelog_1',['Changelog',['../md_CHANGELOG.html',1,'']]],
   ['char_5ftraits_2',['char_traits',['../structcpstd_1_1char__traits.html',1,'cpstd']]],
   ['clear_3',['clear',['../classcpstd_1_1vector.html#a55639e10822635f85aa73fb8e03b398b',1,'cpstd::vector']]],

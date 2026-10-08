@@ -74,19 +74,19 @@ $(function() {
   <div class="headertitle"><div class="title">Hardware verification</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md27"></a> CPSTL's embedded support is verified at three levels:</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md29"></a> CPSTL's embedded support is verified at three levels:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Target   </th><th class="markdownTableHeadNone">Build verification   </th><th class="markdownTableHeadNone">Physical verification   </th><th class="markdownTableHeadNone">CPSTL mode    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">AVR ATmega328P (Arduino Uno)   </td><td class="markdownTableBodyNone">AVR-GCC smoke firmware, simavr and every Arduino sketch   </td><td class="markdownTableBodyNone">Upload an Arduino example and observe its documented <code>PASS</code> line at 9600 baud   </td><td class="markdownTableBodyNone">CPSTL implementation with C allocation    </td></tr>
+<td class="markdownTableBodyNone">AVR ATmega328P (Arduino Uno)   </td><td class="markdownTableBodyNone">AVR-GCC smoke firmware, simavr and every Arduino tutorial   </td><td class="markdownTableBodyNone">Upload an Arduino tutorial and observe its documented output at 9600 baud   </td><td class="markdownTableBodyNone">CPSTL implementation with C allocation    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">ESP32   </td><td class="markdownTableBodyNone">Arduino compilation for <code>esp32:esp32:esp32</code>   </td><td class="markdownTableBodyNone">Upload an Arduino example and observe its documented <code>PASS</code> line at 9600 baud   </td><td class="markdownTableBodyNone">STL mode    </td></tr>
+<td class="markdownTableBodyNone">ESP32   </td><td class="markdownTableBodyNone">Arduino compilation for <code>esp32:esp32:esp32</code>   </td><td class="markdownTableBodyNone">Upload an Arduino tutorial and observe its documented output at 9600 baud   </td><td class="markdownTableBodyNone">STL mode    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">STM32G0B1CBT6   </td><td class="markdownTableBodyNone">Foundation's Cortex-M0+ consumer build   </td><td class="markdownTableBodyNone">Flash the Foundation consumer through ST-LINK and observe its configured pass signal   </td><td class="markdownTableBodyNone">CPSTL implementation with C allocation and no C++ runtime   </td></tr>
 </table>
 <p>The automated builds catch compiler, headers and link configuration errors. Only a physical run can mark a board as hardware verified, because it also covers the programmer/debugger connection, board power and the actual target.</p>
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md30"></a>
 Verification record</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -102,16 +102,16 @@ Verification record</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">2026-10-07   </td><td class="markdownTableBodyNone">STM32G0B1CBT6   </td><td class="markdownTableBodyNone">ST-LINK / SWD, 100 kHz   </td><td class="markdownTableBodyNone">Foundation consumer: 12/12 checks passed (<code>PASS</code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md31"></a>
 AVR and ESP32 procedure</h1>
 <ol type="1">
-<li>Open a sketch under <code>examples/arduino/</code> in Arduino IDE, with this repository installed as the CPSTL library. <code>BasicUsage</code> is the quickest smoke check; the complete serial criteria are in <code>examples/arduino/README.md</code>.</li>
+<li>Open a tutorial sketch under <code>examples/&lt;Tutorial&gt;/</code> in Arduino IDE, with this repository installed as the CPSTL library. <code>FixedCapacityLog</code> is a compact first tutorial; the catalog is in <code>examples/README.md</code>.</li>
 <li>Select either an Arduino Uno or the connected ESP32 board and its serial port.</li>
 <li>Upload the sketch, then open the serial monitor at 9600 baud.</li>
-<li>Record the board model, core version and the sketch's documented <code>PASS</code> line in the verification record.</li>
+<li>Record the board model, core version and the tutorial output in the verification record.</li>
 </ol>
 <p>An ESP32 has a hosted C++ standard library, so it intentionally uses <code>CPSTL_USING_STL</code>. The AVR run intentionally uses CPSTL's own implementation and <code>malloc</code>/<code>free</code>.</p>
-<h1><a class="anchor" id="autotoc_md30"></a>
+<h1><a class="anchor" id="autotoc_md32"></a>
 STM32G0B1CBT6 procedure</h1>
 <p>Use the Foundation hardware-consumer firmware once its Cortex-M0+ build has been generated. Connect the ST-LINK through SWD (PA13/SWDIO, PA14/SWCLK, NRST, GND and 3.3 V reference); do not use a PICkit. Record the exact Foundation and CPSTL commits, programmer version and the observable pass signal.</p>
 <p>The STM32G0B1 is the freestanding case: the firmware must link with C allocation and without <code>operator new</code> or <code>operator delete</code> from a C++ runtime. </p>
