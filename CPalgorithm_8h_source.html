@@ -178,8 +178,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            cpstd::swap(*a, *b);</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        }</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="foldopen" id="foldopen00103" data-start="{" data-end="}">
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="namespacecpstd_1_1detail.html">  103</a></span>        <span class="keyword">namespace </span>detail {</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keyword">namespace </span>detail {</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>            <span class="comment">// Restores the max-heap property below `root` in heap[0, size).</span></div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>            <span class="keyword">template</span> &lt;<span class="keyword">class</span> RandomAccessIterator, <span class="keyword">class</span> Size, <span class="keyword">class</span> Compare&gt;</div>
@@ -200,14 +199,11 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>                }</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>            }</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
-<div class="foldopen" id="foldopen00124" data-start="{" data-end="};">
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="structcpstd_1_1detail_1_1less.html">  124</a></span>            <span class="keyword">struct </span><a class="code hl_struct" href="structcpstd_1_1detail_1_1less.html">less</a> {</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            <span class="keyword">struct </span>less {</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>                <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> T&amp; a, <span class="keyword">const</span> T&amp; b)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> a &lt; b; }</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>            };</div>
-</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        }</div>
-</div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        <span class="keyword">template</span> &lt;<span class="keyword">class</span> RandomAccessIterator, <span class="keyword">class</span> Compare&gt;</div>
 <div class="foldopen" id="foldopen00132" data-start="{" data-end="}">
@@ -229,7 +225,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        <span class="keyword">template</span> &lt;<span class="keyword">class</span> RandomAccessIterator&gt;</div>
 <div class="foldopen" id="foldopen00148" data-start="{" data-end="}">
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno"><a class="line" href="CPalgorithm_8h.html#a4feaaac005d935759eec75e0fe0a0abe">  148</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="CPalgorithm_8h.html#a307dfa90c2eb86f01d75eef987e45aae">sort</a>(RandomAccessIterator first, RandomAccessIterator last) {</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>            <a class="code hl_struct" href="structcpstd_1_1detail_1_1less.html">detail::less</a> comp;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>            detail::less comp;</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>            <a class="code hl_function" href="CPalgorithm_8h.html#a307dfa90c2eb86f01d75eef987e45aae">cpstd::sort</a>(first, last, comp);</div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        }</div>
 </div>
@@ -240,7 +236,6 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="preprocessor">#endif</span><span class="comment">//CROSS_PLATFORM_ALGORITHM_H</span></div>
 <div class="ttc" id="aCPalgorithm_8h_html_a307dfa90c2eb86f01d75eef987e45aae"><div class="ttname"><a href="CPalgorithm_8h.html#a307dfa90c2eb86f01d75eef987e45aae">cpstd::sort</a></div><div class="ttdeci">void sort(RandomAccessIterator first, RandomAccessIterator last, Compare comp)</div><div class="ttdoc">Sorts [first, last) so comp holds between neighbours (heapsort).</div><div class="ttdef"><b>Definition</b> CPalgorithm.h:132</div></div>
-<div class="ttc" id="astructcpstd_1_1detail_1_1less_html"><div class="ttname"><a href="structcpstd_1_1detail_1_1less.html">cpstd::detail::less</a></div><div class="ttdef"><b>Definition</b> CPalgorithm.h:124</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- CPSTL footer aligned with the Foundation-family Doxygen output. -->
 <!-- start footer part -->

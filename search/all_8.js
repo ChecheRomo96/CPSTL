@@ -8,8 +8,7 @@ var searchData=
   ['configuration_5',['configuration',['../group__CPSTL__Configuration.html',1,'Configuration'],['../md_README.html#autotoc_md2',1,'Configuration']]],
   ['cpalgorithm_2eh_6',['CPalgorithm.h',['../CPalgorithm_8h.html',1,'']]],
   ['cpexception_2eh_7',['CPexception.h',['../CPexception_8h.html',1,'']]],
-  ['cpstd_3a_3adetail_8',['detail',['../namespacecpstd_1_1detail.html',1,'cpstd']]],
-  ['cpstl_9',['CPSTL',['../index.html',1,'']]],
-  ['cpstl_3a_20cross_20platform_20stl_10',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]],
-  ['cross_20platform_20stl_11',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]]
+  ['cpstl_8',['CPSTL',['../index.html',1,'']]],
+  ['cpstl_3a_20cross_20platform_20stl_9',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]],
+  ['cross_20platform_20stl_10',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]]
 ];

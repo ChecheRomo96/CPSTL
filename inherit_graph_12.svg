@@ -11,8 +11,8 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structcpstd_1_1detail_1_1floating__limits.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="179,-63 0,-63 0,0 179,0 179,-63"/>
+<g id="a_Node000000"><a xlink:title=" ">
+<polygon fill="#e0e0e0" stroke="#999999" points="179,-63 0,-63 0,0 179,0 179,-63"/>
 <text text-anchor="start" x="8" y="-51" font-family="Helvetica,sans-Serif" font-size="10.00">cpstd::detail::floating</text>
 <text text-anchor="start" x="8" y="-40" font-family="Helvetica,sans-Serif" font-size="10.00">_limits&lt; float, FLT_DIG,</text>
 <text text-anchor="start" x="8" y="-29" font-family="Helvetica,sans-Serif" font-size="10.00"> FLT_MANT_DIG, FLT_MIN_EXP,</text>

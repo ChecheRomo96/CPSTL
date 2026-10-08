@@ -1,5 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structcpstd_1_1detail_1_1integral__limits.html" title=" " alt="" coords="5,5,196,75"/>
-<area shape="rect" id="Node000001" href="$classcpstd_1_1numeric__limits_3_01char_01_4.html" title=" " alt="" coords="244,20,407,60"/>
-<area shape="poly" id="edge5_Node000000_Node000001" title=" " alt="" coords="210,37,244,37,244,43,210,43"/>
+<area shape="rect" id="Node000000" href="$classcpstd_1_1exception.html" title=" " alt="" coords="5,31,135,56"/>
+<area shape="rect" id="Node000001" href="$classcpstd_1_1bad__alloc.html" title=" " alt="" coords="187,5,313,31"/>
+<area shape="poly" id="edge6_Node000000_Node000001" title=" " alt="" coords="148,30,186,24,187,30,149,35"/>
+<area shape="rect" id="Node000002" href="$classcpstd_1_1logic__error.html" title=" " alt="" coords="183,55,317,80"/>
+<area shape="poly" id="edge7_Node000000_Node000002" title=" " alt="" coords="149,51,183,56,182,61,148,56"/>
+<area shape="rect" id="Node000003" href="$classcpstd_1_1length__error.html" title=" " alt="" coords="369,29,513,55"/>
+<area shape="poly" id="edge8_Node000002_Node000003" title=" " alt="" coords="331,54,368,49,369,54,331,59"/>
+<area shape="rect" id="Node000004" href="$classcpstd_1_1out__of__range.html" title=" " alt="" coords="365,79,516,104"/>
+<area shape="poly" id="edge9_Node000002_Node000004" title=" " alt="" coords="331,75,366,79,365,85,331,80"/>
 </map>
