@@ -18,6 +18,8 @@ covers the programmer/debugger connection, board power and the actual target.
 | --- | --- | --- | --- |
 | 2026-10-07 | ESP32 | CP2102 USB-to-UART | `CPSTL hardware smoke: PASS` |
 | 2026-10-07 | Arduino Mega (AVR) | COM8 | `CPSTL hardware smoke: PASS` |
+| 2026-10-07 | ESP32 | CP2102 USB-to-UART | `Algorithms: PASS`; `Function: PASS` |
+| 2026-10-07 | Arduino Mega (AVR) | COM8 | `Algorithms: PASS`; `Function: PASS` |
 | 2026-10-07 | STM32G0B1CBT6 | ST-LINK / SWD, 100 kHz | Foundation consumer: 12/12 checks passed (`PASS`) |
 
 ## AVR and ESP32 procedure

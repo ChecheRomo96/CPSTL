@@ -3,7 +3,7 @@
 This file records user-visible changes to CPSTL. Release dates use the
 `YYYY-MM-DD` format.
 
-## Unreleased
+## [1.1.5] - 2026-10-07
 
 ### Added
 
