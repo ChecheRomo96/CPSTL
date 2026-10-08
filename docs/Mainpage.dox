@@ -1,0 +1,14 @@
+/**
+ * @mainpage CPSTL
+ *
+ * CPSTL provides the familiar C++ standard-library vocabulary on hosted and
+ * freestanding targets. The public namespace is `cpstd`: in STL mode every
+ * name aliases `std`; otherwise CPSTL supplies a C++11-compatible
+ * implementation built only on freestanding C headers.
+ *
+ * @section CPSTL_Start Start here
+ * - @ref CPSTL_Configuration selects STL mode, allocation and modules.
+ * - @ref CPSTL_Runtime defines allocation and failure behavior.
+ * - @ref CPSTL_Modules lists the public vocabulary and headers.
+ * - @ref CPSTL_Build documents desktop, AVR and Arduino validation.
+ */
