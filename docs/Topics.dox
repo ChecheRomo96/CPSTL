@@ -30,7 +30,8 @@
 
 /** @page CPSTL_Tutorials Tutorials
  *
- * Public tutorials live directly in `examples/<Tutorial>/`. Every tutorial has
+ * Public tutorials are grouped by module in
+ * `examples/<module>/<tutorial_name>/`. Every tutorial has
  * an Arduino sketch named after its directory and a matching
  * `Desktop/main.cpp`, each with its own `CMakeLists.txt`. They demonstrate a
  * portable task rather than present a unit-test assertion stream; configured
