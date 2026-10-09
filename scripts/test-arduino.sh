@@ -52,8 +52,11 @@ COUNT=0
 for FQBN in $BOARDS; do
     BUILD_ROOT="$ROOT/build/arduino/$(printf '%s' "$FQBN" | tr ':' '_')"
     rm -rf -- "$BUILD_ROOT"
-    for SKETCH in "$ROOT"/examples/*/*.ino; do
-        [ -f "$SKETCH" ] || die "no tutorial sketches under examples"
+    SKETCH_LIST="$BUILD_ROOT/tutorial-sketches.txt"
+    mkdir -p -- "$BUILD_ROOT"
+    find "$ROOT/examples" -type f -name '*.ino' | sort >"$SKETCH_LIST"
+    [ -s "$SKETCH_LIST" ] || die "no tutorial sketches under examples"
+    while IFS= read -r SKETCH; do
         SKETCH_DIR=$(dirname -- "$SKETCH")
         # A tutorial is a self-contained example directory. Historical Arduino
         # test suites such as AUnit_Tests intentionally have no CMakeLists.txt
@@ -79,7 +82,7 @@ for FQBN in $BOARDS; do
             die "$NAME compiled with CPSTL warnings for $FQBN"
         fi
         COUNT=$((COUNT + 1))
-    done
+    done <"$SKETCH_LIST"
 done
 
 [ "$COUNT" -gt 0 ] || die "no tutorial sketches under examples"

@@ -7,7 +7,8 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ### Changed
 
-- Examples are now application tutorials under `examples/<Tutorial>/`, each
+- Examples are now application tutorials grouped under
+  `examples/<module>/<tutorial_name>/`, each
   with an Arduino sketch and matching desktop entry point. They explain
   portable workflows instead of serving as serial PASS/FAIL tests.
 

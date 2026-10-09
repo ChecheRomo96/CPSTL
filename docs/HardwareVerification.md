@@ -24,8 +24,8 @@ covers the programmer/debugger connection, board power and the actual target.
 
 ## AVR and ESP32 procedure
 
-1. Open a tutorial sketch under `examples/<Tutorial>/` in Arduino IDE, with
-   this repository installed as the CPSTL library. `FixedCapacityLog` is a
+1. Open a tutorial sketch under `examples/<module>/<tutorial_name>/` in Arduino IDE,
+   with this repository installed as the CPSTL library. `telemetry_log` is a
    compact first tutorial; the catalog is in `examples/README.md`.
 2. Select either an Arduino Uno or the connected ESP32 board and its serial
    port.
