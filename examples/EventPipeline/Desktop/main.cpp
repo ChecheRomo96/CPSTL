@@ -1,6 +1,4 @@
 #include <CPfunctional.h>
-#include <CPmemory.h>
-#include <CPutility.h>
 #include <CPvector>
 
 #include <stdio.h>
@@ -15,15 +13,13 @@ namespace {
 }
 
 int main() {
-    cpstd::unique_ptr<Recorder> recorder = cpstd::make_unique<Recorder>();
-    Recorder* const destination = recorder.get();
     cpstd::vector<cpstd::function<void(int)> > listeners;
     listeners.reserve(1);
-    listeners.push_back([destination](int value) { (*destination)(value); });
+    Recorder recorder;
+    listeners.push_back([&recorder](int value) { recorder(value); });
     listeners[0](12);
     listeners[0](8);
 
-    cpstd::unique_ptr<Recorder> owner = cpstd::move(recorder);
-    printf("Event total: %d\n", owner->total);
+    printf("Event total: %d\n", recorder.total);
     return 0;
 }

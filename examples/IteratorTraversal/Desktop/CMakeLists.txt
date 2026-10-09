@@ -1,0 +1,1 @@
+cpstl_add_example(CPSTL_IteratorTraversal main.cpp)
