@@ -6,18 +6,10 @@ traits, iterators, algorithms) on targets with or without a C++ standard
 library. With `CPSTL_USING_STL` every `cpstd` name aliases `std`; otherwise
 CPSTL provides its own implementation.
 
-## Shared RoModular guidance
+## Scope
 
-Before starting work, look for the shared guidance in `../RoModularAgents`.
-
-- If it exists and is readable, read `AGENTS.md` and `CONTRACT.md` completely.
-- Read the CPSTL repository adapter under `repositories/` when one exists.
-- If the sibling repository is unavailable, continue with the rules in this
-  file and report that the shared guidance was not loaded.
-
-Shared guidance does not expand the user's requested scope. Do not modify
-Foundation, MCC, MIDILAR, RoModular, RoModularBuild, or another sibling
-repository unless the user explicitly includes it.
+Do not modify Foundation, MCC, MIDILAR, RoModular, RoModularBuild, or another
+sibling repository unless the user explicitly includes it.
 
 ## Repository rules
 
@@ -38,6 +30,12 @@ repository unless the user explicitly includes it.
 - Keep public headers, examples, tests, `CHANGELOG.md`, and the version in
   `CMakeLists.txt`, `library.properties` and `src/CPSTL_BuildSettings.h`
   synchronized.
+- Preserve configuration selection through the `CPSTL_*` cache options
+  (`CPSTL_USING_STL`, `CPSTL_ALLOCATION`, `CPSTL_VECTOR`, `CPSTL_STRING`,
+  `CPSTL_STACK`, `CPSTL_QUEUE`, `CPSTL_CXX_STANDARD`) and their
+  `src/CPSTL_UserSetup.h` equivalents for IDE builds.
+- A change to a `cpstd` interface affects every RoModular library above it;
+  report such a change to the user before making it.
 - Preserve unrelated work and do not commit, tag, push, publish, or merge
   unless the user explicitly requests it.
 
