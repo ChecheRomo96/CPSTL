@@ -2,7 +2,7 @@
 
 // Parse complete integer commands and explain rejected input.
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Parse complete integer commands and explain rejected input.");
     const cpstd::string commands[] = {"tempo=120", "transpose=-2", "broken", "=120", "tempo=", "tempo=fast", "tempo=12x"};

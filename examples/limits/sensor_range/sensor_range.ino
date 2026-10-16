@@ -3,7 +3,7 @@
 
 // Check whether a simulated ADC reading fits its storage type.
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Check whether a simulated ADC reading fits its storage type.");
     const int reading = 300;

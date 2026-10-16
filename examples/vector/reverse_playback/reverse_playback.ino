@@ -7,7 +7,7 @@
   Observe: The same samples print in capture order and reverse order.
 */
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     const size_t sampleCount = 20;
     cpstd::vector<uint8_t> samples;

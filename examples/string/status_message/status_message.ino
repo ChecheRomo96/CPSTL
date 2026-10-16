@@ -2,7 +2,7 @@
 
 // Compose a readable status message from simulated telemetry.
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Compose a readable status message from simulated telemetry.");
     const int channel = 2;

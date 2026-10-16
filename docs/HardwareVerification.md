@@ -4,8 +4,8 @@ CPSTL's embedded support is verified at three levels:
 
 | Target | Build verification | Physical verification | CPSTL mode |
 | --- | --- | --- | --- |
-| AVR ATmega328P (Arduino Uno) | AVR-GCC smoke firmware, simavr and every Arduino tutorial | Upload an Arduino tutorial and observe its documented output at 9600 baud | CPSTL implementation with C allocation |
-| ESP32 | Arduino compilation for `esp32:esp32:esp32` | Upload an Arduino tutorial and observe its documented output at 9600 baud | STL mode |
+| AVR ATmega328P (Arduino Uno) | AVR-GCC smoke firmware, simavr and every Arduino tutorial | Upload an Arduino tutorial and observe its documented output at 115200 baud | CPSTL implementation with C allocation |
+| ESP32 | Arduino compilation for `esp32:esp32:esp32` | Upload an Arduino tutorial and observe its documented output at 115200 baud | STL mode |
 | STM32G0B1CBT6 | Foundation's Cortex-M0+ consumer build | Flash the Foundation consumer through ST-LINK and observe its configured pass signal | CPSTL implementation with C allocation and no C++ runtime |
 
 The automated builds catch compiler, headers and link configuration errors.
@@ -35,7 +35,7 @@ the tutorials below serve a different purpose.
    compact first tutorial; the catalog is in `examples/README.md`.
 2. Select either an Arduino Uno or the connected ESP32 board and its serial
    port.
-3. Upload the sketch, then open the serial monitor at 9600 baud.
+3. Upload the sketch, then open the serial monitor at 115200 baud.
 4. Record the board model, core version and the tutorial output in the
    verification record.
 

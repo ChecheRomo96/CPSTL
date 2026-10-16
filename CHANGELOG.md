@@ -5,6 +5,12 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [1.1.12] - 2026-10-16
+
+### Changed
+
+- Standardize all Arduino tutorial UARTs at 115200 baud and update monitor instructions.
+
 ## [1.1.11] - 2026-10-16
 
 ### Fixed

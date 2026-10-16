@@ -9,7 +9,7 @@ namespace {
 }
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Send every simulated reading to two independent callbacks.");
     cpstd::vector<cpstd::function<void(int)> > listeners;

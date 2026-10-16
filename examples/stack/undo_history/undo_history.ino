@@ -3,7 +3,7 @@
 
 // Restore previous brightness settings in reverse order (LIFO).
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Restore previous brightness settings in reverse order (LIFO).");
     cpstd::stack<int> undo;

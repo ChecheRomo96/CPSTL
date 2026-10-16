@@ -212,6 +212,7 @@ This validates the installed IDE's compilation/upload backend and the physical
 application. No GUI interaction, menu rendering or IDE button operation was
 performed. For the GUI workflow, open the installed `telemetry_log.ino` in
 Arduino IDE, select Arduino Mega or Mega 2560 / ATmega2560 / COM3, and open
-Serial Monitor at 9600 baud. Reset the board to repeat the output. The board
+Serial Monitor at 115200 baud for the current tutorial (the recorded firmware
+used 9600 baud). Reset the board to repeat the output. The board
 is now left running that tutorial, and the installed library copy remains
 available in the user's sketchbook.
