@@ -9,7 +9,7 @@ Each program prints its starting values, names the operation, and shows the
 result from the actual object. Arduino and desktop use the same scenarios;
 simulated readings are identified explicitly. Each tutorial README includes
 a captured desktop transcript and explains platform-dependent values such as
-capacity, integer ranges and pseudorandom samples. Serial tutorials use 9600 baud.
+capacity, integer ranges and pseudorandom samples. Serial tutorials use 115200 baud.
 
 The historical `AUnit_Tests` sketch is only a runner without registered CPSTL
 cases; it prints that fact at startup and is not one of the 20 tutorials.

@@ -3,7 +3,7 @@
 
 // Reject an invalid sample index and report a recovery action.
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Reject an invalid sample index and report a recovery action.");
     const int capturedSamples = 4;

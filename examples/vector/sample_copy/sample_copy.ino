@@ -11,7 +11,7 @@ void PrintValues(const char* label, const cpstd::vector<int>& values) {
 }
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Copy a packet into an independent log.");
     cpstd::vector<int> source = {3, 5, 8};
