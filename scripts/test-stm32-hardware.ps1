@@ -41,9 +41,9 @@ $cases = @($manifest | ForEach-Object {
     if ($_ -match '^CPSTL_HW_CASE\((\w+)\)$') { $Matches[1] }
 })
 if ($cases.Count -eq 0 -or $size -ne (7+$cases.Count)*4) { throw 'Invalid report layout' }
-Invoke-Logged $Programmer @('-c','port=SWD','freq=1000','-w',$elf,'-v','-rst') "$output/flash.log"
+& "$root/tools/RoModularBuild/scripts/stlink.ps1" -Action Flash -Programmer $Programmer -File $elf -Log "$output/flash.log"
 Start-Sleep -Seconds 2
-Invoke-Logged $Programmer @('-c','port=SWD','freq=1000','mode=HOTPLUG','-u',$address,"$size","$output/report.bin") "$output/read.log"
+& "$root/tools/RoModularBuild/scripts/stlink.ps1" -Action Read -Programmer $Programmer -Address $address -Size $size -File "$output/report.bin" -Log "$output/read.log"
 $bytes = [IO.File]::ReadAllBytes("$output/report.bin")
 if ($bytes.Length -ne $size) { throw 'Truncated report' }
 $words = @(0..(($size/4)-1) | ForEach-Object { [BitConverter]::ToUInt32($bytes,$_ * 4) })

@@ -1,0 +1,76 @@
+name: STM32 Physical Contract Tests (Manual)
+
+# No pull_request/push trigger: this workflow writes to a real board.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stm32g0b1-physical-board
+  cancel-in-progress: false
+
+jobs:
+  hardware:
+    name: STM32G0B1CBT6 / ST-LINK / physical execution
+    runs-on: [self-hosted, windows, x64, stm32g0b1]
+    environment: stm32-hardware
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Run all modes, test failure propagation, then restore passing C firmware
+        shell: pwsh
+        env:
+          STM32_TOOLCHAIN_ROOT: ${{ vars.STM32_TOOLCHAIN_ROOT }}
+          STM32_PROGRAMMER: ${{ vars.STM32_PROGRAMMER }}
+          STM32_PROBE_SERIAL: ${{ vars.STM32_PROBE_SERIAL }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ([string]::IsNullOrWhiteSpace($env:STM32_TOOLCHAIN_ROOT) -or
+              [string]::IsNullOrWhiteSpace($env:STM32_PROGRAMMER) -or
+              -not (Test-Path -LiteralPath $env:STM32_TOOLCHAIN_ROOT) -or
+              -not (Test-Path -LiteralPath $env:STM32_PROGRAMMER -PathType Leaf)) {
+              throw 'Configure STM32_TOOLCHAIN_ROOT and STM32_PROGRAMMER environment variables in GitHub'
+          }
+          $common = @{
+              ToolchainRoot = $env:STM32_TOOLCHAIN_ROOT
+              Programmer = $env:STM32_PROGRAMMER
+              ProbeSerial = $env:STM32_PROBE_SERIAL
+              Flash = $true
+          }
+          try {
+              foreach ($mode in 'C', 'CPP', 'STD', 'STL') {
+                  & ./scripts/test-stm32-native.ps1 @common -Allocation $mode
+              }
+              $runRoot = Join-Path $PWD 'build/hardware/stm32-native'
+              $before = @(Get-ChildItem $runRoot -Directory | Select-Object -ExpandProperty FullName)
+              $rejected = $false
+              try { & ./scripts/test-stm32-native.ps1 @common -Allocation C -InjectFailure }
+              catch { $rejected = $true; Write-Host "Expected rejection: $_" }
+              if (-not $rejected) { throw 'Injected failure did not fail the command' }
+              $newRun = @(Get-ChildItem $runRoot -Directory | Where-Object { $_.FullName -notin $before })
+              if ($newRun.Count -ne 1) { throw 'Cannot identify the injected-failure run' }
+              $metadata = Get-Content (Join-Path $newRun[0].FullName 'build.json') -Raw | ConvertFrom-Json
+              $result = Get-Content (Join-Path $newRun[0].FullName 'result.json') -Raw | ConvertFrom-Json
+              $failed = @($result.cases | Where-Object { -not $_.passed })
+              if (-not $metadata.injected -or $result.buildId -ne $metadata.buildId -or
+                  $result.total -ne 23 -or $result.passed -ne 22 -or $result.failed -ne 1 -or
+                  $result.assertions -le 0 -or $failed.Count -ne 1 -or $failed[0].name -ne 'TypeTraits') {
+                  throw 'The failure was not the expected injected TypeTraits case'
+              }
+          }
+          finally {
+              # Leave the board running a normal passing image even after a test failure.
+              & ./scripts/test-stm32-native.ps1 @common -Allocation C
+          }
+      - name: Upload actual board reports and firmware
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CPSTL-stm32g0b1-physical-results
+          path: build/hardware/stm32-native/
+          if-no-files-found: warn
+          retention-days: 14
