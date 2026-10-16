@@ -1,32 +1,4 @@
 var searchData=
 [
-  ['random_5faccess_5fiterator_5ftag_0',['random_access_iterator_tag',['../structcpstd_1_1random__access__iterator__tag.html',1,'cpstd']]],
-  ['rebind_1',['rebind',['../structcpstd_1_1allocator_1_1rebind.html',1,'cpstd::allocator&lt; T &gt;::rebind&lt; U &gt;'],['../structcpstd_1_1allocator__traits_1_1rebind.html',1,'cpstd::allocator_traits&lt; Alloc &gt;::rebind&lt; U &gt;']]],
-  ['reconnection_2',['Completed after USB reconnection',['../md_docs_2ArduinoHardwareTests.html#autotoc_md36',1,'']]],
-  ['record_3',['Verification record',['../md_docs_2HardwareVerification.html#autotoc_md39',1,'']]],
-  ['record_3a_202026_2010_2015_4',['Execution record: 2026-10-15',['../md_docs_2ArduinoHardwareTests.html#autotoc_md35',1,'']]],
-  ['release_201_201_206_20verification_20—_202026_2010_2015_5',['Release 1.1.6 verification — 2026-10-15',['../md_docs_2WindowsValidation.html#autotoc_md57',1,'']]],
-  ['relocation_20evidence_6',['Independent consumer and relocation evidence',['../md_docs_2WindowsValidation.html#autotoc_md53',1,'']]],
-  ['remaining_20limits_20and_20next_20step_7',['Remaining limits and next step',['../md_docs_2WindowsValidation.html#autotoc_md56',1,'']]],
-  ['remove_5fconst_8',['remove_const',['../structcpstd_1_1remove__const.html',1,'cpstd']]],
-  ['remove_5fconst_3c_20const_20t_20_3e_9',['remove_const&lt; const T &gt;',['../structcpstd_1_1remove__const_3_01const_01T_01_4.html',1,'cpstd']]],
-  ['remove_5fcv_10',['remove_cv',['../structcpstd_1_1remove__cv.html',1,'cpstd']]],
-  ['remove_5fcv_3c_20const_20t_20_3e_11',['remove_cv&lt; const T &gt;',['../structcpstd_1_1remove__cv_3_01const_01T_01_4.html',1,'cpstd']]],
-  ['remove_5fcv_3c_20const_20volatile_20t_20_3e_12',['remove_cv&lt; const volatile T &gt;',['../structcpstd_1_1remove__cv_3_01const_01volatile_01T_01_4.html',1,'cpstd']]],
-  ['remove_5fcv_3c_20volatile_20t_20_3e_13',['remove_cv&lt; volatile T &gt;',['../structcpstd_1_1remove__cv_3_01volatile_01T_01_4.html',1,'cpstd']]],
-  ['remove_5freference_14',['remove_reference',['../structcpstd_1_1remove__reference.html',1,'cpstd']]],
-  ['remove_5freference_3c_20t_20_26_20_3e_15',['remove_reference&lt; T &amp; &gt;',['../structcpstd_1_1remove__reference_3_01T_01_6_01_4.html',1,'cpstd']]],
-  ['remove_5freference_3c_20t_20_26_26_20_3e_16',['remove_reference&lt; T &amp;&amp; &gt;',['../structcpstd_1_1remove__reference_3_01T_01_6_6_01_4.html',1,'cpstd']]],
-  ['remove_5fvolatile_17',['remove_volatile',['../structcpstd_1_1remove__volatile.html',1,'cpstd']]],
-  ['remove_5fvolatile_3c_20volatile_20t_20_3e_18',['remove_volatile&lt; volatile T &gt;',['../structcpstd_1_1remove__volatile_3_01volatile_01T_01_4.html',1,'cpstd']]],
-  ['requirements_19',['Requirements',['../md_docs_2ArduinoHardwareTests.html#autotoc_md31',1,'']]],
-  ['reserve_20',['reserve',['../classcpstd_1_1vector.html#a36c8ad1b9fe5061cdcc9f6b62df67029',1,'cpstd::vector']]],
-  ['resize_21',['resize',['../classcpstd_1_1vector.html#a31a6e89a25a7a29f1ddc4be36f6ce5d9',1,'cpstd::vector::resize(size_type n)'],['../classcpstd_1_1vector.html#a652e6586fa3f74475f3619aff45fde0f',1,'cpstd::vector::resize(size_type n, const value_type &amp;value)']]],
-  ['results_22',['Final commands and observed results',['../md_docs_2WindowsValidation.html#autotoc_md52',1,'']]],
-  ['results_20without_20a_20serial_20adapter_23',['Results without a serial adapter',['../md_docs_2STM32ArduinoValidation.html#autotoc_md45',1,'']]],
-  ['reverse_5fiterator_24',['reverse_iterator',['../classcpstd_1_1reverse__iterator.html',1,'cpstd']]],
-  ['revisions_20and_20initial_20state_25',['Revisions and initial state',['../md_docs_2WindowsValidation.html#autotoc_md48',1,'']]],
-  ['run_26',['Run',['../md_docs_2ArduinoHardwareTests.html#autotoc_md32',1,'']]],
-  ['runs_20on_20the_20board_27',['What runs on the board',['../md_docs_2ArduinoHardwareTests.html#autotoc_md33',1,'']]],
-  ['runtime_20and_20allocation_28',['Runtime and allocation',['../group__CPSTL__Runtime.html',1,'']]]
+  ['queue_0',['queue',['../classcpstd_1_1queue.html',1,'cpstd::queue&lt; T, Container &gt;'],['../md_README.html#autotoc_md3',1,'Stack and queue']]]
 ];
