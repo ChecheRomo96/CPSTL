@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['matrix_20follow_20up_20—_202026_2010_2015_0',['Allocation and STL matrix follow-up — 2026-10-15',['../md_docs_2WindowsValidation.html#autotoc_md55',1,'']]],
-  ['modules_1',['modules',['../md_README.html#autotoc_md1',1,'Modules'],['../group__CPSTL__Modules.html',1,'Public modules']]]
+  ['length_5ferror_0',['length_error',['../classcpstd_1_1length__error.html',1,'cpstd']]],
+  ['library_20compatibility_20—_202026_2010_2015_1',['Arduino IDE library compatibility — 2026-10-15',['../md_docs_2ArduinoHardwareTests.html#autotoc_md39',1,'']]],
+  ['license_2',['License',['../md_README.html#autotoc_md8',1,'']]],
+  ['limitations_3',['Known limitations',['../md_CHANGELOG.html#autotoc_md30',1,'']]],
+  ['limits_20and_20next_20step_4',['Remaining limits and next step',['../md_docs_2WindowsValidation.html#autotoc_md59',1,'']]],
+  ['logic_5ferror_5',['logic_error',['../classcpstd_1_1logic__error.html',1,'cpstd']]]
 ];
