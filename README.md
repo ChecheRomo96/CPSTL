@@ -105,6 +105,28 @@ On Windows use the matching `.ps1` scripts. List the presets with
 the configure step, for example
 `./scripts/configure.sh linux_gcc_x64 --fresh -- -DCPSTL_USING_STL=ON`.
 
+For physical ATmega2560 contract tests on Windows, run
+`./scripts/test-hardware.ps1 -Port COM3` with the board's actual COM port.
+See [Arduino hardware tests](docs/ArduinoHardwareTests.md) for requirements,
+coverage, serial/JUnit evidence and the current execution record.
+
+For Visual Studio Build Tools 2022 with the C++ workload and Windows SDK, use
+`windows_msvc2022_x64`; `windows_msvc_x64` selects Visual Studio 2026 through
+the pinned shared profile. Both select x64 explicitly. For example:
+
+```powershell
+.\scripts\configure.ps1 windows_msvc2022_x64
+.\scripts\build.ps1 windows_msvc2022_x64 -Configuration Debug
+.\scripts\test.ps1 windows_msvc2022_x64 -Configuration Debug
+.\scripts\build.ps1 windows_msvc2022_x64 -Configuration Release
+.\scripts\test.ps1 windows_msvc2022_x64 -Configuration Release
+.\scripts\install.ps1 windows_msvc2022_x64
+```
+
+Installation exports Release to `dist/windows_msvc2022_x64`. See
+[Windows validation](docs/WindowsValidation.md) for executed results and the
+independent package-consumer check.
+
 ## Use from CMake
 
 ```cmake

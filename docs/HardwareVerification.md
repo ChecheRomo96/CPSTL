@@ -16,6 +16,7 @@ covers the programmer/debugger connection, board power and the actual target.
 
 | Date | Target | Connection | Result |
 | --- | --- | --- | --- |
+| 2026-10-15 | ATmega2560 / Arduino Mega 2560 | COM3, avrdude 8.0-arduino.1 | Dedicated physical contract suite: C 23/23, CPP 23/23; 131 assertions each; injected failure rejected with exit 1. See [execution record](ArduinoHardwareTests.md#completed-after-usb-reconnection). |
 | 2026-10-07 | ESP32 | CP2102 USB-to-UART | `CPSTL hardware smoke: PASS` |
 | 2026-10-07 | Arduino Mega (AVR) | COM8 | `CPSTL hardware smoke: PASS` |
 | 2026-10-07 | ESP32 | CP2102 USB-to-UART | `Algorithms: PASS`; `Function: PASS` |
@@ -23,6 +24,11 @@ covers the programmer/debugger connection, board power and the actual target.
 | 2026-10-07 | STM32G0B1CBT6 | ST-LINK / SWD, 100 kHz | Foundation consumer: 12/12 checks passed (`PASS`) |
 
 ## AVR and ESP32 procedure
+
+For automated ATmega2560 physical contract tests on Windows, see
+[Arduino hardware tests](ArduinoHardwareTests.md). This is a dedicated
+embedded suite with per-case serial results and host-side failure detection;
+the tutorials below serve a different purpose.
 
 1. Open a tutorial sketch under `examples/<module>/<tutorial_name>/` in Arduino IDE,
    with this repository installed as the CPSTL library. `telemetry_log` is a
@@ -38,6 +44,11 @@ An ESP32 has a hosted C++ standard library, so it intentionally uses
 and `malloc`/`free`.
 
 ## STM32G0B1CBT6 procedure
+
+For the Arduino IDE compatibility work and its current compilation evidence
+and physical-execution blocker, see
+[STM32 Arduino validation](STM32ArduinoValidation.md). The historical
+Foundation procedure below is a separate firmware workflow.
 
 Use the Foundation hardware-consumer firmware once its Cortex-M0+ build has
 been generated. Connect the ST-LINK through SWD (PA13/SWDIO, PA14/SWCLK, NRST,
