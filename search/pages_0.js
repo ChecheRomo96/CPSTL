@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['changelog_0',['Changelog',['../md_CHANGELOG.html',1,'']]],
-  ['cpstl_1',['CPSTL',['../index.html',1,'']]],
-  ['cpstl_3a_20cross_20platform_20stl_2',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]],
-  ['cross_20platform_20stl_3',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]]
+  ['10_2015_0',['Windows end-to-end validation — 2026-10-15',['../md_docs_2WindowsValidation.html',1,'']]],
+  ['15_1',['Windows end-to-end validation — 2026-10-15',['../md_docs_2WindowsValidation.html',1,'']]]
 ];
