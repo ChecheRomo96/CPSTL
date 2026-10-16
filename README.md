@@ -1,11 +1,11 @@
 # CPSTL: Cross-Platform STL
 
+**Documentation:** [API and build guide](https://checheromo96.github.io/CPSTL/) · [API class index](https://checheromo96.github.io/CPSTL/annotated.html)
+
 CPSTL gives C++11 and newer code the familiar `std` interface on targets with
 or without a C++ standard library. Code written against `cpstd::vector`,
 `cpstd::string`, `cpstd::function`, `cpstd::sort` or `cpstd::is_same` builds
 unchanged on a desktop and on an 8-bit AVR.
-
-**Documentation:** [CPSTL API and build guide](https://checheromo96.github.io/CPSTL/)
 
 - **STL mode** (`CPSTL_USING_STL`): every `cpstd` name is an alias of its `std`
   counterpart, at no cost.
