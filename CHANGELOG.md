@@ -5,6 +5,12 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [1.1.11] - 2026-10-16
+
+### Fixed
+
+- Pin RoModularBuild v0.6.2 so imported AVR C++ package headers retain C++ linkage.
+
 ## [1.1.10] - 2026-10-16
 
 ### Fixed
