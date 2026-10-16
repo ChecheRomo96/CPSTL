@@ -74,9 +74,9 @@ $(function() {
   <div class="headertitle"><div class="title">Automated physical tests: ATmega2560</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md42"></a> This Windows PowerShell 7 runner builds a dedicated CPSTL contract suite with Arduino CLI, flashes an Arduino Mega 2560 through its serial bootloader using avrdude, and checks the actual board's serial test results. It does not burn a bootloader, change fuses or use a simulator.</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md44"></a> This Windows PowerShell 7 runner builds a dedicated CPSTL contract suite with Arduino CLI, flashes an Arduino Mega 2560 through its serial bootloader using avrdude, and checks the actual board's serial test results. It does not burn a bootloader, change fuses or use a simulator.</p>
 <p>The runner described here targets the Mega. A separate STM32 Arduino candidate uses the same cases and a report in RAM for ST-LINK-only connections; its <a class="el" href="md_docs_2STM32ArduinoValidation.html">execution status</a> is recorded separately and must not be inferred from the successful AVR runs below.</p>
-<h1><a class="anchor" id="autotoc_md43"></a>
+<h1><a class="anchor" id="autotoc_md45"></a>
 Requirements</h1>
 <ul>
 <li>Arduino Mega 2560 connected over USB, identified by Arduino CLI.</li>
@@ -85,7 +85,7 @@ Requirements</h1>
 <li>The <code>arduino:avr</code> platform installed in Arduino CLI's default data directory.</li>
 <li>The serial monitor closed so the test command can use the port.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md44"></a>
+<h1><a class="anchor" id="autotoc_md46"></a>
 Run</h1>
 <p>From the CPSTL repository root:</p>
 <div class="fragment"><div class="line">./scripts/test-hardware.ps1 -Port COM3</div>
@@ -94,7 +94,7 @@ Run</h1>
 <p>To use a CLI outside PATH:</p>
 <div class="fragment"><div class="line">./scripts/test-hardware.ps1 -Port COM3 -ArduinoCli C:/tools/arduino-cli.exe</div>
 </div><!-- fragment --><p><code>-TimeoutSeconds 30</code> controls the serial test deadline. Compilation and upload also have bounded deadlines (120 and 45 seconds respectively). Failure to compile, upload, verify or receive a complete test run causes a nonzero script exit. The script terminates its own subprocess tree if its deadline expires.</p>
-<h1><a class="anchor" id="autotoc_md45"></a>
+<h1><a class="anchor" id="autotoc_md47"></a>
 What runs on the board</h1>
 <p><code>tests/Arduino/CPSTLHardware/Cases.h</code> is the expected case manifest. The firmware runs 23 cases covering:</p>
 <ul>
@@ -108,7 +108,7 @@ What runs on the board</h1>
 </ul>
 <p>The firmware uses C++11 and the CPSTL implementation, with C allocation by default. CPP selects the Arduino core's nothrow new/delete support. STD allocation and STL mode cannot be tested on this AVR toolchain, which has no C++ standard library.</p>
 <p>This is a dedicated embedded contract suite, not the complete desktop GoogleTest suite. It does not establish every desktop case, real system-wide out-of-memory behavior, heap fragmentation endurance, stack high-water marks, interrupt safety or timing guarantees. Simulated allocation failures use a test allocator and check unchanged contents and outstanding allocation counts.</p>
-<h1><a class="anchor" id="autotoc_md46"></a>
+<h1><a class="anchor" id="autotoc_md48"></a>
 Evidence and failure detection</h1>
 <p>Every invocation creates <code>build/hardware/atmega2560/&lt;allocation&gt;-&lt;build-id&gt;/</code>. It records board identity/core/tool versions, source revision and dirty state, the RoModularBuild revision, exact CLI argument arrays, compilation log, firmware and SHA256, and the verbose avrdude command and verification log.</p>
 <p>After upload, the host requests the freshly compiled build ID over serial at 115200 baud. It requires a matching BEGIN, one PASS/FAIL for every manifest case, and a matching END with consistent counts and positive assertions. Duplicate cases, unknown cases, missing results and timeouts cannot pass.</p>
@@ -119,12 +119,12 @@ Evidence and failure detection</h1>
 <div class="line"># Afterwards restore and test the normal firmware:</div>
 <div class="line">./scripts/test-hardware.ps1 -Port COM3</div>
 </div><!-- fragment --><p>The failure injection only changes the first case's reported verdict. It does not intentionally damage memory or induce unsafe behavior.</p>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Execution record: 2026-10-15</h1>
 <p>Board detected on COM3: Arduino Mega 2560, USB VID/PID <code>2341:0042</code>. Arduino CLI 1.5.1, Arduino AVR Boards 1.8.8, AVR-GCC 7.3.0, avrdude 8.0-arduino.1. Avrdude read signature <code>1E 98 01</code> and verified 17,088 bytes of firmware in the initial normal run (<code>C-41D2617A</code>). The physical board reported 23/23 cases passing and 131 assertions. Static globals occupied 373 of 8,192 SRAM bytes; this is not a runtime peak-memory measurement.</p>
 <p>The first runner revision then failed while generating JUnit; the XML element handling was corrected. Two subsequent uploads of the failure-injection build stalled during flash writes. Those invocations were failures, not test passes. Bounded process timeouts were added, and the user reconnected USB before retrying. The subsequent complete runs are recorded below. Local evidence is under <code>build/hardware/atmega2560/</code>, including the failed invocations; the cause of the earlier upload stalls was not established.</p>
 <p>While awaiting USB recovery, CPP allocation compiled successfully without flashing (<code>CPP-compile-only</code>): 17,090 bytes of flash and 373 bytes of static globals. That invocation was compilation evidence only. Warnings seen in these builds were unused parameters in the Arduino core's <code>new.cpp</code>; no CPSTL warnings were observed.</p>
-<h2><a class="anchor" id="autotoc_md48"></a>
+<h2><a class="anchor" id="autotoc_md50"></a>
 Completed after USB reconnection</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -143,7 +143,7 @@ Completed after USB reconnection</h2>
 <div class="line">./scripts/test-hardware.ps1 -Port COM3 -Allocation CPP</div>
 </div><!-- fragment --><p>All three uploads completed with avrdude's flash verification. Normal C used 17,088 flash bytes and normal CPP used 17,090; both used 373 static SRAM bytes. Each run produced serial logs, a JUnit report and JSON metadata with matching build IDs. The negative JUnit contained 23 tests and one failure; both normal reports contained 23 tests and zero failures. The last firmware left on the board at the end of that sequence was the normal CPP variant, with failure injection disabled. A later IDE-library check below replaced it with a tutorial.</p>
 <p>This completes the dedicated 23-case physical contract suite in both supported AVR allocation backends. It does not claim that all desktop GoogleTest cases have been ported or executed on ATmega2560. RoModularBuild remained pinned at <code>c905ef4fbddc39d5602a097387c175fe11832135</code>; no shared engine changes were made.</p>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<h1><a class="anchor" id="autotoc_md51"></a>
 Arduino IDE library compatibility — 2026-10-15</h1>
 <p>The user's objective was to establish that CPSTL works as a normal Arduino IDE library, rather than testing the Arduino core's own GPIO/timer APIs or a bare AVR build. No bare-AVR source or preset changes were retained.</p>
 <p>Arduino IDE 2.3.10 is installed through WinGet. Its bundled Arduino CLI 1.5.1 was used with Arduino AVR Boards 1.8.8 and its stock C++11 flags. A standalone copy of CPSTL 1.1.5 (<code>src</code>, <code>examples</code>, metadata and documents) was installed at <code>C:/Users/jromo/Documents/Arduino/libraries/CPSTL</code>. There was no existing CPSTL installation to overwrite. Arduino CLI enumerated it as a user library and discovered its example sketches.</p>
@@ -171,7 +171,7 @@ Arduino IDE library compatibility — 2026-10-15</h1>
 <div class="line">Recorded 4 samples without growing storage during capture.</div>
 <div class="line">If a burst can exceed this budget, reserve more before sampling.</div>
 </div><!-- fragment --><p>Compiler dependency files were checked: they reference the installed library's headers and do not reference the original checkout's <code>src</code> directory. Results, per-tutorial logs, library discovery, upload verification and raw serial output are in <code>build/validation/arduino-ide/</code>, with <code>summary.json</code>.</p>
-<p>This validates the installed IDE's compilation/upload backend and the physical application. No GUI interaction, menu rendering or IDE button operation was performed. For the GUI workflow, open the installed <code>telemetry_log.ino</code> in Arduino IDE, select Arduino Mega or Mega 2560 / ATmega2560 / COM3, and open Serial Monitor at 9600 baud. Reset the board to repeat the output. The board is now left running that tutorial, and the installed library copy remains available in the user's sketchbook. </p>
+<p>This validates the installed IDE's compilation/upload backend and the physical application. No GUI interaction, menu rendering or IDE button operation was performed. For the GUI workflow, open the installed <code>telemetry_log.ino</code> in Arduino IDE, select Arduino Mega or Mega 2560 / ATmega2560 / COM3, and open Serial Monitor at 115200 baud for the current tutorial (the recorded firmware used 9600 baud). Reset the board to repeat the output. The board is now left running that tutorial, and the installed library copy remains available in the user's sketchbook. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- CPSTL footer aligned with the Foundation-family Doxygen output. -->
