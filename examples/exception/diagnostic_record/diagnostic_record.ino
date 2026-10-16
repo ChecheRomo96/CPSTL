@@ -1,25 +1,22 @@
 #include <CPSTL.h>
 #include <CPexception.h>
 
-
-/*
-  Goal: Exception vocabulary: describe a failed bounds check without throwing on an embedded target.
-  Interfaces: cpstd::out_of_range::what().
-  Observe: A rejected index produces a diagnostic and a recovery instruction.
-*/
+// Reject an invalid sample index and report a recovery action.
 void setup() {
     Serial.begin(9600);
     while (!Serial) {}
-    const int requestedIndex = 6;
+    Serial.println("Reject an invalid sample index and report a recovery action.");
     const int capturedSamples = 4;
-    if (requestedIndex >= capturedSamples) {
-        // Embedded code can carry a standard-style diagnostic without throwing it.
+    int requestedIndex = 6;
+    Serial.print("Captured sample count: "); Serial.println(static_cast<long>(capturedSamples));
+    Serial.println("Valid zero-based indices: 0 through 3.");
+    Serial.print("Requested index: "); Serial.println(static_cast<long>(requestedIndex));
+    if (requestedIndex < 0 || requestedIndex >= capturedSamples) {
         const cpstd::out_of_range diagnostic("requested sample is outside the capture");
-        Serial.print("Read #"); Serial.print(requestedIndex); Serial.print(": ");
-        Serial.println(diagnostic.what());
-        Serial.println("Recover by asking for an index from 0 through 3.");
+        Serial.print("Request rejected: "); Serial.println(diagnostic.what());
+        Serial.println("Recovery: request an index from 0 through 3; no buffer access was attempted.");
     }
-    Serial.println("The exception object is a message vocabulary; this sketch does not throw.");
+    Serial.println("The diagnostic object carries a message; this example does not throw an exception.");
 }
 
 void loop() {}

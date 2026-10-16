@@ -2,12 +2,7 @@
 #include <CPmemory.h>
 #include <CPutility.h>
 
-
-/*
-  Goal: Exclusive ownership: hand a hardware object from one subsystem to another.
-  Interfaces: cpstd::make_unique(), cpstd::move(), unique_ptr::operator->().
-  Observe: After move(), the source is empty and the destination is the only owner.
-*/
+// Transfer ownership of a simulated sensor to a logger.
 struct Sensor {
     explicit Sensor(int value) : id(value) {}
     int id;
@@ -16,12 +11,16 @@ struct Sensor {
 
 void setup() {
     Serial.begin(9600);
+    while (!Serial) {}
+    Serial.println("Transfer ownership of a simulated sensor to a logger.");
     cpstd::unique_ptr<Sensor> driver = cpstd::make_unique<Sensor>(42);
-    Serial.print("Driver owns sensor #"); Serial.println(driver->id);
+    if (!driver) { Serial.println("Could not allocate the simulated sensor."); return; }
+    Serial.print("Before move, driver owns sensor ID: "); Serial.println(static_cast<long>(driver->id));
     cpstd::unique_ptr<Sensor> logger = cpstd::move(driver);
-    Serial.print("After move, driver is "); Serial.println(driver ? "still owner" : "empty");
-    Serial.print("Logger reads: "); Serial.println(logger->Read());
-    Serial.println("Only logger may use the sensor now; it deletes it automatically.");
+    Serial.print("After move, driver is empty: "); Serial.println(!driver ? "yes" : "no");
+    Serial.print("After move, logger owns sensor ID: "); Serial.println(static_cast<long>(logger->id));
+    Serial.print("Simulated logger reading (ID * 10): "); Serial.println(static_cast<long>(logger->Read()));
+    Serial.println("The sensor was transferred, not copied; logger releases it automatically on exit.");
 }
 
 void loop() {}

@@ -1,24 +1,30 @@
 #include <CPSTL.h>
+#include <CPstack.h>
 
-
-/*
-  Goal: LIFO history: undo the most recently recorded setting first.
-  Interfaces: stack::push(), top(), pop(), empty().
-  Observe: The last brightness value is restored first.
-*/
+// Restore previous brightness settings in reverse order (LIFO).
 void setup() {
     Serial.begin(9600);
     while (!Serial) {}
+    Serial.println("Restore previous brightness settings in reverse order (LIFO).");
     cpstd::stack<int> undo;
-    undo.push(10); // brightness was 10
-    undo.push(20); // user changed it to 20
-    undo.push(40); // then to 40
-    Serial.println("Undo returns changes in reverse order:");
-    while (!undo.empty()) {
-        Serial.print("Restore brightness "); Serial.println(undo.top());
-        undo.pop();
+    int brightness = 10;
+    Serial.print("Initial brightness: "); Serial.println(static_cast<long>(brightness));
+    const int changes[] = {20, 40};
+    for (cpstd::size_t i = 0; i < sizeof(changes) / sizeof(changes[0]); ++i) {
+        const cpstd::size_t before = undo.size();
+        undo.push(brightness);
+        if (undo.size() != before + 1) { Serial.println("Not enough memory to save undo history."); return; }
+        brightness = changes[i];
+        Serial.print("Changed brightness to: "); Serial.println(static_cast<long>(brightness));
     }
-    Serial.println("Always check empty() before top() or pop().");
+    Serial.println("Undo saves the previous setting before each edit.");
+    while (!undo.empty()) {
+        brightness = undo.top();
+        undo.pop();
+        Serial.print("Undo restored brightness: "); Serial.println(static_cast<long>(brightness));
+        Serial.print("  Remaining undo entries: "); Serial.println(static_cast<long>(undo.size()));
+    }
+    Serial.println("No older setting remains; top() is never called on an empty stack.");
 }
 
 void loop() {}
