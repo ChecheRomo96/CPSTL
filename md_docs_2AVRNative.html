@@ -74,16 +74,16 @@ $(function() {
   <div class="headertitle"><div class="title">Native AVR validation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md46"></a> The <code>atmega328p_avrgcc_avr5</code> and <code>atmega2560_avrgcc_avr6</code> presets build <code>CPSTLAvrSmoke</code> with AVR-GCC and avr-libc, without an Arduino core. CPSTL owns the test firmware and its USART0 verdict; the pinned RoModularBuild release owns toolchain profiles, ELF/HEX/map generation, optional C++ allocation glue, simavr execution and avrdude transport. avr-libc provides startup and linking.</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md48"></a> The <code>atmega328p_avrgcc_avr5</code> and <code>atmega2560_avrgcc_avr6</code> presets build <code>CPSTLAvrSmoke</code> with AVR-GCC and avr-libc, without an Arduino core. CPSTL owns the test firmware and its USART0 verdict; the pinned RoModularBuild release owns toolchain profiles, ELF/HEX/map generation, optional C++ allocation glue, simavr execution and avrdude transport. avr-libc provides startup and linking.</p>
 <p>CI builds Debug and Release for both MCUs, then runs the Release HEX in simavr at 16 MHz. <code>CPSTL AVR smoke: PASS</code> means the smoke assertions passed; a failing check prints <code>CPSTL AVR smoke: FAIL &lt;number&gt;</code>. This firmware is a separate smoke suite from the full Arduino hardware suite and the native STM32 suite. Simulation does not establish physical Mega/Uno verification.</p>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Build a Mega image on Windows</h1>
 <p>Initialize the pinned submodule with <code>git submodule update --init --recursive</code>. With AVR-GCC installed, run from the CPSTL checkout:</p>
 <div class="fragment"><div class="line">$avrRoot = Join-Path $env:LOCALAPPDATA &#39;Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7&#39;</div>
-<div class="line">.\scripts\configure.ps1 atmega2560_avrgcc_avr6 -CMakeArguments @(&quot;-DROMODULAR_AVR_TOOLCHAIN_ROOT=$avrRoot&quot;)</div>
+<div class="line">.\scripts\configure.ps1 atmega2560_avrgcc_avr6 -Fresh -CMakeArguments @(&quot;-DROMODULAR_AVR_TOOLCHAIN_ROOT=$avrRoot&quot;)</div>
 <div class="line">.\scripts\build.ps1 atmega2560_avrgcc_avr6 -Configuration Release -Parallel 4</div>
 </div><!-- fragment --><p>The compiler can come from an Arduino tools installation; the generated image does not link the Arduino core. Substitute your standalone AVR toolchain root when appropriate. The resulting ELF, HEX and map are under <code>build/atmega2560_avrgcc_avr6/bin/Release/</code>.</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md50"></a>
 Explicit physical Mega test</h1>
 <p>The following command replaces the application on the Mega on COM3. Close other serial monitors first. The <code>wiring</code> protocol, 115200 baud and <code>-NoErase</code> are for a Mega2560 with its normal serial bootloader, not an ISP programmer. avrdude still checks the device signature and verifies the programmed image.</p>
 <div class="fragment"><div class="line">$tools = Join-Path $env:LOCALAPPDATA &#39;Arduino15/packages/arduino/tools/avrdude&#39;</div>
