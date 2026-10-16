@@ -22,7 +22,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CPSTL<span id="projectnumber">&#160;1.1.7</span>
+   <div id="projectname">CPSTL<span id="projectnumber">&#160;1.1.8</span>
    </div>
    <div id="projectbrief">Cross-Platform STL for hosted and freestanding C++</div>
   </td>
@@ -74,8 +74,8 @@ $(function() {
   <div class="headertitle"><div class="title">Windows end-to-end validation — 2026-10-15</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md50"></a> </p>
-<h1><a class="anchor" id="autotoc_md51"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md59"></a> </p>
+<h1><a class="anchor" id="autotoc_md60"></a>
 Revisions and initial state</h1>
 <ul>
 <li>CPSTL: <code>838d8b27c755361a1df716e8e72c76d3b4bca055</code>, initially clean.</li>
@@ -83,11 +83,11 @@ Revisions and initial state</h1>
 <li>Sibling RoModularBuild: <code>17fa6798de7db2abe51d17d469532e3d7501b145</code>. Its existing modified <code>README.md</code> and untracked <code>docs/PlatformWorkflowProposal.md</code> were preserved.</li>
 <li>One agent; no commits, tags, pushes, publications or other platform work.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<h1><a class="anchor" id="autotoc_md61"></a>
 Tools and public interface</h1>
 <p>Windows 10.0.19045; x64 target; Visual Studio Build Tools 2022 17.14.37710.0; MSVC 19.44.35229.0, toolset directory 14.44.35207; MSBuild 17.14.60; Windows SDK 10.0.26100.0; CMake/CTest 4.4.4; PowerShell 7.6.7; Git 2.55.0.windows.5; Ninja 1.13.2 installed but unused by the MSVC generator. The workflow requires CMake &gt;=3.25, PowerShell, the selected C++ compiler and SDK. Tests download GoogleTest at <code>063de7e9578f82b369302001269680b4b1553359</code> with a fixed SHA256; <code>FETCHCONTENT_SOURCE_DIR_GOOGLETEST</code> supports an existing offline checkout.</p>
 <p>Public adapters are <code>scripts/configure.ps1</code>, <code>build.ps1</code>, <code>test.ps1</code>, <code>install.ps1</code> and <code>clean.ps1</code>, with Bash counterparts. Initial Windows presets were <code>windows_msvc_x64</code> (VS2026, x64) and <code>windows_clang_x64</code> (Ninja Multi-Config). The added <code>windows_msvc2022_x64</code> selects VS2022, inherits the existing x64 profile, and works with both adapter families. No shared lifecycle behavior changed, so no Bash/PowerShell engine changes were needed. Bash execution and Clang were not validated in this run.</p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md62"></a>
 Acceptance criteria established before edits</h1>
 <ol type="1">
 <li>Configure and build Debug and Release through CPSTL's public adapters.</li>
@@ -96,12 +96,12 @@ Acceptance criteria established before edits</h1>
 <li>Copy the package and a standalone consumer outside CPSTL. Configure with <code>find_package</code>, compile and execute while CPSTL's entire original tree (source, build and dist) is unavailable. Disable CMake package registries.</li>
 <li>Validate RoModularBuild's own contract and preserve the pinned revision.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md54"></a>
+<h1><a class="anchor" id="autotoc_md63"></a>
 Baseline before tracked edits</h1>
 <p><code>./scripts/configure.ps1 windows_msvc_x64</code> failed: the preset's <code>Visual Studio 18 2026</code> generator could not find an installed instance. VS2022 is installed; VS2026 is not.</p>
 <p>&lsquo;./scripts/configure.ps1 windows_msvc_x64 -Fresh -CMakeArguments @(&rsquo;-G','Visual Studio 17 2022','-DCPSTL_TESTING=ON')<code>configured successfully. However,</code>./scripts/test.ps1 windows_msvc_x64 -Configuration Debug -Parallel 4 -JUnit build/validation/baseline-debug.xml` failed because its configure step reapplied the VS2026 generator to the VS2022 build directory. The baseline failure did not create that JUnit file.</p>
 <p>A temporary <code>CMakeUserPresets.json</code> defined <code>windows_msvc2022_x64_local</code>, inheriting <code>windows_msvc_x64</code> and overriding only the generator. Using the public configure/build/test/install adapters with that preset and the unchanged dependency passed Debug 176/176, Release 176/176 and installation. This established that the installed toolchain worked before adding the equivalent public CPSTL preset. The temporary user preset was then removed.</p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md64"></a>
 Final commands and observed results</h1>
 <p>Executed from CPSTL with the new local CPSTL changes and the <b>unchanged</b> RoModularBuild pin:</p>
 <div class="fragment"><div class="line">cmake --list-presets=all</div>
@@ -113,7 +113,7 @@ Final commands and observed results</h1>
 <div class="line">./scripts/install.ps1 windows_msvc2022_x64</div>
 </div><!-- fragment --><p>All succeeded. Both JUnit reports contain 176 tests, 0 failures and 0 disabled tests: 175 GoogleTest cases plus <code>CPSTLHeaderCheck</code>. Library/header check use C++11; GoogleTest requires C++17. Configuration was STL OFF, allocation C, vector/string/stack/queue ON. Release was installed to <code>dist/windows_msvc2022_x64</code>. Other feature/allocation combinations were outside this validation.</p>
 <p><code>./scripts/validate.ps1</code> also succeeded from both the pinned submodule and the sibling RoModularBuild repository: 6 contract tests passed in each, plus configure/build/install/clean checks. Its deliberate empty-suite test failed without <code>-AllowNoTests</code> and succeeded with that explicit override. That expected empty-suite case is not counted as CPSTL test evidence.</p>
-<h1><a class="anchor" id="autotoc_md56"></a>
+<h1><a class="anchor" id="autotoc_md65"></a>
 Independent consumer and relocation evidence</h1>
 <p>The fixture at <code>tests/package-consumer</code> uses only <code>find_package(CPSTL 1.1.5 EXACT CONFIG REQUIRED)</code> and <code>CPSTL::CPSTL</code>. It checks vector insertion/sorting, string operations and <code>to_string</code> (which also exercises compiled library symbols), returning nonzero on error.</p>
 <p>Execution directory: <code>C:/Users/jromo/AppData/Local/Temp/CPSTL-Windows-434c77b5ed6e486c95193020eeb5b882</code>. The fixture and installed package were copied there as <code>consumer</code> and <code>relocated-package</code>. Installed <code>.cmake</code> files contained no original CPSTL source/build absolute paths. CPSTL was renamed temporarily to <code>C:/Dev/RoModular/CPSTL.validation-hidden</code>; the original location was confirmed absent before these commands:</p>
@@ -124,7 +124,7 @@ Independent consumer and relocation evidence</h1>
 <div class="line">&amp; &quot;$validationRoot/consumer-build/Release/cpstl_consumer.exe&quot;</div>
 </div><!-- fragment --><p>All commands returned zero; CTest passed 1/1 and direct execution printed <code>CPSTL 1.1.5: installed package PASS</code>. MSBuild emitted MSB8029 because the independent build was under TEMP; it did not prevent compilation or execution. The original tree was restored in a <code>finally</code> block.</p>
 <p>Raw logs and JUnit reports remain under <code>build/validation/</code>, including <code>public-*.log</code>, <code>public-Debug.xml</code>, <code>public-Release.xml</code>, <code>pinned-romodular-validation.log</code>, <code>sibling-romodular-validation.log</code>, <code>isolation.log</code>, <code>isolate.ps1</code> and <code>consumer.xml</code>. These are local ignored execution artifacts, not committed evidence archives.</p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md66"></a>
 VS2026 follow-up after installation</h1>
 <p>The user subsequently authorized installing VS2026. The official WinGet package installed successfully with exit code 0:</p>
 <div class="fragment"><div class="line">winget install --id Microsoft.VisualStudio.BuildTools --exact --source winget --accept-source-agreements --accept-package-agreements --override &#39;--wait --quiet --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended&#39; --disable-interactivity</div>
@@ -139,7 +139,7 @@ VS2026 follow-up after installation</h1>
 </div><!-- fragment --><p>All commands succeeded: Debug 176/176 and Release 176/176, zero failures and zero disabled tests; Release installed to <code>dist/windows_msvc_x64</code>. CPSTL feature options and the pinned RoModularBuild revision were unchanged. <code>-Fresh</code> cleared only the original preset's earlier failed build tree; the VS2022 builds and reports were retained.</p>
 <p>The installed package and consumer fixture were copied to <code>C:/Users/jromo/AppData/Local/Temp/CPSTL-VS2026-ee4c4ce96e1c4b86b6405c835ae752d1</code>. The isolation procedure above was repeated using the <code>Visual Studio 18 2026</code> generator: original CPSTL tree unavailable, package registries disabled, relocated package selected through <code>CMAKE_PREFIX_PATH</code>. Configure/build/CTest/direct execution all passed; the consumer ran 1/1 test and printed <code>CPSTL 1.1.5: installed package PASS</code>. The original tree was restored in <code>finally</code>. The same harmless MSB8029 warning about using TEMP appeared.</p>
 <p>Additional local evidence in <code>build/validation/</code>: <code>vs2026-configure.log</code>, <code>vs2026-build-*.log</code>, <code>vs2026-test-*.log</code>, <code>vs2026-install.log</code>, <code>vs2026-Debug.xml</code>, <code>vs2026-Release.xml</code>, <code>vs2026-isolation.log</code>, <code>vs2026-consumer.xml</code>, <code>vs2026-isolate.ps1</code> and <code>vs2026-installed-instances.json</code>.</p>
-<h1><a class="anchor" id="autotoc_md58"></a>
+<h1><a class="anchor" id="autotoc_md67"></a>
 Allocation and STL matrix follow-up — 2026-10-15</h1>
 <p>Executed with the same CPSTL working tree, unchanged RoModularBuild <code>c905ef4fbddc39d5602a097387c175fe11832135</code>, VS2026/MSVC 19.51.36260.0, x64 and C++11 (GoogleTest uses C++17). No implementation changes were needed. The previous builds, reports and uncommitted changes were preserved.</p>
 <p>Temporary CMake user presets inherited <code>windows_msvc_x64</code> and selected:</p>
@@ -171,10 +171,10 @@ Allocation and STL matrix follow-up — 2026-10-15</h1>
 <p>STD allocation omits <code>AllocatorTest.ReturnsNullOnOverflowAndZero</code>, which is guarded out for <code>std::allocator</code>. STL mode excludes 18 CPSTL-specific cases and adds seven STL-specific cases relative to C allocation, for a net count of 165. The difference includes CPSTL allocation-failure guarantees, empty adapter behavior and iterator specializations; it is conditional compilation, not skipped or disabled tests. These results do not establish behavior under real system-wide memory exhaustion.</p>
 <p>Local evidence is in <code>build/validation/allocation-matrix/</code>: <code>results.json</code>, eight JUnit XML reports, configure/build/test logs, <code>compile-definitions.json</code>, <code>test-differences.json</code>, <code>run-matrix.ps1</code>, and a snapshot of <code>CMakeUserPresets.json</code>. The temporary root user preset file was removed after verification. To repeat this matrix, first copy that snapshot to the CPSTL root, provided no user preset file already exists, then run the saved runner from the CPSTL root. Keep the file while using these local presets; it is needed for subsequent adapter invocations.</p>
 <p>This follow-up tested builds and unit/header checks only. Installation and isolated package consumption remain validated for the default C backend above, not for each additional backend.</p>
-<h1><a class="anchor" id="autotoc_md59"></a>
+<h1><a class="anchor" id="autotoc_md68"></a>
 Remaining limits and next step</h1>
 <p>Both VS2022 and the original VS2026 workflow passed end to end on this host. No intervention, RoModularBuild source fix or dependency revision update is needed. Review the CPSTL preset/documentation/fixture changes. Clang, Bash execution, C++14/17/20 library builds, examples, other feature combinations and other platforms remain outside the recorded validation scope.</p>
-<h1><a class="anchor" id="autotoc_md60"></a>
+<h1><a class="anchor" id="autotoc_md69"></a>
 Release 1.1.6 verification — 2026-10-15</h1>
 <p>After the version update, the public test adapter passed 176/176 tests in Debug and 176/176 in Release on <code>windows_msvc2022_x64</code>. Reports are <code>build/validation/release-1.1.6-debug.xml</code> and <code>build/validation/release-1.1.6-release.xml</code>. The public install adapter installed version 1.1.6; the package-consumer fixture now requests that exact version and passed its Release build and installed-package test using the installed prefix with package registries disabled. The earlier relocation experiment above remains evidence for version 1.1.5. </p>
 </div></div><!-- contents -->

@@ -22,7 +22,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CPSTL<span id="projectnumber">&#160;1.1.7</span>
+   <div id="projectname">CPSTL<span id="projectnumber">&#160;1.1.8</span>
    </div>
    <div id="projectbrief">Cross-Platform STL for hosted and freestanding C++</div>
   </td>
@@ -74,12 +74,12 @@ $(function() {
   <div class="headertitle"><div class="title">STM32G0B1CBT6 with Arduino: physical validation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md44"></a> </p>
-<h1><a class="anchor" id="autotoc_md45"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md48"></a> </p>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Objective and firmware</h1>
 <p>Validate CPSTL as an installed Arduino IDE library on STM32G0B1CBT6. The firmware under test is an Arduino application using CPSTL, not a replacement bootloader, Arduino-core conformance suite or bare-metal CMake application.</p>
 <p>The public tutorials exercise documented application workflows. The separate <code>tests/Arduino/CPSTLHardware</code> firmware runs 23 CPSTL contract cases. The desktop GoogleTest suite has not been ported in full to this microcontroller.</p>
-<h1><a class="anchor" id="autotoc_md46"></a>
+<h1><a class="anchor" id="autotoc_md50"></a>
 Compilation evidence — 2026-10-15</h1>
 <ul>
 <li>Arduino IDE backend: bundled Arduino CLI 1.5.1, IDE 2.3.10.</li>
@@ -98,7 +98,7 @@ Compilation evidence — 2026-10-15</h1>
 <div class="line">    --build-property &#39;compiler.cpp.extra_flags=-DCPSTL_HW_BUILD_ID=0x474F4231UL -DCPSTL_USING_C_ALLOCATION&#39; `</div>
 <div class="line">    tests/Arduino/CPSTLHardware</div>
 </div><!-- fragment --><p>The SWD-capable suite compiled successfully: 26,536 flash bytes and 1,588 static SRAM bytes. These are build sizes, not runtime peak-memory measurements. The ATmega2560 branch was also recompiled after the transport refactor and still occupies 17,088 flash bytes and 373 static SRAM bytes. It was not reflashed during this STM32 work.</p>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h1><a class="anchor" id="autotoc_md51"></a>
 Results without a serial adapter</h1>
 <p>The user has only ST-LINK. On STM32 the suite therefore runs automatically from Arduino <code>setup()</code> and stores a volatile report in SRAM. Arduino core startup, allocation/runtime support and library configuration remain in use. The AVR branch retains its serial-command-triggered behavior.</p>
 <p>The <code>cpstlHardwareReport</code> symbol holds 30 little-endian 32-bit words:</p>
@@ -117,7 +117,7 @@ Results without a serial adapter</h1>
 <td class="markdownTableBodyNone">7–29   </td><td class="markdownTableBodyNone">One outcome per <code>Cases.h</code> entry: 0 not executed, 1 PASS, 2 FAIL   </td></tr>
 </table>
 <p>The current ELF places the 120-byte symbol at <code>0x20000178</code>; its address must be obtained from each actual ELF, not assumed for a future build. Physical passes below include flash verification, a completed report with matching build ID, all 23 case outcomes, consistent counts and positive assertions.</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md52"></a>
 Physical execution and installation</h1>
 <p>STM32CubeIDE 2.2.0 was downloaded from the authenticated official ST portal and installed at <code>C:/ST/STM32CubeIDE_2.2.0/STM32CubeIDE</code>. The installer had a valid STMicroelectronics Authenticode signature. Its ST-LINK driver now reports Windows device status OK. CubeIDE's bundled STM32CubeProgrammer is 2.23.0. The IDE GUI itself was not exercised.</p>
 <p>SWD identified device ID 0x467, revision Z, Cortex-M0+, 128 KB flash, supply 3.25 V, ST-LINK firmware V2J45S7. Requested SWD 1000 kHz negotiated 950 kHz. Before programming, the original 131072 flash bytes were backed up to <code>build/validation/stm32-arduino/original-flash.bin</code>. No option bytes, protection settings or probe firmware were changed.</p>
