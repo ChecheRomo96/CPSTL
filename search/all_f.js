@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['failure_20detection_0',['Evidence and failure detection',['../md_docs_2ArduinoHardwareTests.html#autotoc_md44',1,'']]],
-  ['final_20commands_20and_20observed_20results_1',['Final commands and observed results',['../md_docs_2WindowsValidation.html#autotoc_md71',1,'']]],
-  ['firmware_2',['Objective and firmware',['../md_docs_2STM32ArduinoValidation.html#autotoc_md56',1,'']]],
-  ['fixed_3',['fixed',['../md_CHANGELOG.html#autotoc_md37',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md33',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md13',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md25',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md27',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md29',1,'Fixed']]],
-  ['follow_20up_20—_202026_2010_2015_4',['Allocation and STL matrix follow-up — 2026-10-15',['../md_docs_2WindowsValidation.html#autotoc_md74',1,'']]],
-  ['follow_20up_20after_20installation_5',['VS2026 follow-up after installation',['../md_docs_2WindowsValidation.html#autotoc_md73',1,'']]],
+  ['failure_20detection_0',['Evidence and failure detection',['../md_docs_2ArduinoHardwareTests.html#autotoc_md46',1,'']]],
+  ['final_20commands_20and_20observed_20results_1',['Final commands and observed results',['../md_docs_2WindowsValidation.html#autotoc_md73',1,'']]],
+  ['firmware_2',['Objective and firmware',['../md_docs_2STM32ArduinoValidation.html#autotoc_md58',1,'']]],
+  ['fixed_3',['fixed',['../md_CHANGELOG.html#autotoc_md39',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md35',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md13',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md15',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md27',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md29',1,'Fixed'],['../md_CHANGELOG.html#autotoc_md31',1,'Fixed']]],
+  ['follow_20up_20—_202026_2010_2015_4',['Allocation and STL matrix follow-up — 2026-10-15',['../md_docs_2WindowsValidation.html#autotoc_md76',1,'']]],
+  ['follow_20up_20after_20installation_5',['VS2026 follow-up after installation',['../md_docs_2WindowsValidation.html#autotoc_md75',1,'']]],
   ['forward_5fiterator_5ftag_6',['forward_iterator_tag',['../structcpstd_1_1forward__iterator__tag.html',1,'cpstd']]],
   ['from_20arduino_7',['Use from Arduino',['../md_README.html#autotoc_md6',1,'']]],
   ['from_20cmake_8',['Use from CMake',['../md_README.html#autotoc_md5',1,'']]],
