@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['validation_0',['validation',['../md_docs_2STM32Native.html',1,'Native STM32G0B1CBT6 validation'],['../md_docs_2STM32ArduinoValidation.html',1,'STM32G0B1CBT6 with Arduino: physical validation']]],
+  ['validation_0',['validation',['../md_docs_2AVRNative.html',1,'Native AVR validation'],['../md_docs_2STM32Native.html',1,'Native STM32G0B1CBT6 validation'],['../md_docs_2STM32ArduinoValidation.html',1,'STM32G0B1CBT6 with Arduino: physical validation']]],
   ['validation_20—_202026_2010_2015_1',['validation — 2026 10 15',['../md_docs_2TutorialValidation.html',1,'Tutorial validation — 2026-10-15'],['../md_docs_2WindowsValidation.html',1,'Windows end-to-end validation — 2026-10-15']]],
   ['verification_2',['Hardware verification',['../md_docs_2HardwareVerification.html',1,'']]]
 ];

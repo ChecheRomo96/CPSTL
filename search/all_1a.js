@@ -1,15 +1,18 @@
 var searchData=
 [
-  ['terminal_0',['Native STM32 from the terminal',['../md_README.html#autotoc_md7',1,'']]],
-  ['test_1',['Build and test',['../md_README.html#autotoc_md4',1,'']]],
-  ['tests_3a_20atmega2560_2',['Automated physical tests: ATmega2560',['../md_docs_2ArduinoHardwareTests.html',1,'']]],
-  ['the_20board_3',['What runs on the board',['../md_docs_2ArduinoHardwareTests.html#autotoc_md39',1,'']]],
-  ['the_20result_4',['Reading the result',['../md_docs_2STM32Native.html#autotoc_md55',1,'']]],
-  ['the_20terminal_5',['Native STM32 from the terminal',['../md_README.html#autotoc_md7',1,'']]],
-  ['this_20windows_20host_6',['Commands on this Windows host',['../md_docs_2STM32Native.html#autotoc_md54',1,'']]],
-  ['to_20end_20validation_20—_202026_2010_2015_7',['Windows end-to-end validation — 2026-10-15',['../md_docs_2WindowsValidation.html',1,'']]],
-  ['tools_20and_20public_20interface_8',['Tools and public interface',['../md_docs_2WindowsValidation.html#autotoc_md61',1,'']]],
-  ['tracked_20edits_9',['Baseline before tracked edits',['../md_docs_2WindowsValidation.html#autotoc_md63',1,'']]],
-  ['tutorial_20validation_20—_202026_2010_2015_10',['Tutorial validation — 2026-10-15',['../md_docs_2TutorialValidation.html',1,'']]],
-  ['tutorials_11',['Tutorials',['../CPSTL_Tutorials.html',1,'']]]
+  ['serial_20adapter_0',['Results without a serial adapter',['../md_docs_2STM32ArduinoValidation.html#autotoc_md56',1,'']]],
+  ['shrink_5fto_5ffit_1',['shrink_to_fit',['../classcpstd_1_1vector.html#afc790618ed19676aade3d26bf8a6d9aa',1,'cpstd::vector']]],
+  ['sort_2',['sort',['../CPalgorithm_8h.html#a307dfa90c2eb86f01d75eef987e45aae',1,'cpstd::sort(RandomAccessIterator first, RandomAccessIterator last, Compare comp)'],['../CPalgorithm_8h.html#a4feaaac005d935759eec75e0fe0a0abe',1,'cpstd::sort(RandomAccessIterator first, RandomAccessIterator last)']]],
+  ['stack_3',['stack',['../classcpstd_1_1stack.html',1,'cpstd']]],
+  ['stack_20and_20queue_4',['Stack and queue',['../md_README.html#autotoc_md3',1,'']]],
+  ['start_20here_5',['Start here',['../index.html#CPSTL_Start',1,'']]],
+  ['state_6',['Revisions and initial state',['../md_docs_2WindowsValidation.html#autotoc_md65',1,'']]],
+  ['status_7',['Validation status',['../md_README.html#autotoc_md8',1,'']]],
+  ['step_8',['Remaining limits and next step',['../md_docs_2WindowsValidation.html#autotoc_md73',1,'']]],
+  ['stl_9',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]],
+  ['stl_20matrix_20follow_20up_20—_202026_2010_2015_10',['Allocation and STL matrix follow-up — 2026-10-15',['../md_docs_2WindowsValidation.html#autotoc_md72',1,'']]],
+  ['stm32_20from_20the_20terminal_11',['Native STM32 from the terminal',['../md_README.html#autotoc_md7',1,'']]],
+  ['stm32g0b1cbt6_20procedure_12',['STM32G0B1CBT6 procedure',['../md_docs_2HardwareVerification.html#autotoc_md52',1,'']]],
+  ['stm32g0b1cbt6_20validation_13',['Native STM32G0B1CBT6 validation',['../md_docs_2STM32Native.html',1,'']]],
+  ['stm32g0b1cbt6_20with_20arduino_3a_20physical_20validation_14',['STM32G0B1CBT6 with Arduino: physical validation',['../md_docs_2STM32ArduinoValidation.html',1,'']]]
 ];

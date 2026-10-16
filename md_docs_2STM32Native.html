@@ -74,9 +74,9 @@ $(function() {
   <div class="headertitle"><div class="title">Native STM32G0B1CBT6 validation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md53"></a> This firmware uses CMake, GNU Arm Embedded and ST-LINK/SWD. It does not use Arduino, STM32 HAL, UART, semihosting or an RTOS. Startup, linker template, bounded runtime, firmware artifact conversion and ST-LINK transport come from the pinned RoModularBuild <code>v0.5.1</code>. CPSTL owns only the assertions, report protocol, target configuration and test orchestration. The assertions are reused from the existing hardware fixture; their header location under <code>tests/Arduino/CPSTLHardware</code> does not introduce an Arduino-core dependency.</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md58"></a> This firmware uses CMake, GNU Arm Embedded and ST-LINK/SWD. It does not use Arduino, STM32 HAL, UART, semihosting or an RTOS. Startup, linker template, bounded runtime, firmware artifact conversion and ST-LINK transport come from the pinned RoModularBuild <code>v0.5.1</code>. CPSTL owns only the assertions, report protocol, target configuration and test orchestration. The assertions are reused from the existing hardware fixture; their header location under <code>tests/Arduino/CPSTLHardware</code> does not introduce an Arduino-core dependency.</p>
 <p>The <a href="https://www.st.com/en/microcontrollers-microprocessors/stm32g0b1cb.html">STM32G0B1CB product documentation</a> specifies 128 KiB flash and 144 KiB SRAM. This fixture uses only the normal 128 KiB SRAM region and does not modify parity or other option bytes. Its linker reserves a 16 KiB newlib heap and at least 8 KiB for the stack. Startup copies data, clears BSS, initializes C++ globals and runs the cases with interrupts disabled, using the reset clock configuration. After completion or a fault it stays in an active loop rather than WFI, so a new HOTPLUG session can read the report after the programming session closes.</p>
-<h1><a class="anchor" id="autotoc_md54"></a>
+<h1><a class="anchor" id="autotoc_md59"></a>
 Commands on this Windows host</h1>
 <p>Use PowerShell 7. CMake, Ninja and STM32CubeIDE's GNU Arm tools must be installed. The shared build submodule remains at its checked-in revision.</p>
 <div class="fragment"><div class="line">Set-Location F:\Dev\RoModular\CPSTL</div>
@@ -95,7 +95,7 @@ Commands on this Windows host</h1>
 <div class="line">    -Programmer $programmer -Allocation C -Flash</div>
 </div><!-- fragment --><p>Use <code>-Allocation CPP</code>, <code>STD</code> or <code>STL</code> for the other modes. The native CMake preset is <code>stm32g0b1cbt6_armgcc_cortex_m0plus_soft</code>; the runner delegates to the existing public configure/build adapters. <code>-Configuration Debug</code> selects the debug build; Release is the default. <code>-ProbeSerial</code> selects a probe when more than one is present; <code>-Frequency 100</code> lowers SWD speed if needed.</p>
 <p>Each run creates a unique directory under <code>build/hardware/stm32-native/</code>, with its ELF, HEX, BIN, map, symbol list and <code>build.json</code>. The ELF report address and size are discovered from that ELF, not hardcoded. The metadata contains its SHA256, build ID and actual preprocessed case manifest.</p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md60"></a>
 Reading the result</h1>
 <p>After <code>-Flash</code>, each case prints PASS or FAIL and a summary reports actual case and assertion counts. C/CPP/STD have 23 cases; STL has 20. STD skips nonstandard allocator boundary contracts, and STL excludes CPSTL-specific allocation-failure cases. No excluded case is counted as a pass.</p>
 <p>The raw SRAM report, per-case results and logs remain in that run directory. To read it again without reflashing, supply the printed metadata path:</p>
@@ -103,7 +103,7 @@ Reading the result</h1>
 <div class="line">    -Metadata &#39;build\hardware\stm32-native\C-&lt;build-id&gt;\build.json&#39; `</div>
 <div class="line">    -Programmer $programmer</div>
 </div><!-- fragment --><p>The reader checks the ELF hash, native report magic, build ID, completed state, exact layout, case outcomes, nonzero assertions and consistent totals. It rejects a stale image, partial execution, fault state or failed case. <code>-InjectFailure -Flash</code> intentionally fails the first case to exercise the negative path; afterwards re-run without that option to restore a normal image. A failed case causes the PowerShell script to fail.</p>
-<h1><a class="anchor" id="autotoc_md56"></a>
+<h1><a class="anchor" id="autotoc_md61"></a>
 Validation performed</h1>
 <p>On 2026-10-15, compiled C/CPP/STD/STL and an injected-failure image using STM32CubeIDE's ARM GCC 14.3.1 with the pinned RoModularBuild toolchain. The final C image uses 9748 flash bytes; reserved/static RAM is 25232 bytes, including the 16 KiB heap and 8 KiB stack reservation, not peak heap usage. Checked the reader with synthetic success, failed-case, stale-ID, incomplete, inconsistent-count, invalid-outcome, truncated-report and changed-ELF inputs. Both existing Arduino hardware fixtures still compile (Mega and STM32G0B1).</p>
 <p>The user subsequently executed the native images on the physical STM32G0B1CBT6 with ST-LINK, flash verification and matching SRAM build IDs:</p>
@@ -125,7 +125,7 @@ Validation performed</h1>
 </table>
 <p>The injected failure was <code>TypeTraits</code>; the reader saved the result and threw an error. The final normal C run restored a passing image. The local raw reports and JSON files were inspected when recording this table.</p>
 <p>The first user flash (<code>C-CB42A7E3</code>) programmed and verified successfully, but the subsequent HOTPLUG read returned an all-zero SRAM report and device identification errors. Its firmware ended in WFI. The active-loop revision removes that dependency on sleep/debug behavior; the successful runs above used that revision. See <a href="https://community.st.com/stm32-mcus-products-25/stm32g0-changes-dbgmcu-behaviour-63861">ST's STM32G0 debug behavior discussion</a> for context; the zero report alone does not establish which stage failed.</p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md62"></a>
 CI</h1>
 <p>The board-support extraction into RoModularBuild was compiled independently and with CPSTL in all four modes. The physical results above precede that extraction; repeat the same user commands to collect evidence for the shared runtime revision. This refactor did not flash or reset the user's board.</p>
 <p><code>.github/workflows/stm32-native-ci.yml</code> runs on main-branch push/PR and manual dispatch. Ubuntu installs GNU Arm, newlib and the embedded C++ libraries, then compiles and links Debug/Release images for C, CPP, STD, STL and a C image with an injected failure. A separate job tests the report decoder with synthetic transport. These jobs do not execute firmware on an STM32 and do not claim physical passes; the injected image is compiled, not run, there.</p>

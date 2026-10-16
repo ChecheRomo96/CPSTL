@@ -1,22 +1,14 @@
 var searchData=
 [
-  ['changed_0',['changed',['../md_CHANGELOG.html#autotoc_md32',1,'Changed'],['../md_CHANGELOG.html#autotoc_md27',1,'Changed'],['../md_CHANGELOG.html#autotoc_md18',1,'Changed'],['../md_CHANGELOG.html#autotoc_md13',1,'Changed'],['../md_CHANGELOG.html#autotoc_md16',1,'Changed']]],
-  ['changelog_1',['Changelog',['../md_CHANGELOG.html',1,'']]],
-  ['char_5ftraits_2',['char_traits',['../structcpstd_1_1char__traits.html',1,'cpstd']]],
-  ['ci_3',['CI',['../md_docs_2STM32Native.html#autotoc_md57',1,'']]],
-  ['clear_4',['clear',['../classcpstd_1_1vector.html#a55639e10822635f85aa73fb8e03b398b',1,'cpstd::vector']]],
-  ['cmake_5',['Use from CMake',['../md_README.html#autotoc_md5',1,'']]],
-  ['commands_20and_20observed_20results_6',['Final commands and observed results',['../md_docs_2WindowsValidation.html#autotoc_md64',1,'']]],
-  ['commands_20on_20this_20windows_20host_7',['Commands on this Windows host',['../md_docs_2STM32Native.html#autotoc_md54',1,'']]],
-  ['compatibility_20—_202026_2010_2015_8',['Arduino IDE library compatibility — 2026-10-15',['../md_docs_2ArduinoHardwareTests.html#autotoc_md43',1,'']]],
-  ['compilation_20evidence_20—_202026_2010_2015_9',['Compilation evidence — 2026-10-15',['../md_docs_2STM32ArduinoValidation.html#autotoc_md50',1,'']]],
-  ['completed_20after_20usb_20reconnection_10',['Completed after USB reconnection',['../md_docs_2ArduinoHardwareTests.html#autotoc_md42',1,'']]],
-  ['configuration_11',['configuration',['../md_README.html#autotoc_md2',1,'Configuration'],['../group__CPSTL__Configuration.html',1,'Configuration']]],
-  ['consumer_20and_20relocation_20evidence_12',['Independent consumer and relocation evidence',['../md_docs_2WindowsValidation.html#autotoc_md65',1,'']]],
-  ['cpalgorithm_2eh_13',['CPalgorithm.h',['../CPalgorithm_8h.html',1,'']]],
-  ['cpexception_2eh_14',['CPexception.h',['../CPexception_8h.html',1,'']]],
-  ['cpstl_15',['CPSTL',['../index.html',1,'']]],
-  ['cpstl_3a_20cross_20platform_20stl_16',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]],
-  ['criteria_20established_20before_20edits_17',['Acceptance criteria established before edits',['../md_docs_2WindowsValidation.html#autotoc_md62',1,'']]],
-  ['cross_20platform_20stl_18',['CPSTL: Cross-Platform STL',['../md_README.html',1,'']]]
+  ['back_5finsert_5fiterator_0',['back_insert_iterator',['../classcpstd_1_1back__insert__iterator.html',1,'cpstd']]],
+  ['bad_5falloc_1',['bad_alloc',['../classcpstd_1_1bad__alloc.html',1,'cpstd']]],
+  ['baseline_20before_20tracked_20edits_2',['Baseline before tracked edits',['../md_docs_2WindowsValidation.html#autotoc_md68',1,'']]],
+  ['basic_5fstring_3',['basic_string',['../classcpstd_1_1basic__string.html',1,'cpstd']]],
+  ['before_20edits_4',['Acceptance criteria established before edits',['../md_docs_2WindowsValidation.html#autotoc_md67',1,'']]],
+  ['before_20tracked_20edits_5',['Baseline before tracked edits',['../md_docs_2WindowsValidation.html#autotoc_md68',1,'']]],
+  ['bidirectional_5fiterator_5ftag_6',['bidirectional_iterator_tag',['../structcpstd_1_1bidirectional__iterator__tag.html',1,'cpstd']]],
+  ['board_7',['What runs on the board',['../md_docs_2ArduinoHardwareTests.html#autotoc_md41',1,'']]],
+  ['build_20a_20mega_20image_20on_20windows_8',['Build a Mega image on Windows',['../md_docs_2AVRNative.html#autotoc_md47',1,'']]],
+  ['build_20and_20test_9',['Build and test',['../md_README.html#autotoc_md4',1,'']]],
+  ['build_20and_20validation_10',['Build and validation',['../group__CPSTL__Build.html',1,'']]]
 ];

@@ -1,15 +1,7 @@
 var searchData=
 [
-  ['native_20stm32_20from_20the_20terminal_0',['Native STM32 from the terminal',['../md_README.html#autotoc_md7',1,'']]],
-  ['native_20stm32g0b1cbt6_20validation_1',['Native STM32G0B1CBT6 validation',['../md_docs_2STM32Native.html',1,'']]],
-  ['next_20step_2',['Remaining limits and next step',['../md_docs_2WindowsValidation.html#autotoc_md68',1,'']]],
-  ['numeric_5flimits_3',['numeric_limits',['../classcpstd_1_1numeric__limits.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20bool_20_3e_4',['numeric_limits&lt; bool &gt;',['../classcpstd_1_1numeric__limits_3_01bool_01_4.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20char_20_3e_5',['numeric_limits&lt; char &gt;',['../classcpstd_1_1numeric__limits_3_01char_01_4.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20const_20t_20_3e_6',['numeric_limits&lt; const T &gt;',['../classcpstd_1_1numeric__limits_3_01const_01T_01_4.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20const_20volatile_20t_20_3e_7',['numeric_limits&lt; const volatile T &gt;',['../classcpstd_1_1numeric__limits_3_01const_01volatile_01T_01_4.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20double_20_3e_8',['numeric_limits&lt; double &gt;',['../classcpstd_1_1numeric__limits_3_01double_01_4.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20float_20_3e_9',['numeric_limits&lt; float &gt;',['../classcpstd_1_1numeric__limits_3_01float_01_4.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20long_20double_20_3e_10',['numeric_limits&lt; long double &gt;',['../classcpstd_1_1numeric__limits_3_01long_01double_01_4.html',1,'cpstd']]],
-  ['numeric_5flimits_3c_20volatile_20t_20_3e_11',['numeric_limits&lt; volatile T &gt;',['../classcpstd_1_1numeric__limits_3_01volatile_01T_01_4.html',1,'cpstd']]]
+  ['matrix_20follow_20up_20—_202026_2010_2015_0',['Allocation and STL matrix follow-up — 2026-10-15',['../md_docs_2WindowsValidation.html#autotoc_md72',1,'']]],
+  ['mega_20image_20on_20windows_1',['Build a Mega image on Windows',['../md_docs_2AVRNative.html#autotoc_md47',1,'']]],
+  ['mega_20test_2',['Explicit physical Mega test',['../md_docs_2AVRNative.html#autotoc_md48',1,'']]],
+  ['modules_3',['modules',['../md_README.html#autotoc_md1',1,'Modules'],['../group__CPSTL__Modules.html',1,'Public modules']]]
 ];
