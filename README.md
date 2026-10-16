@@ -94,6 +94,9 @@ git submodule update --init --recursive
 ./scripts/install.sh macos_arm64         # Release package in dist/macos_arm64
 ```
 
+For AVR, see [native AVR validation](docs/AVRNative.md) for Uno/Mega profiles,
+simulation and explicit physical programming.
+
 For AVR, `./scripts/build.sh atmega328p_avrgcc_avr5` cross-compiles the
 library and a self-checking ATmega328P firmware with the bare AVR-GCC
 toolchain, and `./scripts/test-arduino.sh` compiles the Arduino sketches with

@@ -5,6 +5,17 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [1.1.9] - 2026-10-16
+
+### Changed
+
+- Pin RoModularBuild v0.6.0 for AVR firmware artifacts, bare allocation glue,
+  simavr execution and avrdude programming; CPSTL retains smoke tests and verdicts.
+- Add native ATmega2560 / AVR6 presets and build/simulate both AVR MCUs in CI.
+- Document explicit Mega build/programming commands without flashing hardware
+  as part of ordinary builds or hosted CI.
+
+
 ## [1.1.8] - 2026-10-15
 
 ### Changed

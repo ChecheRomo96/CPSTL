@@ -1,8 +1,8 @@
-// Self-checking CPSTL firmware for the ATmega328P, built with the bare AVR-GCC
+// Self-checking CPSTL firmware for ATmega328P / ATmega2560, built with bare AVR-GCC
 // toolchain (no Arduino core, no C++ standard library).
 //
 // Building it proves every module compiles and links for AVR; running it (on
-// an Uno or under simavr) checks the results. The verdict goes to USART0 at
+// an Uno, Mega or under simavr) checks the results. The verdict goes to USART0 at
 // 9600 baud as "CPSTL AVR smoke: PASS" or "... FAIL <n>", where n is the first
 // failing check. The MCU then sleeps with interrupts off, which also ends a
 // simavr run.
@@ -16,14 +16,6 @@
 #include <avr/sleep.h>
 #include <stdint.h>
 #include <stdlib.h>
-
-// cpstd::function and cpstd::unique_ptr allocate with new. AVR-GCC alone has
-// no operator new, so firmware that uses them supplies one, as the Arduino
-// core does. Containers do not need it: they allocate with malloc in the C
-// allocation mode this firmware is built with.
-void* operator new(size_t size) { return malloc(size); }
-void operator delete(void* ptr) noexcept { free(ptr); }
-void operator delete(void* ptr, size_t) noexcept { free(ptr); }
 
 namespace {
 

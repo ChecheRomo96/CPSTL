@@ -16,12 +16,29 @@
         "CPSTL_ALLOCATION": "C",
         "CPSTL_AVR_SMOKE": "ON"
       }
+    },
+    {
+      "name": "atmega2560_avrgcc_avr6",
+      "inherits": [
+        "base",
+        "romodular_atmega2560_avrgcc_avr6"
+      ],
+      "toolchainFile": "${sourceDir}/tools/RoModularBuild/cmake/toolchains/avr-gcc/atmega2560.cmake",
+      "cacheVariables": {
+        "CPSTL_ALLOCATION": "C",
+        "CPSTL_AVR_SMOKE": "ON"
+      }
     }
   ],
   "buildPresets": [
     {
       "name": "atmega328p_avrgcc_avr5",
       "configurePreset": "atmega328p_avrgcc_avr5",
+      "configuration": "Debug"
+    },
+    {
+      "name": "atmega2560_avrgcc_avr6",
+      "configurePreset": "atmega2560_avrgcc_avr6",
       "configuration": "Debug"
     }
   ]

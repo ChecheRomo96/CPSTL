@@ -18,7 +18,15 @@ concurrency:
 
 jobs:
   avr:
-    name: AVR-GCC / ATmega328P / bare metal
+    name: AVR-GCC / ${{ matrix.mcu }} / bare metal
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mcu: atmega328p
+            preset: atmega328p_avrgcc_avr5
+          - mcu: atmega2560
+            preset: atmega2560_avrgcc_avr6
     runs-on: ubuntu-24.04
     timeout-minutes: 20
 
@@ -49,28 +57,29 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ./scripts/configure.sh atmega328p_avrgcc_avr5 --fresh
-          ./scripts/build.sh atmega328p_avrgcc_avr5 --config Debug --parallel 4
-          ./scripts/build.sh atmega328p_avrgcc_avr5 --config Release --parallel 4
+          ./scripts/configure.sh ${{ matrix.preset }} --fresh
+          ./scripts/build.sh ${{ matrix.preset }} --config Debug --parallel 4
+          ./scripts/build.sh ${{ matrix.preset }} --config Release --parallel 4
 
-      # Runs the Release firmware on a simulated ATmega328P; it reports its
+      # Runs the Release firmware on a simulated MCU; it reports its
       # verdict over USART0 and then sleeps with interrupts off, which ends
       # the simulation.
       - name: Run firmware under simavr
         shell: bash
         run: |
           set -euo pipefail
-          firmware=build/atmega328p_avrgcc_avr5/bin/Release/CPSTLAvrSmoke.hex
-          timeout 60 simavr -m atmega328p -f 16000000 "$firmware" 2>&1 | tee simavr.log
+          firmware=build/${{ matrix.preset }}/bin/Release/CPSTLAvrSmoke.hex
+          sh tools/RoModularBuild/scripts/simavr.sh --mcu ${{ matrix.mcu }} --file "$firmware" --log simavr.log
           grep -q "CPSTL AVR smoke: PASS" simavr.log
+          ! grep -q "CPSTL AVR smoke: FAIL" simavr.log
 
       - name: Upload AVR firmware
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: CPSTL-atmega328p-firmware
+          name: CPSTL-${{ matrix.mcu }}-firmware
           path: |
-            build/atmega328p_avrgcc_avr5/bin/*/CPSTLAvrSmoke.*
+            build/${{ matrix.preset }}/bin/*/CPSTLAvrSmoke.*
             simavr.log
           if-no-files-found: warn
           retention-days: 7
