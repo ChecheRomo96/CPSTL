@@ -22,7 +22,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CPSTL<span id="projectnumber">&#160;1.1.7</span>
+   <div id="projectname">CPSTL<span id="projectnumber">&#160;1.1.8</span>
    </div>
    <div id="projectbrief">Cross-Platform STL for hosted and freestanding C++</div>
   </td>
@@ -74,7 +74,7 @@ $(function() {
   <div class="headertitle"><div class="title">Hardware verification</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md40"></a> CPSTL's embedded support is verified at three levels:</p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md44"></a> CPSTL's embedded support is verified at three levels:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Target   </th><th class="markdownTableHeadNone">Build verification   </th><th class="markdownTableHeadNone">Physical verification   </th><th class="markdownTableHeadNone">CPSTL mode    </th></tr>
@@ -86,7 +86,7 @@ $(function() {
 <td class="markdownTableBodyNone">STM32G0B1CBT6   </td><td class="markdownTableBodyNone">Foundation's Cortex-M0+ consumer build   </td><td class="markdownTableBodyNone">Flash the Foundation consumer through ST-LINK and observe its configured pass signal   </td><td class="markdownTableBodyNone">CPSTL implementation with C allocation and no C++ runtime   </td></tr>
 </table>
 <p>The automated builds catch compiler, headers and link configuration errors. Only a physical run can mark a board as hardware verified, because it also covers the programmer/debugger connection, board power and the actual target.</p>
-<h1><a class="anchor" id="autotoc_md41"></a>
+<h1><a class="anchor" id="autotoc_md45"></a>
 Verification record</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -104,7 +104,7 @@ Verification record</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">2026-10-07   </td><td class="markdownTableBodyNone">STM32G0B1CBT6   </td><td class="markdownTableBodyNone">ST-LINK / SWD, 100 kHz   </td><td class="markdownTableBodyNone">Foundation consumer: 12/12 checks passed (<code>PASS</code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md42"></a>
+<h1><a class="anchor" id="autotoc_md46"></a>
 AVR and ESP32 procedure</h1>
 <p>For automated ATmega2560 physical contract tests on Windows, see <a class="el" href="md_docs_2ArduinoHardwareTests.html">Arduino hardware tests</a>. This is a dedicated embedded suite with per-case serial results and host-side failure detection; the tutorials below serve a different purpose.</p>
 <ol type="1">
@@ -114,7 +114,7 @@ AVR and ESP32 procedure</h1>
 <li>Record the board model, core version and the tutorial output in the verification record.</li>
 </ol>
 <p>An ESP32 has a hosted C++ standard library, so it intentionally uses <code>CPSTL_USING_STL</code>. The AVR run intentionally uses CPSTL's own implementation and <code>malloc</code>/<code>free</code>.</p>
-<h1><a class="anchor" id="autotoc_md43"></a>
+<h1><a class="anchor" id="autotoc_md47"></a>
 STM32G0B1CBT6 procedure</h1>
 <p>For the Arduino IDE compatibility work and its current compilation evidence and physical-execution blocker, see <a class="el" href="md_docs_2STM32ArduinoValidation.html">STM32 Arduino validation</a>. The historical Foundation procedure below is a separate firmware workflow.</p>
 <p>Use the Foundation hardware-consumer firmware once its Cortex-M0+ build has been generated. Connect the ST-LINK through SWD (PA13/SWDIO, PA14/SWCLK, NRST, GND and 3.3 V reference); do not use a PICkit. Record the exact Foundation and CPSTL commits, programmer version and the observable pass signal.</p>

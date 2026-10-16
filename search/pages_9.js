@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['validation_0',['STM32G0B1CBT6 with Arduino: physical validation',['../md_docs_2STM32ArduinoValidation.html',1,'']]],
-  ['validation_20—_202026_2010_2015_1',['validation — 2026 10 15',['../md_docs_2TutorialValidation.html',1,'Tutorial validation — 2026-10-15'],['../md_docs_2WindowsValidation.html',1,'Windows end-to-end validation — 2026-10-15']]],
-  ['verification_2',['Hardware verification',['../md_docs_2HardwareVerification.html',1,'']]]
+  ['tests_3a_20atmega2560_0',['Automated physical tests: ATmega2560',['../md_docs_2ArduinoHardwareTests.html',1,'']]],
+  ['to_20end_20validation_20—_202026_2010_2015_1',['Windows end-to-end validation — 2026-10-15',['../md_docs_2WindowsValidation.html',1,'']]],
+  ['tutorial_20validation_20—_202026_2010_2015_2',['Tutorial validation — 2026-10-15',['../md_docs_2TutorialValidation.html',1,'']]],
+  ['tutorials_3',['Tutorials',['../CPSTL_Tutorials.html',1,'']]]
 ];
