@@ -5,6 +5,12 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [1.1.10] - 2026-10-16
+
+### Fixed
+
+- Pin RoModularBuild v0.6.1 for macOS simavr timeout discovery and validation.
+
 ## [1.1.9] - 2026-10-16
 
 ### Changed
