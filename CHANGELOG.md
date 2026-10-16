@@ -5,6 +5,26 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [1.1.8] - 2026-10-15
+
+### Changed
+
+- Pin RoModularBuild v0.5.1 for STM32 startup, linker/runtime, firmware
+  artifacts and ST-LINK transport. CPSTL retains test cases, result decoding,
+  application configuration and its own CI workflows.
+
+### Added
+
+- CI builds native STM32 firmware in all allocation modes and checks the SWD
+  report reader with synthetic inputs. A separate manual workflow supports a
+  dedicated self-hosted STM32/ST-LINK runner, including injected failure and
+  restoration of a passing image.
+
+- Native STM32G0B1CBT6 CMake/ARM GCC contract firmware using shared board
+  support, with build/flash and SWD report commands independent of Arduino.
+  Reuse the embedded contract assertions in both transports and validate
+  report identity, completion and per-case outcomes on the host.
+
 ## [1.1.7] - 2026-10-15
 
 ### Changed

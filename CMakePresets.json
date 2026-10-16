@@ -9,6 +9,7 @@
     "cmake/presets/linux.json",
     "cmake/presets/macos.json",
     "cmake/presets/windows.json",
-    "cmake/presets/avr-gcc.json"
+    "cmake/presets/avr-gcc.json",
+    "cmake/presets/stm32.json"
   ]
 }

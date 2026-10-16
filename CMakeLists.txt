@@ -3,7 +3,7 @@
 
     cmake_minimum_required(VERSION 3.25)
 
-    project(CPSTL VERSION 1.1.7 LANGUAGES CXX)
+    project(CPSTL VERSION 1.1.8 LANGUAGES CXX)
 
     # library.properties (Arduino) and CPSTL_BuildSettings.h (IDE builds)
     # carry the same version; refuse to configure when they drift.
@@ -59,6 +59,10 @@
 
     if(CPSTL_AVR_SMOKE)
         add_subdirectory(tests/AvrSmoke)
+    endif()
+    if(CPSTL_STM32_NATIVE)
+        enable_language(ASM)
+        add_subdirectory(tests/Stm32Native)
     endif()
 #
 #####################################################################################################
