@@ -52,7 +52,7 @@ Use the PowerShell equivalent on Windows.
 ./scripts/test-arduino.sh [--fqbn <board>]... [-- <arduino-cli options>]   # Bash only
 ```
 
-AVR: `atmega328p_avrgcc_avr5` builds the library and the `CPSTLAvrSmoke`
+AVR: `atmega328p_avrgcc_avr5` and `atmega2560_avrgcc_avr6` build the library and the `CPSTLAvrSmoke`
 firmware (no tests or examples on AVR); run its `.hex` under simavr and look
 for `CPSTL AVR smoke: PASS`. Public Arduino tutorials are grouped by module
 under `examples/<module>/<tutorial_name>/`, alongside the matching desktop
