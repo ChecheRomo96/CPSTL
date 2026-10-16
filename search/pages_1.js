@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hardware_20verification_0',['Hardware verification',['../md_docs_2HardwareVerification.html',1,'']]]
+  ['2026_2010_2015_0',['Windows end-to-end validation — 2026-10-15',['../md_docs_2WindowsValidation.html',1,'']]]
 ];
