@@ -5,6 +5,22 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [1.1.7] - 2026-10-15
+
+### Changed
+
+- Make all Arduino and desktop tutorials explain inputs, operations and observed
+  results consistently. Print container contents after edits, demonstrate real
+  undo and FIFO processing, validate command input before conversion, and use
+  wide arithmetic for the AVR ADC scaling example. Document actual output.
+
+- Align the measurement-lookup tutorials across Arduino and desktop, show the
+  session, and describe exact matching with a checked, zero-based result.
+
+- Align the Arduino and desktop reverse-playback tutorials: capture exactly
+  20 pseudorandom byte samples, print them numerically in both directions,
+  and report insufficient storage before filling the vector.
+
 ## [1.1.6] - 2026-10-15
 
 ### Changed
