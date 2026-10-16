@@ -5,6 +5,15 @@ a practical situation, walks through the CPSTL operations that solve it, and
 prints an observable result on either a serial monitor or stdout. Edge cases,
 allocation failures and API conformance remain in `tests/`.
 
+Each program prints its starting values, names the operation, and shows the
+result from the actual object. Arduino and desktop use the same scenarios;
+simulated readings are identified explicitly. Each tutorial README includes
+a captured desktop transcript and explains platform-dependent values such as
+capacity, integer ranges and pseudorandom samples. Serial tutorials use 9600 baud.
+
+The historical `AUnit_Tests` sketch is only a runner without registered CPSTL
+cases; it prints that fact at startup and is not one of the 20 tutorials.
+
 Tutorials are grouped by their primary CPSTL class or module. Arduino IDE
 shows these folders as nested groups, so `vector`, `string`, `queue`, and the
 other facilities can be explored independently.

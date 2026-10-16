@@ -9,19 +9,25 @@
 void setup() {
     Serial.begin(9600);
     while (!Serial) {}
-    cpstd::vector<int> samples;
-    samples.push_back(7);
-    samples.push_back(11);
-    samples.push_back(13);
+    const size_t sampleCount = 20;
+    cpstd::vector<uint8_t> samples;
+    samples.reserve(sampleCount);
+    if (samples.capacity() < sampleCount) {
+        Serial.println("Not enough memory to capture samples.");
+        return;
+    }
+    for (size_t i = 0; i < sampleCount; ++i) {
+        samples.push_back(static_cast<uint8_t>(random(256)));
+    }
 
-    Serial.println("Recorded button states in time order:");
+    Serial.println("Captured samples in time order:");
     Serial.print("Forward: ");
-    for (cpstd::vector<int>::iterator it = samples.begin(); it != samples.end(); ++it) {
+    for (cpstd::vector<uint8_t>::iterator it = samples.begin(); it != samples.end(); ++it) {
         Serial.print(*it);
         Serial.print(' ');
     }
     Serial.print("\nUndo/playback: ");
-    for (cpstd::vector<int>::reverse_iterator it = samples.rbegin(); it != samples.rend(); ++it) {
+    for (cpstd::vector<uint8_t>::reverse_iterator it = samples.rbegin(); it != samples.rend(); ++it) {
         Serial.print(*it);
         Serial.print(' ');
     }

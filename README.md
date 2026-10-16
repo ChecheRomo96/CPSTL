@@ -130,7 +130,7 @@ independent package-consumer check.
 ## Use from CMake
 
 ```cmake
-find_package(CPSTL 1.1.5 CONFIG REQUIRED)
+find_package(CPSTL 1.1.7 CONFIG REQUIRED)
 target_link_libraries(app PRIVATE CPSTL::CPSTL)
 ```
 
@@ -147,7 +147,10 @@ using the supported STL-compatible APIs. Pick the configuration in
 
 ## Status
 
-See [CHANGELOG.md](CHANGELOG.md). The 1.1.5 candidate is validated on Linux
+See [CHANGELOG.md](CHANGELOG.md). Version 1.1.7 includes 20 paired tutorials
+with input, operation and result traces; see the executed
+[tutorial validation](docs/TutorialValidation.md) for desktop and AVR coverage.
+Earlier 1.1.5 validation covered Linux
 (GCC, Clang), macOS (Apple Clang), AVR (ATmega328P under simavr, Arduino Uno
 and Mega) and ESP32 compilation. Hardware execution remains a separate,
 recorded gate for AVR, ESP32 and STM32G0B1.

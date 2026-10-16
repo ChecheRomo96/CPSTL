@@ -1,26 +1,38 @@
 #include <CPSTL.h>
 
+// Reserve storage before an eight-sample capture.
+void PrintValues(const char* label, const cpstd::vector<int>& values) {
+    Serial.print(label); Serial.print(": ");
+    for (cpstd::size_t i = 0; i < values.size(); ++i) {
+        if (i != 0) Serial.print(", ");
+        Serial.print(values[i]);
+    }
+    Serial.println();
+}
 
-/*
-  Goal: Capacity planning: allocate a capture budget before a time-sensitive loop.
-  Interfaces: vector::reserve(), capacity(), size(), push_back().
-  Observe: Capacity stays stable while the pre-budgeted burst is captured.
-*/
 void setup() {
     Serial.begin(9600);
     while (!Serial) {}
+    Serial.println("Reserve storage before an eight-sample capture.");
     cpstd::vector<int> samples;
     const cpstd::size_t captureBudget = 8;
-    samples.reserve(captureBudget); // Allocate before the timing-sensitive capture.
-    Serial.print("Capture budget: "); Serial.println(captureBudget);
-    Serial.print("Allocated capacity: "); Serial.println(samples.capacity());
+    Serial.print("Before reserve, size: "); Serial.println(static_cast<long>(samples.size()));
+    Serial.print("Before reserve, capacity: "); Serial.println(static_cast<long>(samples.capacity()));
+    samples.reserve(captureBudget);
+    if (samples.capacity() < captureBudget) { Serial.println("Not enough memory for the capture budget."); return; }
+    const cpstd::size_t reserved = samples.capacity();
+    Serial.print("After reserve(8), size: "); Serial.println(static_cast<long>(samples.size()));
+    Serial.print("After reserve(8), capacity: "); Serial.println(static_cast<long>(reserved));
+    Serial.println("reserve() allocates space but does not create samples.");
     for (int sample = 0; sample < 8; ++sample) {
-        samples.push_back(100 + sample * 3);
-        Serial.print("Captured #"); Serial.print(sample);
-        Serial.print("; size="); Serial.print(samples.size());
-        Serial.print(", capacity="); Serial.println(samples.capacity());
+        const int reading = 100 + sample * 3;
+        samples.push_back(reading);
+        Serial.print("Captured reading: "); Serial.println(static_cast<long>(reading));
+        Serial.print("  Stored samples: "); Serial.println(static_cast<long>(samples.size()));
+        Serial.print("  Available capacity: "); Serial.println(static_cast<long>(samples.capacity()));
     }
-    Serial.println("Reserve the worst expected burst before entering a real ISR or loop.");
+    PrintValues("Completed capture", samples);
+    Serial.print("Capacity unchanged during capture: "); Serial.println(samples.capacity() == reserved ? "yes" : "no");
 }
 
 void loop() {}
