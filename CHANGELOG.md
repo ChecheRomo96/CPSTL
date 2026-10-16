@@ -5,7 +5,21 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [1.1.6] - 2026-10-15
+
 ### Changed
+
+- Declare the `stm32` Arduino architecture after compiling all public tutorials
+  for STM32G0B1CBT6; prepare the physical suite's SWD report for that target.
+  Physical STM32 execution remains pending.
+
+- Add a Windows PowerShell runner and dedicated ATmega2560 physical contract
+  suite using Arduino CLI, avrdude verification and per-case serial results.
+
+- Add the explicit `windows_msvc2022_x64` public preset for Visual Studio
+  Build Tools 2022 while retaining the shared VS2026 preset and dependency pin.
+- Add an independent installed-package consumer fixture and record Windows
+  Debug/Release execution evidence in `docs/WindowsValidation.md`.
 
 - Examples are now application tutorials grouped under
   `examples/<module>/<tutorial_name>/`, each
