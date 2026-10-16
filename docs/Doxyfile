@@ -1,5 +1,5 @@
 PROJECT_NAME           = "CPSTL"
-PROJECT_NUMBER         = "1.1.7"
+PROJECT_NUMBER         = "1.1.8"
 PROJECT_BRIEF          = "Cross-Platform STL for hosted and freestanding C++"
 OUTPUT_DIRECTORY       = build/documentation
 OUTPUT_LANGUAGE        = English

@@ -130,7 +130,7 @@ independent package-consumer check.
 ## Use from CMake
 
 ```cmake
-find_package(CPSTL 1.1.7 CONFIG REQUIRED)
+find_package(CPSTL 1.1.8 CONFIG REQUIRED)
 target_link_libraries(app PRIVATE CPSTL::CPSTL)
 ```
 
@@ -145,7 +145,16 @@ using the supported STL-compatible APIs. Pick the configuration in
 `src/CPSTL_UserSetup.h`. On AVR boards containers allocate with `malloc`;
 `cpstd::function` and `unique_ptr` use the core's `operator new`.
 
-## Status
+## Native STM32 from the terminal
+
+For STM32G0B1CBT6 without Arduino, use the native CMake/ARM GCC fixture and
+ST-LINK report reader. The [native STM32 guide](docs/STM32Native.md) provides
+build, flash and per-case SWD result commands. All four modes and injected
+failure propagation passed physical validation. CI compiles the firmware and
+tests the report reader; an optional manual workflow targets a dedicated
+self-hosted runner connected to the board.
+
+## Validation status
 
 See [CHANGELOG.md](CHANGELOG.md). Version 1.1.7 includes 20 paired tutorials
 with input, operation and result traces; see the executed

@@ -8,8 +8,8 @@
 #include <float.h>
 #include <string.h>
 
-#if !defined(__AVR_ATmega2560__) && !(defined(ARDUINO_ARCH_STM32) && defined(STM32G0B1xx))
-#error "This fixture targets ATmega2560 or STM32G0B1 with its Arduino core"
+#if !defined(__AVR_ATmega2560__) && !(defined(ARDUINO_ARCH_STM32) && defined(STM32G0B1xx)) && !defined(CPSTL_STM32_NATIVE)
+#error "Select the ATmega2560, STM32 Arduino or STM32 native hardware fixture"
 #endif
 #if defined(__AVR__) && (defined(CPSTL_USING_STL) || defined(CPSTL_USING_STD_ALLOCATION))
 #error "The AVR physical suite requires CPSTL implementation mode"
@@ -17,8 +17,15 @@
 
 namespace hardware_tests {
 static unsigned assertions;
+static unsigned lastFailureLine;
+static void ReportFailure(unsigned line) {
+    lastFailureLine = line;
+#if defined(ARDUINO)
+    Serial.print(F("CPSTL_HW_ASSERT line=")); Serial.println(line);
+#endif
+}
 #define HW_CHECK(expression) do { ++assertions; if (!(expression)) { \
-    Serial.print(F("CPSTL_HW_ASSERT line=")); Serial.println(__LINE__); \
+    ReportFailure(__LINE__); \
     return false; } } while (0)
 
 struct Tracked {

@@ -1,0 +1,84 @@
+name: STM32 Native Build and Report Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stm32-native-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  report-reader:
+    name: Native SWD report decoder / synthetic transport
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Accept valid results and reject failures, stale and incomplete reports
+        shell: pwsh
+        run: ./tests/test-stm32-native-report.ps1
+
+  firmware:
+    name: STM32G0B1 native / ${{ matrix.name }} / compile only
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {name: C, allocation: C, stl: 'OFF', injected: 'OFF'}
+          - {name: CPP, allocation: CPP, stl: 'OFF', injected: 'OFF'}
+          - {name: STD, allocation: STD, stl: 'OFF', injected: 'OFF'}
+          - {name: STL, allocation: STD, stl: 'ON', injected: 'OFF'}
+          - {name: C-injected-failure, allocation: C, stl: 'OFF', injected: 'ON'}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Install GNU Arm, newlib and embedded C++ runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ninja-build \
+            gcc-arm-none-eabi binutils-arm-none-eabi libnewlib-arm-none-eabi \
+            libstdc++-arm-none-eabi-newlib
+          arm-none-eabi-g++ --version
+          cmake --version
+          ninja --version
+      - name: Configure native STM32 firmware
+        shell: bash
+        env:
+          ALLOCATION: ${{ matrix.allocation }}
+          STL_MODE: ${{ matrix.stl }}
+          INJECTED: ${{ matrix.injected }}
+        run: |
+          set -euo pipefail
+          ./scripts/configure.sh stm32g0b1cbt6_armgcc_cortex_m0plus_soft --fresh -- \
+            -DCPSTL_ALLOCATION="$ALLOCATION" -DCPSTL_USING_STL="$STL_MODE" \
+            -DCPSTL_STM32_INJECT_FAILURE="$INJECTED" -DCPSTL_STM32_BUILD_ID=0x43490001
+      - name: Link Debug and Release firmware without Arduino
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./scripts/build.sh stm32g0b1cbt6_armgcc_cortex_m0plus_soft --config Debug --parallel 4
+          ./scripts/build.sh stm32g0b1cbt6_armgcc_cortex_m0plus_soft --config Release --parallel 4
+      - name: Upload firmware artifacts (not hardware execution results)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CPSTL-stm32g0b1-native-${{ matrix.name }}
+          path: |
+            build/stm32g0b1cbt6_armgcc_cortex_m0plus_soft/bin/*/CPSTLStm32Native.*
+            build/stm32g0b1cbt6_armgcc_cortex_m0plus_soft/compile_commands.json
+          if-no-files-found: warn
+          retention-days: 7
