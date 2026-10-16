@@ -19,7 +19,7 @@ With AVR-GCC installed, run from the CPSTL checkout:
 
 ```powershell
 $avrRoot = Join-Path $env:LOCALAPPDATA 'Arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7'
-.\scripts\configure.ps1 atmega2560_avrgcc_avr6 -CMakeArguments @("-DROMODULAR_AVR_TOOLCHAIN_ROOT=$avrRoot")
+.\scripts\configure.ps1 atmega2560_avrgcc_avr6 -Fresh -CMakeArguments @("-DROMODULAR_AVR_TOOLCHAIN_ROOT=$avrRoot")
 .\scripts\build.ps1 atmega2560_avrgcc_avr6 -Configuration Release -Parallel 4
 ```
 
