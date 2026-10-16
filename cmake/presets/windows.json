@@ -6,6 +6,11 @@
   ],
   "configurePresets": [
     {
+      "name": "windows_msvc2022_x64",
+      "inherits": "windows_msvc_x64",
+      "generator": "Visual Studio 17 2022"
+    },
+    {
       "name": "windows_msvc_x64",
       "inherits": [
         "base",
@@ -32,6 +37,11 @@
   ],
   "buildPresets": [
     {
+      "name": "windows_msvc2022_x64",
+      "configurePreset": "windows_msvc2022_x64",
+      "configuration": "Debug"
+    },
+    {
       "name": "windows_msvc_x64",
       "configurePreset": "windows_msvc_x64",
       "configuration": "Debug"
@@ -43,6 +53,14 @@
     }
   ],
   "testPresets": [
+    {
+      "name": "windows_msvc2022_x64",
+      "configurePreset": "windows_msvc2022_x64",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
     {
       "name": "windows_msvc_x64",
       "configurePreset": "windows_msvc_x64",
