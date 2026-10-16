@@ -7,7 +7,7 @@
   Observe: find() is always checked against end() before the result is used.
 */
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Measurement lookup: find the first exact match.");
     cpstd::vector<int> readings;

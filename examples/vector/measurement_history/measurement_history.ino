@@ -11,7 +11,7 @@ void PrintValues(const char* label, const cpstd::vector<int>& values) {
 }
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Sort a report copy while preserving capture order.");
     cpstd::vector<int> readings = {42, 18, 31, 18, 27};

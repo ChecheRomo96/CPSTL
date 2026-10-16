@@ -7,7 +7,7 @@ typedef cpstd::remove_cv<SensorValue>::type PlainSensorValue;
 static_assert(cpstd::is_same<PlainSensorValue, int>::value, "qualifiers are removed");
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Copy a qualified observation into a plain value type.");
     SensorValue simulatedRegister = 512;

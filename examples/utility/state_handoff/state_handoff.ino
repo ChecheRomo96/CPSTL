@@ -3,7 +3,7 @@
 
 // Replace active state with exchange, then trade values with swap.
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Replace active state with exchange, then trade values with swap.");
     int activeChannel = 1;

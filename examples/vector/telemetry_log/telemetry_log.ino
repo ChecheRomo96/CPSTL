@@ -11,7 +11,7 @@ void PrintValues(const char* label, const cpstd::vector<int>& values) {
 }
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Capture a simulated telemetry burst in preallocated storage.");
     cpstd::vector<int> log;

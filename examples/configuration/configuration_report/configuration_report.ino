@@ -7,7 +7,7 @@
   Observe: The serial report identifies the selected implementation and numeric range.
 */
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {
     }
 

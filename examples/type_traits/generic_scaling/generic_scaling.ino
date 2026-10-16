@@ -11,7 +11,7 @@ long ScaleIntegral(T value, long numerator, long denominator) {
 static_assert(!cpstd::is_integral<float>::value, "float is not integral");
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     while (!Serial) {}
     Serial.println("Convert a simulated 10-bit ADC sample to millivolts.");
     const long rawAdc = 768;
