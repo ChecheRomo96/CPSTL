@@ -35,4 +35,6 @@ FULL_SIDEBAR           = NO
 SEARCHENGINE           = YES
 GENERATE_LATEX         = NO
 HAVE_DOT               = YES
+UML_LOOK               = YES
+DOT_UML_DETAILS        = YES
 DOT_IMAGE_FORMAT       = svg
