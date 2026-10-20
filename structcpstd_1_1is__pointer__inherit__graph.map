@@ -1,7 +1,7 @@
 <map id="cpstd::is_pointer&lt; T &gt;" name="cpstd::is_pointer&lt; T &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="17,181,184,207"/>
-<area shape="rect" id="Node000002" href="$structcpstd_1_1is__pointer__helper.html" title=" " alt="" coords="5,79,196,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,147,103,181,98,181,98,147"/>
-<area shape="rect" id="Node000003" href="$structcpstd_1_1integral__constant.html" title=" " alt="" coords="34,5,167,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,44,103,79,98,79,98,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,325,176,391"/>
+<area shape="rect" id="Node000002" href="$structcpstd_1_1is__pointer__helper.html" title=" " alt="" coords="5,183,188,277"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,291,99,325,94,325,94,291"/>
+<area shape="rect" id="Node000003" href="$structcpstd_1_1integral__constant.html" title=" " alt="" coords="15,5,179,135"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,148,99,182,94,182,94,148"/>
 </map>
