@@ -7,6 +7,9 @@ or without a C++ standard library. Code written against `cpstd::vector`,
 `cpstd::string`, `cpstd::function`, `cpstd::sort` or `cpstd::is_same` builds
 unchanged on a desktop and on an 8-bit AVR.
 
+The active RoModular baseline is CPSTL 0.0.1. Earlier releases remain in Git
+history but are not the default dependency line.
+
 - **STL mode** (`CPSTL_USING_STL`): every `cpstd` name is an alias of its `std`
   counterpart, at no cost.
 - **CPSTL implementation** (default): CPSTL provides the facilities itself,
