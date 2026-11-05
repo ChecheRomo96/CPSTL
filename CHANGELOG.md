@@ -5,6 +5,13 @@ This file records user-visible changes to CPSTL. Release dates use the
 
 ## Unreleased
 
+## [0.0.1] - Unreleased
+
+### Changed
+
+- Reset the active RoModular release baseline to 0.0.1. Earlier tags remain
+  historical references and are no longer the default integration line.
+
 ## [1.1.12] - 2026-10-16
 
 ### Changed

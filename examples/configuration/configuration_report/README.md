@@ -10,7 +10,7 @@ Observed on desktop with CPSTL mode enabled. Arduino prints the same scenario.
 Version, language value, enabled modules and allocation mode reflect the current build.
 
 ```text
-CPSTL version: 1.1.8
+CPSTL version: 0.0.1
 C++ language value: 201402
 Vocabulary: CPSTL portable implementation
 Allocation: C (malloc/free)
