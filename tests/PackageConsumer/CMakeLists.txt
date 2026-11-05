@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.25)
 project(CPSTLPackageConsumer LANGUAGES CXX)
 
-find_package(CPSTL 1.1 CONFIG REQUIRED)
+find_package(CPSTL 0.0.1 CONFIG REQUIRED)
 
 add_executable(CPSTLPackageConsumer main.cpp)
 target_link_libraries(CPSTLPackageConsumer PRIVATE CPSTL::CPSTL)
