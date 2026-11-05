@@ -8,6 +8,7 @@
 - Sibling RoModularBuild: `17fa6798de7db2abe51d17d469532e3d7501b145`.
   Its existing modified `README.md` and untracked
   `docs/PlatformWorkflowProposal.md` were preserved.
+- One operator; no commits, tags, pushes, publications or other platform work.
 
 ## Tools and public interface
 
